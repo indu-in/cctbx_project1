@@ -1,5 +1,5 @@
 from __future__ import division
-from builtins import range
+from builtins import izip
 import boost.python
 ext = boost.python.import_ext("boost_rational_ext")
 from boost_rational_ext import *
@@ -15,13 +15,8 @@ def from_string(s):
 
 def vector(numerators, denominators):
   if (isinstance(denominators, builtin_int)):
-    denominators = [denominators] * len(numerators)
-  else:
-    assert len(numerators) == len(denominators)
-  result = []
-  for i in range(len(numerators)):
-    result.append(int(numerators[i], denominators[i]))
-  return result
+    return [ int(n, denominators) for n in numerators ]
+  return [ int(n, d) for n, d in izip(numberators, denominators) ]
 
 def lcm_denominators(array):
   l = 1
