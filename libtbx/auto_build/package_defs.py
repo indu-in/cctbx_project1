@@ -169,6 +169,7 @@ git_repositories = {
   "bitshuffle": [#'git@github.com:kiyo-masui/bitshuffle.git',
                  #'https://github.com/kiyo-masui/bitshuffle.git',
                  'https://github.com/kiyo-masui/bitshuffle/archive/master.zip'],
+  "hdf5_plugins": [ 'https://github.com/nexusformat/HDF5-External-Filter-Plugins/archive/v0.1.0.zip' ],
 }
 
 class fetch_packages (object) :

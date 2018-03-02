@@ -1016,43 +1016,21 @@ _replace_sysconfig_paths(build_time_vars)
       pkg_name_label="biopython",
       confirm_import_module="Bio")
 
-  def build_lz4_plugin (self, patch_src=True):
+  def build_lz4_plugin(self, patch_src=True):
     log = self.start_building_package("lz4_plugin")
-    repos = ["hdf5_lz4", "bitshuffle"]
-    for repo in repos:
-      fetch_remote_package(repo, log=log, use_ssh=self.options.git_ssh)
+    fetch_remote_package('hdf5_plugins', log=log, use_ssh=self.options.git_ssh)
     if self.check_download_only("lz4 plugin"): return
-    if (patch_src) :
-      print >> log, "Patching hdf5_lz4/Makefile"
-      self.patch_src(src_file="hdf5_lz4/Makefile",
-                     target="HDF5_INSTALL = /home/det/hdf5-1.8.11/hdf5/",
-                     replace_with="HDF5_INSTALL = %s"%self.base_dir)
-      print >> log, "Patching bitshuffle/setup.py"
-      self.patch_src(src_file="bitshuffle/setup.py",
-                     target=["COMPILE_FLAGS = ['-O3', '-ffast-math', '-march=native', '-std=c99']",
-                             'raise ValueError("pkg-config must be installed")',
-                             "FALLBACK_CONFIG['include_dirs'] = [d for d in FALLBACK_CONFIG['include_dirs']", "if path.isdir(d)]",
-                             "FALLBACK_CONFIG['library_dirs'] = [d for d in FALLBACK_CONFIG['library_dirs']", "if path.isdir(d)]",
-                             "except subprocess.CalledProcessError:",
-                            ],
-                     replace_with=[
-                             "COMPILE_FLAGS = ['-O3', '-std=c99']",
-                             "pass",
-                             "FALLBACK_CONFIG['include_dirs'] = ['%s/include']"%self.base_dir, "",
-                             "FALLBACK_CONFIG['library_dirs'] = ['%s/lib']"%self.base_dir, "",
-                             "except (subprocess.CalledProcessError, OSError):",
-                             ])
-    self.chdir("hdf5_lz4",log=log)
-    self.call("make", log=log)
-    self.chdir("../bitshuffle",log=log)
-    site_file = open("setup.cfg", "w")
-    site_file.write("[build_ext]\nomp = 0\n")
-    site_file.close()
-    self.call("%s setup.py build"%self.python_exe,log=log)
-    self.call("%s setup.py install --h5plugin --h5plugin-dir=../hdf5_lz4"%(self.python_exe),log=log)
-    self.chdir("../hdf5_lz4",log=log)
-    print >> log, "Copying new libraries to base/lib folder"
-    self.call("cp -v *.so %s/lib"%self.base_dir,log=log)
+    self.chdir("hdf5_plugins",log=log)
+    try:
+      os.mkdir('build')
+    except OSError:
+      pass
+    self.chdir('build', log=log)
+    self.call("cmake .. -DENABLE_BITSHUFFLE_PLUGIN=yes -DENABLE_LZ4_PLUGIN=yes -DCMAKE_INSTALL_PREFIX=%s" % self.base_dir,
+              log=log)
+    self.call("make install", log=log)
+#    print >> log, "Copying new libraries to base/lib folder"
+#    self.call("cp -v *.so %s/lib"%self.base_dir,log=log)
 
   def build_scipy(self):
     # requires Fortran compiler.
