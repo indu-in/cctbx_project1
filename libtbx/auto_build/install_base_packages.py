@@ -1569,6 +1569,12 @@ _replace_sysconfig_paths(build_time_vars)
     self.verify_python_module("wxPython", "wx")
 
   def build_matplotlib(self):
+    if MATPLOTLIB_VERSION:
+      self.build_python_module_pip(
+        'matplotlib', package_version=MATPLOTLIB_VERSION,
+        confirm_import_module='matplotlib')
+      return
+
     def patch_matplotlib_src (out) :
       print >> out, "  patching setup.cfg"
       self.patch_src(src_file="setup.cfg.template",

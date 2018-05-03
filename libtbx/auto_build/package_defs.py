@@ -68,6 +68,7 @@ DOCUTILS_VERSION="0.12"
 FUTURE_VERSION="0.16"
 H5PY_VERSION="2.7.1"
 JUNIT_XML_VERSION="1.7"
+MATPLOTLIB_VERSION = "2.2.2"
 MOCK_VERSION="2.0.0"
 NUMPY_VERSION="1.13.3"
 PILLOW_VERSION = "4.2.1"
@@ -116,12 +117,12 @@ GTK_THEME_PKG = "gtk_themes.tar.gz"
 # end Linux-only
 FONT_PKG = "fonts.tar.gz"
 
-MATPLOTLIB_PKG = "matplotlib-2.0.0.tar.gz"
 # CentOS 5 glibc too old to support matplotlib-2.0.0 dependency (subprocess32)
 # will be fixed in subprocess32 3.5+, https://github.com/google/python-subprocess32/blob/master/ChangeLog
 if (sys.platform.startswith("linux")):
   distribution = platform.dist()
   if ( (distribution[0] == 'redhat') and (distribution[1].startswith('5')) ):
+    MATPLOTLIB_VERSION = None
     MATPLOTLIB_PKG = "matplotlib-1.5.1.tar.gz"
 
 PY2APP_PKG = "py2app-0.7.3.tar.gz"                    # Mac only
