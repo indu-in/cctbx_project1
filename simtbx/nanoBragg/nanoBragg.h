@@ -572,6 +572,10 @@ class nanoBragg {
     void add_nanoBragg_spots();
     void add_nanoBragg_spots_nks(boost_adaptbx::python::streambuf &);
 #ifdef NANOBRAGG_HAVE_CUDA
+    void allocate_cuda();
+    void add_energy_channel_cuda();
+    void get_raw_pixels_cuda();
+    void deallocate_cuda():
     void add_nanoBragg_spots_cuda();
 #endif
 
