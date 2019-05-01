@@ -1,5 +1,6 @@
 from __future__ import division, print_function
 
+from six.moves import range
 '''
 Author      : Lyubimov, A.Y.
 Created     : 12/12/2017

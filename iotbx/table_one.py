@@ -8,6 +8,7 @@ to extract statistics for display.
 """
 
 from __future__ import division
+from six.moves import range
 from libtbx import slots_getstate_setstate
 from libtbx.utils import Sorry
 from libtbx import str_utils

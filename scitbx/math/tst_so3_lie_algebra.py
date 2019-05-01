@@ -1,4 +1,5 @@
 from __future__ import division
+from six.moves import range
 from scitbx.math import so3_lie_algebra
 
 import scitbx.matrix

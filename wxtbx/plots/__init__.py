@@ -1,5 +1,6 @@
 
 from __future__ import division, print_function
+from six.moves import range
 from wxtbx import bitmaps
 import wxtbx
 import wx

@@ -1,4 +1,5 @@
 from __future__ import division, print_function
+from six.moves import range
 from cctbx.array_family import flex
 import os, sys
 import libtbx

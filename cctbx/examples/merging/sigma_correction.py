@@ -41,8 +41,8 @@ class ccp4_model(object):
     # plots for debugging
     from matplotlib import pyplot as plt
     cumnorm = plt.subplot(321)
-    cumnorm.plot(range(len(order_a)),normal_a.select(order_a),"b.")
-    cumnorm.plot(range(len(order_b)),normal_b.select(order_b),"r.")
+    cumnorm.plot(list(range(len(order_a))),normal_a.select(order_a),"b.")
+    cumnorm.plot(list(range(len(order_b))),normal_b.select(order_b),"r.")
     #plt.show()
     logger = plt.subplot(324)
     logger.loglog(a_data,b_data,"r.")
@@ -67,7 +67,7 @@ class ccp4_model(object):
       #scatters[isubsection] = flex.mean_and_variance(vals).unweighted_sample_standard_deviation()
       scattersb[isubsection] = flex.mean_and_variance(valsb).unweighted_sample_variance()
     aaronsplot = plt.subplot(325)
-    aaronsplot.plot(range(50), 2. * scatters, "b.")
+    aaronsplot.plot(list(range(50)), 2. * scatters, "b.")
     plt.show()
 
   @staticmethod

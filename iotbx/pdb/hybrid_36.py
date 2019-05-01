@@ -84,6 +84,7 @@ Ralf W. Grosse-Kunstleve, Feb 2007.
 """
 from __future__ import division, print_function
 
+from six.moves import range
 digits_upper = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 digits_lower = digits_upper.lower()
 digits_upper_values = dict([pair for pair in zip(digits_upper, range(36))])
@@ -148,7 +149,7 @@ def hy36decode(width, s):
 def exercise(hy36enc=hy36encode, hy36dec=hy36decode):
   for digits,digits_values in [(digits_upper, digits_upper_values),
                                (digits_lower, digits_lower_values)]:
-    for value in xrange(1000):
+    for value in range(1000):
       s = encode_pure(digits=digits_upper, value=value)
       d = decode_pure(digits_values=digits_upper_values, s=s)
       assert d == value

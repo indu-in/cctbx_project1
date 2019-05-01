@@ -1,5 +1,6 @@
 from __future__ import division, print_function
 from __future__ import absolute_import
+from six.moves import range
 from cctbx import omz
 import cctbx.omz.dev
 from cctbx.array_family import flex
@@ -150,7 +151,7 @@ def run_smtbx_ls(mode, cod_id, i_obs, f_obs, xray_structure, params):
     weighting_scheme=smtbx.refinement.least_squares.unit_weighting())
   ls = rm.least_squares()
   if (mode == "simple"):
-    for i_cycle in xrange(params.ls_simple_iterations):
+    for i_cycle in range(params.ls_simple_iterations):
       ls.build_up()
       try:
         ls.solve_and_step_forward()

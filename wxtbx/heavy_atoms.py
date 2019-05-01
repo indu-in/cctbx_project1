@@ -1,5 +1,6 @@
 from __future__ import division
 
+from six.moves import range
 import wxtbx.phil_controls.floatctrl
 import wx.lib.mixins.listctrl
 import wx

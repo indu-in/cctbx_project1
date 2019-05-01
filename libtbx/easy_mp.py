@@ -1,5 +1,5 @@
 from __future__ import absolute_import, division, print_function
-from builtins import range
+from six.moves import range
 from libtbx.str_utils import show_string
 from libtbx.math_utils import ifloor
 from libtbx import Auto
@@ -774,13 +774,13 @@ def run_parallel(
     from libtbx.easy_mp import  pool_map
     results = pool_map(
       func=run_anything(target_function=target_function,kw_list=kw_list),
-      iterable=range(n),
+      iterable=list(range(n)),
       processes=nproc)
   else :
     from libtbx.easy_mp import parallel_map
     results=parallel_map(
       func=run_anything(target_function=target_function,kw_list=kw_list),
-      iterable=range(n),
+      iterable=list(range(n)),
       method=method,
       processes=nproc,
       callback=None,

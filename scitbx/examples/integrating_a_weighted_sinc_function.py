@@ -1,4 +1,5 @@
 from __future__ import division, print_function
+from six.moves import range
 from scitbx.array_family import flex
 from scitbx.math import chebyshev_polynome
 import scitbx.math

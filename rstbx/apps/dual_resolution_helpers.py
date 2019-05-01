@@ -98,9 +98,9 @@ def get_model_ref_limits(self,raw_image,spotfinder,imageindex,inputai,
     ccc=[];cccx=[];
     for x in range(int(len(obs_tt_sort)/3),len(obs_tt_sort)):
       cccx.append(x)
-      ccc.append(cc(range(x),modified_pred_x[0:x]))
+      ccc.append(cc(list(range(x)),modified_pred_x[0:x]))
       #print x,cc(range(x),modified_pred_x[0:x])
-      corr,slope = cc_slope(range(x),modified_pred_x[0:x])
+      corr,slope = cc_slope(list(range(x)),modified_pred_x[0:x])
       scaled_modified_pred_x = modified_pred_x/slope
 
       second_modified_pred_x=flex.double()
@@ -129,7 +129,7 @@ def get_model_ref_limits(self,raw_image,spotfinder,imageindex,inputai,
       from matplotlib import pyplot as plt
       #plt.plot(delx,dely,"r.")
       #plt.show()
-      plt.plot(range(len(tt)),obs_tt_sort,"r.")
+      plt.plot(list(range(len(tt))),obs_tt_sort,"r.")
       plt.plot(flex.double(range(len(pred_two_theta_rad_best))),pred_two_theta_rad_best,"g.")
       #plt.plot(flex.double(range(len(pred_full_set_best))),pred_full_set_best,"b.")
       plt.plot(cccx, ccc,"b.")

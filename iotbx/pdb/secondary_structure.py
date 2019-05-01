@@ -47,6 +47,7 @@ from __future__ import division, print_function
 #    of code.
 #
 
+from six.moves import range
 from libtbx.utils import Sorry
 import libtbx.phil
 from libtbx import adopt_init_args
@@ -930,7 +931,7 @@ class annotation(structure_base):
     new_sheets = []
     new_h_serial = 0
     new_sheet_id = 0
-    for n_copy in xrange(n_copies):
+    for n_copy in range(n_copies):
       for helix in self.helices:
         new_helix = copy.deepcopy(helix)
         new_helix.erase_hbond_list()

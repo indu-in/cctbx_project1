@@ -4,6 +4,7 @@ Classes for displaying Xtriage results using wxPython (and matplotlib).
 """
 
 from __future__ import division
+from six.moves import range
 from wxtbx import metallicbutton
 import wxtbx.misc_dialogs
 import wxtbx.path_dialogs
