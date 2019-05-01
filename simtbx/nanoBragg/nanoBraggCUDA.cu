@@ -1168,6 +1168,13 @@ __device__ CUDAREAL polarization_factor(CUDAREAL kahn_factor, CUDAREAL *incident
 // allocation function based on nanoBraggSpotsCUDA
 // device pointers are stored in struct to avoid including nanoBragg.h in nanoBragg_cuda.cpp
 // Boost incompatibility with newer version of nvcc
+// These functions are just copies of sections from nanoBraggSpotsCuda
+//   allocate_cuda_cu does the transfers to the GPU
+//   add_energy_channel_cuda_cu accumulates contributions on the GPU
+//   get_raw_pixels_cuda_cu transfers floatimage back to the CPU
+//   deallocate_cuda_cu deallocates the device arrays
+// These map to the same function names in the simtbx::nanoBragg::nanoBragg class, but without the "_cu"
+// at the end.
 extern "C" void allocate_cuda_cu(int spixels, int fpixels, int roi_xmin, int roi_xmax, int roi_ymin, int roi_ymax, int oversample, int point_pixel,
 		double pixel_size, double subpixel_size, int steps, double detector_thickstep, int detector_thicksteps, double detector_thick, double detector_mu,
 		double sdet_vector[4], double fdet_vector[4], double odet_vector[4], double pix0_vector[4], int curved_detector, double distance, double close_distance,
