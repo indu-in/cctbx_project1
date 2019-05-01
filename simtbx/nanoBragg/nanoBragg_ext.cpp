@@ -1867,6 +1867,8 @@ printf("DEBUG: pythony_stolFbg[1]=(%g,%g)\n",nanoBragg.pythony_stolFbg[1][0],nan
        "Allocate and transfer input data the the GPU")
       .def("add_energy_channel_cuda", &nanoBragg::add_energy_channel_cuda,
        "Accumulate Fhkl contributions on the GPU")
+      .def("get_raw_pixels_cuda", &nanoBragg::get_raw_pixels_cuda,
+       "Update raw_pixels on host with array from GPU")
 #endif
 
       /* actual run of the background simulation */
