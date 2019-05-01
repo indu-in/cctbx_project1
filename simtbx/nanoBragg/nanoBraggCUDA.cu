@@ -1386,6 +1386,12 @@ extern "C" void allocate_cuda_cu(int spixels, int fpixels, int roi_xmin, int roi
 	CUDA_CHECK_RETURN(cudaMalloc((void ** )&cp.cu_Fhkl, sizeof(*cp.cu_Fhkl) * hklsize));
 	CUDA_CHECK_RETURN(cudaMemcpy(cp.cu_Fhkl, FhklLinear, sizeof(*cp.cu_Fhkl) * hklsize, cudaMemcpyHostToDevice));
 
+        // deallocate host arrays
+        // potential memory leaks
+	free(rangemap);
+	free(omega_reduction);
+	free(max_I_x_reduction);
+	free(max_I_y_reduction);
 }
 
 extern "C" void add_energy_channel_cuda_cu(double * source_I, double * source_lambda,
@@ -1445,5 +1451,33 @@ extern "C" void get_raw_pixels_cuda_cu(float * floatimage, cudaPointers cp) {
   int total_pixels = cp.cu_spixels * cp.cu_fpixels;
 
   CUDA_CHECK_RETURN(cudaMemcpy(floatimage, cp.cu_floatimage, sizeof(*cp.cu_floatimage) * total_pixels, cudaMemcpyDeviceToHost));
+
+}
+
+extern "C" void deallocate_cuda_cu(cudaPointers cp) {
+
+	CUDA_CHECK_RETURN(cudaFree(cp.cu_sdet_vector));
+	CUDA_CHECK_RETURN(cudaFree(cp.cu_fdet_vector));
+	CUDA_CHECK_RETURN(cudaFree(cp.cu_odet_vector));
+	CUDA_CHECK_RETURN(cudaFree(cp.cu_pix0_vector));
+	CUDA_CHECK_RETURN(cudaFree(cp.cu_beam_vector));
+	CUDA_CHECK_RETURN(cudaFree(cp.cu_spindle_vector));
+	CUDA_CHECK_RETURN(cudaFree(cp.cu_polar_vector));
+	CUDA_CHECK_RETURN(cudaFree(cp.cu_a0));
+	CUDA_CHECK_RETURN(cudaFree(cp.cu_b0));
+	CUDA_CHECK_RETURN(cudaFree(cp.cu_c0));
+	CUDA_CHECK_RETURN(cudaFree(cp.cu_source_X));
+	CUDA_CHECK_RETURN(cudaFree(cp.cu_source_Y));
+	CUDA_CHECK_RETURN(cudaFree(cp.cu_source_Z));
+	CUDA_CHECK_RETURN(cudaFree(cp.cu_source_I));
+	CUDA_CHECK_RETURN(cudaFree(cp.cu_source_lambda));
+	CUDA_CHECK_RETURN(cudaFree(cp.cu_FhklParams));
+	CUDA_CHECK_RETURN(cudaFree(cp.cu_mosaic_umats));
+	CUDA_CHECK_RETURN(cudaFree(cp.cu_floatimage));
+	CUDA_CHECK_RETURN(cudaFree(cp.cu_omega_reduction));
+	CUDA_CHECK_RETURN(cudaFree(cp.cu_max_I_x_reduction));
+	CUDA_CHECK_RETURN(cudaFree(cp.cu_max_I_y_reduction));
+	CUDA_CHECK_RETURN(cudaFree(cp.cu_maskimage));
+	CUDA_CHECK_RETURN(cudaFree(cp.cu_rangemap));
 
 }
