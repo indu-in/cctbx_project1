@@ -34,6 +34,7 @@ void nanoBraggSpotsCUDA(int spixels, int fpixels, int roi_xmin, int roi_xmax,
                         double * sumsqr /*out*/, double * max_I/*out*/,
                         double * max_I_x/*out*/, double * max_I_y /*out*/);
 
+// new CUDA path
 extern "C"
 void allocate_cuda_cu(int spixels, int fpixels, int roi_xmin, int roi_xmax,
                       int roi_ymin, int roi_ymax, int oversample,
@@ -65,6 +66,10 @@ void allocate_cuda_cu(int spixels, int fpixels, int roi_xmin, int roi_xmax,
                       double * max_I_x/*out*/, double * max_I_y /*out*/,
                       cudaPointers cp /* output for pointers */);
 
+extern "C"
+void add_energy_channel_cuda_cu(int sources, double * source_I, double * source_lambda,
+                                double *** Fhkl, int h_range, int k_range, int l_range,
+                                cudaPointers cp);
 
 namespace simtbx {
 namespace nanoBragg {
@@ -187,7 +192,15 @@ nanoBragg::allocate_cuda() {
 #else
   throw SCITBX_ERROR("no CUDA implementation of nanoBragg_add_spots");
 #endif
+}
 
+void nanoBragg::add_energy_channel_cuda() {
+
+#ifdef HAVE_NANOBRAGG_SPOTS_CUDA
+  add_energy_channel_cuda_cu(sources, source_I, source_lambda, Fhkl, h_range, k_range, l_range, cpo);
+#else
+  throw SCITBX_ERROR("no CUDA implementation of nanoBragg_add_spots");
+#endif
 }
 
 }}// namespace simtbx::nanoBragg

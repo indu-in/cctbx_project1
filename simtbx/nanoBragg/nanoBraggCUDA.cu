@@ -1387,3 +1387,56 @@ extern "C" void allocate_cuda_cu(int spixels, int fpixels, int roi_xmin, int roi
 	CUDA_CHECK_RETURN(cudaMemcpy(cp.cu_Fhkl, FhklLinear, sizeof(*cp.cu_Fhkl) * hklsize, cudaMemcpyHostToDevice));
 
 }
+
+extern "C" void add_energy_channel_cuda_cu(int sources, double * source_I, double * source_lambda,
+                                           double *** Fhkl, int h_range, int k_range, int l_range,
+                                           cudaPointers cp) {
+
+        // transfer source_I, source_lambda, and Fhkl
+        // the int arguments are for sizes of the arrays
+        CUDA_CHECK_RETURN(cudaMemcpyVectorDoubleToDevice(cp.cu_source_I, source_I, sources));
+        CUDA_CHECK_RETURN(cudaMemcpyVectorDoubleToDevice(cp.cu_source_lambda, source_lambda, sources));
+
+        int hklsize = h_range * k_range * l_range;
+	CUDAREAL * FhklLinear = (CUDAREAL*) calloc(hklsize, sizeof(*FhklLinear));
+	for (int h = 0; h < h_range; h++) {
+          for (int k = 0; k < k_range; k++) {
+            for (int l = 0; l < l_range; l++) {
+              //	convert Fhkl double to CUDAREAL
+              FhklLinear[h * k_range * l_range + k * l_range + l] = Fhkl[h][k][l];
+            }
+          }
+	}
+	CUDA_CHECK_RETURN(cudaMemcpy(cp.cu_Fhkl, FhklLinear, sizeof(*cp.cu_Fhkl) * hklsize, cudaMemcpyHostToDevice));
+
+  	int deviceId = 0;
+	CUDA_CHECK_RETURN(cudaGetDevice(&deviceId));
+	cudaDeviceProp deviceProps = { 0 };
+	CUDA_CHECK_RETURN(cudaGetDeviceProperties(&deviceProps, deviceId));
+	int smCount = deviceProps.multiProcessorCount;
+
+//	CUDA_CHECK_RETURN(cudaFuncSetCacheConfig(nanoBraggSpotsCUDAKernel, cudaFuncCachePreferShared));
+//	CUDA_CHECK_RETURN(cudaFuncSetCacheConfig(nanoBraggSpotsCUDAKernel, cudaFuncCachePreferL1));
+
+	dim3 threadsPerBlock(THREADS_PER_BLOCK_X, THREADS_PER_BLOCK_Y);
+	//  dim3 numBlocks((spixels - 1) / threadsPerBlock.x + 1, (fpixels - 1) / threadsPerBlock.y + 1);
+	dim3 numBlocks(smCount * 8, 1);
+
+	//  initialize the device memory within a kernel.
+	//	nanoBraggSpotsInitCUDAKernel<<<numBlocks, threadsPerBlock>>>(cu_spixels, cu_fpixels, cu_floatimage, cu_omega_reduction, cu_max_I_x_reduction, cu_max_I_y_reduction, cu_rangemap);
+	//  CUDA_CHECK_RETURN(cudaPeekAtLastError());
+	//  CUDA_CHECK_RETURN(cudaDeviceSynchronize());
+
+	nanoBraggSpotsCUDAKernel<<<numBlocks, threadsPerBlock>>>(cp.cu_spixels, cp.cu_fpixels, cp.cu_roi_xmin, cp.cu_roi_xmax, cp.cu_roi_ymin, cp.cu_roi_ymax, cp.cu_oversample,
+			cp.cu_point_pixel, cp.cu_pixel_size, cp.cu_subpixel_size, cp.cu_steps, cp.cu_detector_thickstep, cp.cu_detector_thicksteps, cp.cu_detector_thick, cp.cu_detector_mu,
+			cp.cu_sdet_vector, cp.cu_fdet_vector, cp.cu_odet_vector, cp.cu_pix0_vector, cp.cu_curved_detector, cp.cu_distance, cp.cu_close_distance, cp.cu_beam_vector,
+			cp.cu_Xbeam, cp.cu_Ybeam, cp.cu_dmin, cp.cu_phi0, cp.cu_phistep, cp.cu_phisteps, cp.cu_spindle_vector,
+			cp.cu_sources, cp.cu_source_X, cp.cu_source_Y, cp.cu_source_Z, cp.cu_source_I, cp.cu_source_lambda, cp.cu_a0, cp.cu_b0, cp.cu_c0, cp.cu_xtal_shape,
+			cp.cu_mosaic_spread, cp.cu_mosaic_domains, cp.cu_mosaic_umats, cp.cu_Na, cp.cu_Nb, cp.cu_Nc, cp.cu_V_cell, cp.cu_water_size, cp.cu_water_F, cp.cu_water_MW, cp.cu_r_e_sqr, cp.cu_fluence,
+			cp.cu_Avogadro, cp.cu_integral_form, cp.cu_default_F, cp.cu_interpolate, cp.cu_Fhkl, cp.cu_FhklParams,
+			cp.cu_nopolar, cp.cu_polar_vector, cp.cu_polarization, cp.cu_fudge, cp.cu_maskimage,
+			cp.cu_floatimage /*out*/, cp.cu_omega_reduction/*out*/, cp.cu_max_I_x_reduction/*out*/, cp.cu_max_I_y_reduction /*out*/, cp.cu_rangemap /*out*/);
+
+	CUDA_CHECK_RETURN(cudaPeekAtLastError());
+	CUDA_CHECK_RETURN(cudaDeviceSynchronize());
+}
