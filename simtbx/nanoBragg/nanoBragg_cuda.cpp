@@ -67,9 +67,12 @@ void allocate_cuda_cu(int spixels, int fpixels, int roi_xmin, int roi_xmax,
                       cudaPointers cp /* output for pointers */);
 
 extern "C"
-void add_energy_channel_cuda_cu(int sources, double * source_I, double * source_lambda,
+void add_energy_channel_cuda_cu(double * source_I, double * source_lambda,
                                 double *** Fhkl, int h_range, int k_range, int l_range,
                                 cudaPointers cp);
+
+extern "C"
+void get_raw_pixels_cuda_cu(float * floatimage, cudaPointers cp);
 
 namespace simtbx {
 namespace nanoBragg {
@@ -190,17 +193,36 @@ nanoBragg::allocate_cuda() {
                    &max_I_x, &max_I_y,
                    cpo);
 #else
-  throw SCITBX_ERROR("no CUDA implementation of nanoBragg_add_spots");
+  throw SCITBX_ERROR("no CUDA implementation of allocate_cuda");
 #endif
 }
 
 void nanoBragg::add_energy_channel_cuda() {
 
 #ifdef HAVE_NANOBRAGG_SPOTS_CUDA
-  add_energy_channel_cuda_cu(sources, source_I, source_lambda, Fhkl, h_range, k_range, l_range, cpo);
+  add_energy_channel_cuda_cu(source_I, source_lambda, Fhkl, h_range, k_range, l_range, cpo);
 #else
-  throw SCITBX_ERROR("no CUDA implementation of nanoBragg_add_spots");
+  throw SCITBX_ERROR("no CUDA implementation of add_energy_channel_cuda");
 #endif
+}
+
+void nanoBragg::get_raw_pixels_cuda() {
+  /* declare a float version of floatimage for output */
+  float * float_floatimage = new float[raw_pixels.size()];
+
+#ifdef HAVE_NANOBRAGG_SPOTS_CUDA
+  get_raw_pixels_cuda_cu(float_floatimage, cpo);
+#else
+  throw SCITBX_ERROR("no CUDA implementation of get_raw_pixels_cuda");
+#endif
+
+  double * raw_pixels_ptr = raw_pixels.begin();
+  for (int i=0; i<raw_pixels.size(); i++) {
+    *raw_pixels_ptr++ = float_floatimage[i];
+  }
+
+  delete[] float_floatimage;
+
 }
 
 }}// namespace simtbx::nanoBragg
