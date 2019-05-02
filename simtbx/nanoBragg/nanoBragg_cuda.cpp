@@ -64,18 +64,18 @@ void allocate_cuda_cu(int spixels, int fpixels, int roi_xmin, int roi_xmax,
                       int * sumn /*out*/, double * sum /*out*/,
                       double * sumsqr /*out*/, double * max_I/*out*/,
                       double * max_I_x/*out*/, double * max_I_y /*out*/,
-                      cudaPointers cp /* output for pointers */);
+                      cudaPointers &cp /* output for pointers */);
 
 extern "C"
 void add_energy_channel_cuda_cu(double * source_I, double * source_lambda,
                                 double *** Fhkl, int h_range, int k_range, int l_range,
-                                cudaPointers cp);
+                                cudaPointers &cp);
 
 extern "C"
-void get_raw_pixels_cuda_cu(float * floatimage, cudaPointers cp);
+void get_raw_pixels_cuda_cu(float * floatimage, cudaPointers &cp);
 
 extern "C"
-void deallocate_cuda_cu(cudaPointers cp);
+void deallocate_cuda_cu(cudaPointers &cp);
 
 namespace simtbx {
 namespace nanoBragg {
