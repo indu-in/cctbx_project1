@@ -219,12 +219,21 @@ void nanoBragg::get_raw_pixels_cuda() {
   throw SCITBX_ERROR("no CUDA implementation of get_raw_pixels_cuda");
 #endif
 
-  double * raw_pixels_ptr = raw_pixels.begin();
-  for (int i=0; i<raw_pixels.size(); i++) {
-    *raw_pixels_ptr++ = float_floatimage[i];
-  }
+  // double * raw_pixels_ptr = raw_pixels.begin();
+  // for (int i=0; i<raw_pixels.size(); i++) {
+  //   *raw_pixels_ptr++ = float_floatimage[i];
+  // }
 
+  // delete[] float_floatimage;
+
+  /* convert float_floatimage to double */
+  for (int i=0; i<raw_pixels.size(); i++) {
+    raw_pixels[i] = double(float_floatimage[i]);
+  }
   delete[] float_floatimage;
+
+  floatimage = raw_pixels.begin();
+
 
 }
 

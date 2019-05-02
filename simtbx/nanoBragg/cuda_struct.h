@@ -8,7 +8,7 @@
 #include <simtbx/nanoBragg/nanotypes.h>
 
 #ifndef CUDAREAL
-#define CUDAREAL float
+#define CUDAREAL double
 #endif
 
 #define CUDA_CHECK_RETURN(value) CheckCudaErrorAux(__FILE__,__LINE__, #value, value)
