@@ -1418,7 +1418,7 @@ extern "C" void allocate_cuda_cu(int spixels, int fpixels, int roi_xmin, int roi
         CUDAREAL * cu_source_Z = NULL;
         CUDA_CHECK_RETURN(cudaMalloc((void ** )&cu_source_Z, sizeof(*cu_source_Z) * sources));
         CUDA_CHECK_RETURN(cudaMemcpyVectorDoubleToDevice(cu_source_Z, source_Z, sources));
-        cp.cu_source_Z = cu_source_Y;
+        cp.cu_source_Z = cu_source_Z;
 
         CUDAREAL * cu_source_I = NULL;
         CUDA_CHECK_RETURN(cudaMalloc((void ** )&cu_source_I, sizeof(*cu_source_I) * sources));
@@ -1470,14 +1470,12 @@ extern "C" void allocate_cuda_cu(int spixels, int fpixels, int roi_xmin, int roi
         int hklsize = h_range * k_range * l_range;
         CUDAREAL * FhklLinear = (CUDAREAL*) calloc(hklsize, sizeof(*FhklLinear));
         for (int h = 0; h < h_range; h++) {
-                for (int k = 0; k < k_range; k++) {
-//                      memcpy(FhklLinear + (h * k_range * l_range + k * l_range), Fhkl[h][k], sizeof(*FhklLinear) * l_range);
-                        for (int l = 0; l < l_range; l++) {
-
-                                //      convert Fhkl double to CUDAREAL
-                                FhklLinear[h * k_range * l_range + k * l_range + l] = Fhkl[h][k][l];
-                        }
-                }
+          for (int k = 0; k < k_range; k++) {
+            for (int l = 0; l < l_range; l++) {
+              //      convert Fhkl double to CUDAREAL
+              FhklLinear[h * k_range * l_range + k * l_range + l] = Fhkl[h][k][l];
+            }
+          }
         }
 
         CUDAREAL * cu_Fhkl = NULL;
