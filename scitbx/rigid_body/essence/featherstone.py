@@ -13,7 +13,6 @@ See also: RBDA:
 """
 
 from __future__ import division
-from __future__ import absolute_import
 from spatial_lib import \
   matrix, cb_as_spatial_transform, crm, crf, kinetic_energy
 
