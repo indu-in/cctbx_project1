@@ -59,7 +59,6 @@ nanoBragg::nanoBragg(
     cross_product(beam_vector,vert_vector,polar_vector);
     unitize(polar_vector,polar_vector);
 
-
     /* DETECTOR properties */
 
     /* size of the pixels in meters */
@@ -231,10 +230,8 @@ nanoBragg::reconcile_parameters()
     /* allocate and set up mosaic domains */
     init_mosaicity();
 
-
     if(verbose) printf("CONSTRUCT!!! %d   x-ray beam: %f %f %f\n",(int) raw_pixels.size(),this->beam_vector[1],this->beam_vector[2],this->beam_vector[3]);
 }
-
 
 /* sensible defaults */
 void
@@ -1964,7 +1961,6 @@ nanoBragg::init_sources()
     }
 
 
-
     if(pythony_beams.size())
     {
         if(verbose>8) printf("pythony_beams.size()= %ld\n",pythony_beams.size());
@@ -2023,7 +2019,6 @@ nanoBragg::init_sources()
         cross_product(beam_vector,vert_vector,polar_vector);
         unitize(polar_vector,polar_vector);
 
-
         /* take in total flux */
         if(flux_sum > 0)
         {
@@ -2031,7 +2026,7 @@ nanoBragg::init_sources()
             init_beam();
         }
         /* make sure stored source intensities are fractional */
-        double norm = flux_sum/sources;
+        double norm = flux_sum; // /sources;  in the setter for source_intensity it says the fractional intensities should sum to 1..
         for (i=0; i < sources && norm>0.0; ++i)
         {
             source_I[i] /= norm;
@@ -2039,7 +2034,6 @@ nanoBragg::init_sources()
 
         if(verbose) printf("done initializing sources:\n");
     }
-
 
 
     if(pythony_source_XYZ.size() || pythony_source_intensity.size() || pythony_source_lambda.size())
@@ -2185,9 +2179,6 @@ nanoBragg::init_sources()
     }
 }
 // end of init_sources()
-
-
-
 
 
 /* expose internal source data */
@@ -2442,10 +2433,8 @@ nanoBragg::add_nanoBragg_spots()
     i = sumn = 0;
     progress_pixel = 0;
     omega_sum = 0.0;
-    for(spixel=0;spixel<spixels;++spixel)
-    {
-        for(fpixel=0;fpixel<fpixels;++fpixel)
-        {
+    for(spixel=0;spixel<spixels;++spixel){
+        for(fpixel=0;fpixel<fpixels;++fpixel){
 
             /* allow for just one part of detector to be rendered */
             if(fpixel < roi_xmin || fpixel > roi_xmax || spixel < roi_ymin || spixel > roi_ymax)
@@ -2466,26 +2455,18 @@ nanoBragg::add_nanoBragg_spots()
             I = 0;
 
             /* loop over sub-pixels */
-            for(subS=0;subS<oversample;++subS)
-            {
-                for(subF=0;subF<oversample;++subF)
-                {
+            for(subS=0;subS<oversample;++subS){
+                for(subF=0;subF<oversample;++subF){
 
                     /* absolute mm position on detector (relative to its origin) */
                     Fdet = subpixel_size*(fpixel*oversample + subF ) + subpixel_size/2.0;
                     Sdet = subpixel_size*(spixel*oversample + subS ) + subpixel_size/2.0;
-//                  Fdet = pixel_size*fpixel;
-//                  Sdet = pixel_size*spixel;
 
-                    for(thick_tic=0;thick_tic<detector_thicksteps;++thick_tic)
-                    {
+                    for(thick_tic=0;thick_tic<detector_thicksteps;++thick_tic){
                         /* assume "distance" is to the front of the detector sensor layer */
                         Odet = thick_tic*detector_thickstep;
 
                         /* construct detector subpixel position in 3D space */
-//                      pixel_X = distance;
-//                      pixel_Y = Sdet-Ybeam;
-//                      pixel_Z = Fdet-Xbeam;
                         pixel_pos[1] = Fdet*fdet_vector[1]+Sdet*sdet_vector[1]+Odet*odet_vector[1]+pix0_vector[1];
                         pixel_pos[2] = Fdet*fdet_vector[2]+Sdet*sdet_vector[2]+Odet*odet_vector[2]+pix0_vector[2];
                         pixel_pos[3] = Fdet*fdet_vector[3]+Sdet*sdet_vector[3]+Odet*odet_vector[3]+pix0_vector[3];
@@ -2498,7 +2479,6 @@ nanoBragg::add_nanoBragg_spots()
                             /* treat detector pixel coordinates as radians */
                             rotate_axis(vector,newvector,sdet_vector,pixel_pos[2]/distance);
                             rotate_axis(newvector,pixel_pos,fdet_vector,pixel_pos[3]/distance);
-    //                      rotate(vector,pixel_pos,0,pixel_pos[3]/distance,pixel_pos[2]/distance);
                         }
                         /* construct the diffracted-beam unit vector to this sub-pixel */
                         airpath = unitize(pixel_pos,diffracted);
@@ -2524,7 +2504,6 @@ nanoBragg::add_nanoBragg_spots()
 
                     /* loop over sources now */
                     for(source=0;source<sources;++source){
-
                         /* retrieve stuff from cache */
                         incident[1] = -source_X[source];
                         incident[2] = -source_Y[source];
@@ -2552,8 +2531,7 @@ nanoBragg::add_nanoBragg_spots()
                         }
 
                         /* sweep over phi angles */
-                        for(phi_tic = 0; phi_tic < phisteps; ++phi_tic)
-                        {
+                        for(phi_tic = 0; phi_tic < phisteps; ++phi_tic){
                             phi = phi0 + phistep*phi_tic;
 
                             if( phi != 0.0 )
@@ -2565,8 +2543,7 @@ nanoBragg::add_nanoBragg_spots()
                             }
 
                             /* enumerate mosaic domains */
-                            for(mos_tic=0;mos_tic<mosaic_domains;++mos_tic)
-                            {
+                            for(mos_tic=0;mos_tic<mosaic_domains;++mos_tic){
                                 /* apply mosaic rotation after phi rotation */
                                 if( mosaic_spread > 0.0 )
                                 {
@@ -2580,9 +2557,6 @@ nanoBragg::add_nanoBragg_spots()
                                     b[1]=bp[1];b[2]=bp[2];b[3]=bp[3];
                                     c[1]=cp[1];c[2]=cp[2];c[3]=cp[3];
                                 }
-//                              printf("%d %f %f %f\n",mos_tic,mosaic_umats[mos_tic*9+0],mosaic_umats[mos_tic*9+1],mosaic_umats[mos_tic*9+2]);
-//                              printf("%d %f %f %f\n",mos_tic,mosaic_umats[mos_tic*9+3],mosaic_umats[mos_tic*9+4],mosaic_umats[mos_tic*9+5]);
-//                              printf("%d %f %f %f\n",mos_tic,mosaic_umats[mos_tic*9+6],mosaic_umats[mos_tic*9+7],mosaic_umats[mos_tic*9+8]);
 
                                 /* construct fractional Miller indicies */
                                 h = dot_product(a,scattering);
@@ -2634,12 +2608,13 @@ nanoBragg::add_nanoBragg_spots()
                                         F_latt = Na*Nb*Nc*(hrad_sqr*fudge < 0.3969 );
                                 }
                                 /* no need to go further if result will be zero */
-                                if(F_latt == 0.0) continue;
+                                if(F_latt == 0.0) {
+                                    continue;
+                                }
 
 
                                 /* find nearest point on Ewald sphere surface? */
-                                if( integral_form )
-                                {
+                                if( integral_form ){
 
                                     if( phi != 0.0 || mos_tic > 0 )
                                     {
@@ -2660,13 +2635,11 @@ nanoBragg::add_nanoBragg_spots()
                                     relp[1] = h0*a_star[1] + k0*b_star[1] + l0*c_star[1];
                                     relp[2] = h0*a_star[2] + k0*b_star[2] + l0*c_star[2];
                                     relp[3] = h0*a_star[3] + k0*b_star[3] + l0*c_star[3];
-//                                  d_star = magnitude(relp)
 
                                     /* reciprocal-space coordinates of center of Ewald sphere */
                                     Ewald0[1] = -incident[1]/lambda/1e10;
                                     Ewald0[2] = -incident[2]/lambda/1e10;
                                     Ewald0[3] = -incident[3]/lambda/1e10;
-//                                  1/lambda = magnitude(Ewald0)
 
                                      /* distance from Ewald sphere in lambda=1 units */
                                     vector[1] = relp[1]-Ewald0[1];
@@ -2695,13 +2668,11 @@ nanoBragg::add_nanoBragg_spots()
                                     test = exp(-( (Fdet-Fdet0)*(Fdet-Fdet0)+(Sdet-Sdet0)*(Sdet-Sdet0) + d_r*d_r )/1e-8);
                                 } // end of integral form
 
-
                                 /* structure factor of the unit cell */
                                 if(interpolate){
                                     h0_flr = static_cast<int>(floor(h));
                                     k0_flr = static_cast<int>(floor(k));
                                     l0_flr = static_cast<int>(floor(l));
-
 
                                     if ( ((h-h_min+3)>h_range) ||
                                          (h-2<h_min)           ||
@@ -2716,49 +2687,50 @@ nanoBragg::add_nanoBragg_spots()
                                         }
                                         F_cell = default_F;
                                         interpolate=0;
-                                        continue;
+                                        //continue; // NOTE: this continue breaks continuity between 1 N-source and  N 1-source calls to add_nanoBragg_spots()
                                     }
+                                    if (interpolate){
+                                        /* integer versions of nearest HKL indicies */
+                                        h_interp[0]=h0_flr-1;
+                                        h_interp[1]=h0_flr;
+                                        h_interp[2]=h0_flr+1;
+                                        h_interp[3]=h0_flr+2;
+                                        k_interp[0]=k0_flr-1;
+                                        k_interp[1]=k0_flr;
+                                        k_interp[2]=k0_flr+1;
+                                        k_interp[3]=k0_flr+2;
+                                        l_interp[0]=l0_flr-1;
+                                        l_interp[1]=l0_flr;
+                                        l_interp[2]=l0_flr+1;
+                                        l_interp[3]=l0_flr+2;
 
-                                    /* integer versions of nearest HKL indicies */
-                                    h_interp[0]=h0_flr-1;
-                                    h_interp[1]=h0_flr;
-                                    h_interp[2]=h0_flr+1;
-                                    h_interp[3]=h0_flr+2;
-                                    k_interp[0]=k0_flr-1;
-                                    k_interp[1]=k0_flr;
-                                    k_interp[2]=k0_flr+1;
-                                    k_interp[3]=k0_flr+2;
-                                    l_interp[0]=l0_flr-1;
-                                    l_interp[1]=l0_flr;
-                                    l_interp[2]=l0_flr+1;
-                                    l_interp[3]=l0_flr+2;
+                                        /* polin function needs doubles */
+                                        h_interp_d[0] = (double) h_interp[0];
+                                        h_interp_d[1] = (double) h_interp[1];
+                                        h_interp_d[2] = (double) h_interp[2];
+                                        h_interp_d[3] = (double) h_interp[3];
+                                        k_interp_d[0] = (double) k_interp[0];
+                                        k_interp_d[1] = (double) k_interp[1];
+                                        k_interp_d[2] = (double) k_interp[2];
+                                        k_interp_d[3] = (double) k_interp[3];
+                                        l_interp_d[0] = (double) l_interp[0];
+                                        l_interp_d[1] = (double) l_interp[1];
+                                        l_interp_d[2] = (double) l_interp[2];
+                                        l_interp_d[3] = (double) l_interp[3];
 
-                                    /* polin function needs doubles */
-                                    h_interp_d[0] = (double) h_interp[0];
-                                    h_interp_d[1] = (double) h_interp[1];
-                                    h_interp_d[2] = (double) h_interp[2];
-                                    h_interp_d[3] = (double) h_interp[3];
-                                    k_interp_d[0] = (double) k_interp[0];
-                                    k_interp_d[1] = (double) k_interp[1];
-                                    k_interp_d[2] = (double) k_interp[2];
-                                    k_interp_d[3] = (double) k_interp[3];
-                                    l_interp_d[0] = (double) l_interp[0];
-                                    l_interp_d[1] = (double) l_interp[1];
-                                    l_interp_d[2] = (double) l_interp[2];
-                                    l_interp_d[3] = (double) l_interp[3];
-
-                                    /* now populate the "y" values (nearest four structure factors in each direction) */
-                                    for (i1=0;i1<4;i1++) {
-                                        for (i2=0;i2<4;i2++) {
-                                           for (i3=0;i3<4;i3++) {
-                                                  sub_Fhkl[i1][i2][i3]= Fhkl[h_interp[i1]-h_min][k_interp[i2]-k_min][l_interp[i3]-l_min];
-                                           }
-                                        }
-                                     }
+                                        /* now populate the "y" values (nearest four structure factors in each direction) */
+                                        for (i1=0;i1<4;i1++) {
+                                            for (i2=0;i2<4;i2++) {
+                                               for (i3=0;i3<4;i3++) {
+                                                      sub_Fhkl[i1][i2][i3]= Fhkl[h_interp[i1]-h_min][k_interp[i2]-k_min][l_interp[i3]-l_min];
+                                               }
+                                            }
+                                         }
 
 
-                                    /* run the tricubic polynomial interpolation */
-                                    polin3(h_interp_d,k_interp_d,l_interp_d,sub_Fhkl,h,k,l,&F_cell);
+                                        /* run the tricubic polynomial interpolation */
+                                        polin3(h_interp_d,k_interp_d,l_interp_d,sub_Fhkl,h,k,l,&F_cell);
+                                    }
                                 }
 
                                 if(! interpolate)
@@ -2786,7 +2758,7 @@ nanoBragg::add_nanoBragg_spots()
                                 }
 
                                 /* convert amplitudes into intensity (photons per steradian) */
-                                    I += F_cell*F_cell*F_latt*F_latt*source_I[source]*capture_fraction;
+                                I += F_cell*F_cell*F_latt*F_latt*source_I[source]*capture_fraction;
                             }
                             /* end of mosaic loop */
                         }
@@ -2799,7 +2771,6 @@ nanoBragg::add_nanoBragg_spots()
                 /* end of sub-pixel y loop */
             }
             /* end of sub-pixel x loop */
-
 
             floatimage[i] += r_e_sqr*fluence*spot_scale*polar*I/steps*omega_pixel;
 //          floatimage[i] = test;

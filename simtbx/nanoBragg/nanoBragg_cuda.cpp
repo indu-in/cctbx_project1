@@ -67,7 +67,8 @@ void allocate_cuda_cu(int spixels, int fpixels, int roi_xmin, int roi_xmax,
                       cudaPointers &cp /* output for pointers */);
 
 extern "C"
-void add_energy_channel_cuda_cu(double * source_I, double * source_lambda,
+void add_energy_channel_cuda_cu(double * source_I, double * source_lambda, double fluence,
+                                double * source_X, double* source_Y,  double* source_Z,
                                 double *** Fhkl, int h_range, int k_range, int l_range,
                                 cudaPointers &cp);
 
@@ -102,6 +103,7 @@ nanoBragg::add_nanoBragg_spots_cuda()
   /* declare a float version of floatimage for output */
   float* float_floatimage = new float[raw_pixels.size()];
 #ifdef HAVE_NANOBRAGG_SPOTS_CUDA
+
   nanoBraggSpotsCUDA(spixels, fpixels, roi_xmin, roi_xmax,
                      roi_ymin, roi_ymax, oversample,
                      point_pixel /* bool */, pixel_size, subpixel_size,
@@ -203,7 +205,7 @@ nanoBragg::allocate_cuda() {
 void nanoBragg::add_energy_channel_cuda() {
 
 #ifdef HAVE_NANOBRAGG_SPOTS_CUDA
-  add_energy_channel_cuda_cu(source_I, source_lambda, Fhkl, h_range, k_range, l_range, cpo);
+  add_energy_channel_cuda_cu(source_I, source_lambda, fluence, source_X, source_Y, source_Z, Fhkl, h_range, k_range, l_range, cpo);
 #else
   throw SCITBX_ERROR("no CUDA implementation of add_energy_channel_cuda");
 #endif
