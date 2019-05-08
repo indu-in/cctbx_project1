@@ -1491,7 +1491,8 @@ extern "C" void allocate_cuda_cu(int spixels, int fpixels, int roi_xmin, int roi
         free(max_I_y_reduction);
 }
 
-extern "C" void add_energy_channel_cuda_cu(double * source_I, double * source_lambda,
+extern "C" void add_energy_channel_cuda_cu(double * source_I, double * source_lambda, double fluence,
+                                            double * source_X, double* source_Y, double* source_Z,
                                            double *** Fhkl, int h_range, int k_range, int l_range,
                                            cudaPointers &cp) {
 
@@ -1499,6 +1500,14 @@ extern "C" void add_energy_channel_cuda_cu(double * source_I, double * source_la
         // the int arguments are for sizes of the arrays
         CUDA_CHECK_RETURN(cudaMemcpyVectorDoubleToDevice(cp.cu_source_I, source_I, cp.cu_sources));
         CUDA_CHECK_RETURN(cudaMemcpyVectorDoubleToDevice(cp.cu_source_lambda, source_lambda, cp.cu_sources));
+
+        cp.cu_fluence = fluence;
+        //cudaMemcpy(cp.cu_fluence, fluence, sizeof(*cp.cu_fluence), cudaMemcpyHostToDevice);
+
+        //CUDA_REAL cp.cu_fluence = fluence;
+        CUDA_CHECK_RETURN(cudaMemcpyVectorDoubleToDevice(cp.cu_source_X, source_X, cp.cu_sources));
+        CUDA_CHECK_RETURN(cudaMemcpyVectorDoubleToDevice(cp.cu_source_Y, source_Y, cp.cu_sources));
+        CUDA_CHECK_RETURN(cudaMemcpyVectorDoubleToDevice(cp.cu_source_Z, source_Z, cp.cu_sources));
 
         int hklsize = h_range * k_range * l_range;
         CUDAREAL * FhklLinear = (CUDAREAL*) calloc(hklsize, sizeof(*FhklLinear));
