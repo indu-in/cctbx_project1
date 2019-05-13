@@ -1871,6 +1871,8 @@ printf("DEBUG: pythony_stolFbg[1]=(%g,%g)\n",nanoBragg.pythony_stolFbg[1][0],nan
        "Update raw_pixels on host with array from GPU")
       .def("deallocate_cuda", &nanoBragg::deallocate_cuda,
        "Deallocate arrays on the GPU")
+      .def("add_nanoBragg_spots_cuda_update", &nanoBragg::add_nanoBragg_spots_cuda_update,
+       "copy over all the small stuff, 0-out the image, and run the kernel")
 #endif
 
       /* actual run of the background simulation */

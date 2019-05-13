@@ -120,7 +120,8 @@ nanoBragg::nanoBragg(
     unitize(spindle_vector,spindle_vector);
 
     /* NOT IMPLEMENTED: read in any other stuff?  */
-    show_params();
+    if(verbose)
+        show_params();
 
     /* sensible initialization of all unititialized values */
     reconcile_parameters();
