@@ -582,6 +582,7 @@ class nanoBragg {
 #ifdef NANOBRAGG_HAVE_CUDA
     void allocate_cuda();
     void add_energy_channel_cuda();
+    void add_nanoBragg_spots_cuda_update();
     void get_raw_pixels_cuda();
     void deallocate_cuda();
     void add_nanoBragg_spots_cuda();
