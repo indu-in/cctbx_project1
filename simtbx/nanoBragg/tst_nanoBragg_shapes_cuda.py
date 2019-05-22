@@ -69,7 +69,7 @@ if __name__ == "__main__":
     for shape in shapes:
         img_cuda = main(cuda=True)
         img = main(cuda=False)
-        np.savez("_shapes", img_cuda, img)
+        #np.savez("_shapes", img_cuda, img)
         
         # from the docs for np.allclose:
         #       np.allclose(a,b,rtol,atol)
