@@ -1162,7 +1162,7 @@ int main() {
     return
   if env_etc.compiler == "darwin_clang" or env_etc.compiler=="darwin_c++": 
       if not libtbx.env.build_options.use_conda:
-        print("libtbx.scons: OpenMP is not supported by clang yet.")
+        print("libtbx.scons: OpenMP is not supported by clang yet outside of a conda build.")
         return
   if env_etc.compiler == "darwin_gcc-4.2" :
     print("libtbx.scons: OpenMP implementation broken.")
@@ -1171,12 +1171,13 @@ int main() {
     print("libtbx.scons: OpenMP is disabled.")
     return
 
-  dawrin_compile = darwin_linker = ""
-  # NOTE need to link to the conda env lib up front to compile test code
+  # Try to build with openMP in darwin if using conda
+  darwin_compile = darwin_link = ""
   if env_etc.compiler == "darwin_clang" or env_etc.compiler=="darwin_c++": 
       if libtbx.env.build_options.use_conda:
-        assert( len(env_etc.conda_libpath)==1 and len(env_etc.conda_cpppath)==1), "Check conda env"
         try:
+          print("lintbx.scons: Trying to configure openMP in darwin + conda build")
+          assert( len(env_etc.conda_libpath)==1 and len(env_etc.conda_cpppath)==1), "Check conda env, too many libs, incs"
           # get the omp header: 
           omp_incdirs = [root for root,_,files in os.walk(env_etc.conda_prefix) if "omp.h" in files]
           assert(omp_incdirs), "No omp.h header found in environment"
@@ -1194,8 +1195,8 @@ int main() {
           # NOTE c++ libs needed because cctbx compiles with clang and not clang++
           omp_libdir = env_etc.conda_libpath[0]
           darwin_link = "-L%s -lomp -lc++ -Wl,-rpath,%s" % (omp_libdir, omp_libdir) 
-        except (AssertionError,):
-          print ("OMP not available!")
+        except AssertionError as Amsg:
+          print ("libtbx.scons: OpenMP not available\n", Amsg)
           return
 
   from libtbx.utils import select_matching
