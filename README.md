@@ -32,14 +32,22 @@ Current efforts are to incorporate cctbx into a conda environment. Here is a bas
 
 The easiest way to set up a development environment from scratch is to:
 
-1. Download https://raw.githubusercontent.com/cctbx/cctbx_project/master/libtbx/auto_build/bootstrap.py in your main working directory.
-2. Make bootstrap an executable and run
+1. Download the cctbx project [boostrap](https://raw.githubusercontent.com/cctbx/cctbx_project/darwin_omp/libtbx/auto_build/bootstrap) script in your main working directory.
+
+2. Make ```bootstrap``` an executable and run
 
 ```
+chmod +x bootstrap
 ./bootstrap --help
 ```
 
-to see the options. 
+to see the options. Note, currently boostrap requires that the first python binary in your path be python version 2, or else it will fail. Verify this by running
+ 
+```
+python -c "import sys;print (sys.version_info[0])"
+``` 
+
+and seeing a 2 printed to the screen. If its a 3, you need to change your PATH varaible accordingly.
 
 <a name="hot"></a>
 ### Getting cctbx project sources: hot and update 
