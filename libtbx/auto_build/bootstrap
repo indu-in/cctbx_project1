@@ -10,6 +10,10 @@
 
 from __future__ import absolute_import, division, print_function
 
+import sys
+if sys.version_info[0] > 2:
+    print("Please ensure the first python in your path is python version 2, not 3")
+    sys.exit()
 import ntpath
 import os
 import os.path
@@ -19,7 +23,6 @@ import shutil
 import socket as pysocket
 import stat
 import subprocess
-import sys
 import tarfile
 import tempfile
 import textwrap
