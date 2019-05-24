@@ -5,10 +5,12 @@
 
 * [Installation](#install)
   * [Download the installer script](#getboot)
-  * [get sources](#hot)
-  * [get dependencies](#conda)
-  * [auto building](#build)
-  * [Manual build](#manual_build)
+  * [Default](#default)
+  * [Using conds](#conda)
+    * [get sources](#hot)
+    * [get dependencies](#conda)
+    * [auto building](#build)
+    * [Manual build](#manual_build)
 
 * [Examples](#Examples)
 
@@ -39,13 +41,19 @@ python -c "import sys;print (sys.version_info[0])"
 
 and seeing a 2 printed to the screen. If its a 3, you need to change your PATH variable and visible python binaries accordingly.
 
-The default should work on your system:
+<a name="default"></a>
+## Default 
+The default install arguments should just work on your system:
 
 ```
 ./bootstrap.py --nroc 8
 ```
 
-You will see a ```modules``` and ```build``` folder created once this is done. To start using cctbx python binary you can run ```source ./build/setpaths.sh```.  With the paths set, one can then write a python cctbx script and execute it using ```libtbx.python my_cctbx_script.py```. There are also several command line tools in your path. To see the full list execute **SHOW_SCRIPTS_FUNCTION_THAT_DOESNT_EXIST_YET** Current efforts, however, are to incorporate cctbx into a conda environment. Below is a basic installation workflow involving conda that requires minimal effort. While non-standard, it should work!
+You will see a ```modules``` and ```build``` folder created once this is done. To start using cctbx python binary you can run ```source ./build/setpaths.sh```.  With the paths set, one can then write a python cctbx script and execute it using ```libtbx.python my_cctbx_script.py```. There are also several command line tools in your path. To see the full list execute **SHOW_SCRIPTS_FUNCTION_THAT_DOESNT_EXIST_YET** 
+
+<a name="conda"></a>
+## Install in a conda environment
+Current efforts, however, are to incorporate cctbx into a conda environment. Below is a basic installation workflow involving conda that requires minimal effort. While non-standard, it should work!
 
 
 <a name="hot"></a>
