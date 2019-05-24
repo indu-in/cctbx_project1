@@ -63,7 +63,7 @@ def main():
         for pid in range(Npan):
             SIM = simtbx.nanoBragg.nanoBragg(detector=cspad, beam=beam,
                 verbose=0, panel_id=pid)
-
+            SIM.timelog = True
             B = sqr(cryst.get_B())
             U = sqr(cryst.get_U())
             Uz = Zrots[ i_rot]
@@ -92,6 +92,7 @@ def main():
     t = time.time()
     SIM = simtbx.nanoBragg.nanoBragg(detector=cspad, beam=beam,
                                      verbose=0, panel_id=pid)
+    SIM.timelog= True
     SIM.Amatrix = sqr(cryst.get_A()).transpose().elems
     SIM.flux = 1e12
     SIM.mosaic_spread_deg = 0.02
