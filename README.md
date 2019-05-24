@@ -25,7 +25,7 @@ First
 <a name="getboot"></a>
 ### Get bootstrap.py
 
-Download the installer script [boostrap](https://raw.githubusercontent.com/cctbx/cctbx_project/darwin_omp/libtbx/auto_build/bootstrap) in your main working directory. 
+Download the installer script [boostrap.py](https://raw.githubusercontent.com/cctbx/cctbx_project/darwin_omp/libtbx/auto_build/bootstrap.py) in your main working directory. 
 
 Make ```bootstrap.py``` an executable and look at the options (we'll just use a few)
 
