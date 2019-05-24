@@ -50,7 +50,7 @@ and seeing a 2 printed to the screen. If its a 3, you need to change your PATH v
 ./bootstrap.py --builder=dials hot update
 ```
 
-Hot and update will download the packages that dials depends on, in this case ```cctbx_project``` and all its goodies. This is the *"builder"* that most developers will use and all of the source materials are available to the public. The packages will be stored in the newly created ```modules``` folder.
+Note we passed the option --builder=dials. Dials is a framework for processing diffraction data that includes an image viewer and spot findingm indexing, and integration routines. Dials that makes use of cctbx libraries,  as well as some other libraries, namely dxtbx which is a library for various experimental models (e.g. crystals detectors, beams) and almost every known X-ray detector image format. In this case hot and update will download the packages that dials depends on. *"Dials"* is the *"builder"* that most developers will use and all of the sources materials are freely available to the public. The packages will be stored in a newly created ```./modules``` folder.
 
 <a name="conda"></a>
 ### Getting external dependencies: conda
