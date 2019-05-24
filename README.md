@@ -4,7 +4,6 @@
 
 
 * [Installation](#install)
-
   * [Download the installer script](#getboot)
   * [get sources](#hot)
   * [get dependencies](#conda)
@@ -18,8 +17,6 @@
 
 <a name="install"></a>
 ## Installation
-
-Current efforts are to incorporate cctbx into a conda environment. Here is a basic installation workflow, that while non-standard, should work !
 
 First
 <a name="getboot"></a>
@@ -42,6 +39,15 @@ python -c "import sys;print (sys.version_info[0])"
 
 and seeing a 2 printed to the screen. If its a 3, you need to change your PATH variable and visible python binaries accordingly.
 
+The default should work on your system:
+
+```
+./bootstrap.py --nroc 8
+```
+
+You will see a ```modules``` and ```build``` folder created once this is done. To start using cctbx python binary you can run ```source ./build/setpaths.sh```.  Current efforts, however, are to incorporate cctbx into a conda environment. Below is a basic installation workflow involving conda that requires minimal effort. While non-standard, it should work!
+
+
 <a name="hot"></a>
 ### Getting cctbx project sources: hot and update 
 * Typically the first step is to download the internal sources, which is done automatically using the ```hot``` and ```update``` arguments. 
@@ -50,7 +56,7 @@ and seeing a 2 printed to the screen. If its a 3, you need to change your PATH v
 ./bootstrap.py --builder=dials hot update
 ```
 
-Note we passed the option --builder=dials. Dials is a framework for processing diffraction data that includes an image viewer and spot findingm indexing, and integration routines. Dials that makes use of cctbx libraries,  as well as some other libraries, namely dxtbx which is a library for various experimental models (e.g. crystals detectors, beams) and almost every known X-ray detector image format. In this case hot and update will download the packages that dials depends on. *"Dials"* is the *"builder"* that most developers will use and all of the sources materials are freely available to the public. The packages will be stored in a newly created ```./modules``` folder.
+Note we passed the option --builder=dials. Dials is a framework for processing diffraction data that includes an image viewer and spot findingm indexing, and integration routines. Dials makes use of cctbx libraries,  as well as some other libraries, namely dxtbx which is a library for various experimental models (e.g. crystals detectors, beams) and almost every known X-ray detector image format. In this case hot and update will download the packages that dials depends on. Dials is the *"builder"* that most developers will use and all of the sources materials are freely available to the public. The packages will be stored in a newly created ```./modules``` folder.
 
 <a name="conda"></a>
 ### Getting external dependencies: conda
