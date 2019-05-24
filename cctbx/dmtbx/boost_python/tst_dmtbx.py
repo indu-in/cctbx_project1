@@ -1,5 +1,4 @@
-from __future__ import division
-from __future__ import print_function
+from __future__ import division, print_function
 from cctbx import dmtbx
 from cctbx import sgtbx
 from cctbx.array_family import flex

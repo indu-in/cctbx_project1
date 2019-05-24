@@ -1,11 +1,10 @@
-from __future__ import division
+from __future__ import division, print_function
 # LIBTBX_SET_DISPATCHER_NAME prime.plotstats
 '''
 Author      : Uervirojnangkoorn, M.
 Created     : 7/11/2016
 Description : Plot stats by post-refinement cycles.
 '''
-from __future__ import print_function
 import matplotlib.pyplot as plt
 import sys
 from six.moves import cPickle as pickle

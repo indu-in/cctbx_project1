@@ -1,5 +1,4 @@
-from __future__ import division
-from __future__ import print_function
+from __future__ import division, print_function
 
 import boost.python
 ext = boost.python.import_ext( "scitbx_suffixtree_shared_ext" )

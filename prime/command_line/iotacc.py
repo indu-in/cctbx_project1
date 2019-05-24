@@ -1,11 +1,10 @@
-from __future__ import division
+from __future__ import division, print_function
 # LIBTBX_SET_DISPATCHER_NAME prime.iotacc
 '''
 Author      : Uervirojnangkoorn, M.
 Created     : 11/25/2014
 Description : iotacc selects iota integration results base on CC with ref. set.
 '''
-from __future__ import print_function
 import os, sys
 import numpy as np
 import math

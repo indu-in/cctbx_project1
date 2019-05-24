@@ -1,4 +1,4 @@
-from __future__ import division
+from __future__ import division, print_function
 
 '''
 Author      : Lyubimov, A.Y.
@@ -6,7 +6,6 @@ Created     : 12/12/2017
 Last Changed: 01/29/2018
 Description : SIMTBX (nanoBragg) GUI Windows / frames
 '''
-from __future__ import print_function
 
 import os
 import wx

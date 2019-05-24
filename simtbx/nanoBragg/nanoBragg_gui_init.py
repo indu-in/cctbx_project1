@@ -1,4 +1,4 @@
-from __future__ import division
+from __future__ import division, print_function
 
 '''
 Author      : Lyubimov, A.Y.
@@ -6,7 +6,6 @@ Created     : 12/12/2017
 Last Changed: 10/30/2018
 Description : SIMTBX (nanoBragg) GUI Initialization module
 '''
-from __future__ import print_function
 
 import os
 import wx

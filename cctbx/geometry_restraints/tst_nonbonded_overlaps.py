@@ -1,5 +1,4 @@
-from __future__ import division
-from __future__ import print_function
+from __future__ import division, print_function
 from cctbx.geometry_restraints.nonbonded_overlaps import compute
 import cctbx.geometry_restraints.nonbonded_overlaps as nbo
 import mmtbx.validation.clashscore as mvc

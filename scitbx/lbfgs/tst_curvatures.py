@@ -1,4 +1,4 @@
-from __future__ import division
+from __future__ import division, print_function
 
 """Test case dramatically improves LBFGS multiparameter refinement by
 using curvatures to provide relative weightings for the contributions of
@@ -7,7 +7,6 @@ This implementation is based on code from Ralf Grosse-Kunstleve
 in the module scitbx/lbfgs/dev/twisted_gaussian.py.
 Here, the re-usable part of the code is abstracted to a mix-in class
 that can be used by any other application wishing to use curvatures."""
-from __future__ import print_function
 
 def lbfgs_run(target_evaluator,
               min_iterations=0,

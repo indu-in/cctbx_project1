@@ -1,5 +1,4 @@
-from __future__ import division
-from __future__ import print_function
+from __future__ import division, print_function
 import re,struct
 from iotbx.detectors.detectorbase import DetectorImageBase
 

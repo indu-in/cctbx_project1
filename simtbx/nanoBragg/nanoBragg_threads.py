@@ -1,4 +1,4 @@
-from __future__ import division
+from __future__ import division, print_function
 
 '''
 Author      : Lyubimov, A.Y.
@@ -6,7 +6,6 @@ Created     : 12/21/2017
 Last Changed: 12/21/2017
 Description : SIMTBX (nanoBragg) GUI Threads and PostEvents
 '''
-from __future__ import print_function
 
 import os
 import wx

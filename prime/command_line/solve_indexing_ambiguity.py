@@ -1,10 +1,9 @@
-from __future__ import division
+from __future__ import division, print_function
 '''
 Author      : Uervirojnangkoorn, M.
 Created     : 8/15/2016
 Description : Command line for solving indexing ambiguity
 '''
-from __future__ import print_function
 import numpy as np
 from libtbx.easy_mp import parallel_map
 from prime.index_ambiguity.mod_indexing_ambiguity import indamb_handler

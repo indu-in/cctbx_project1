@@ -1,6 +1,5 @@
-from __future__ import division
+from __future__ import division, print_function
 """ handle queue usage """
-from __future__ import print_function
 __author__ = 'Monarin Uervirojnangkoorn, monarin@gmail.com'
 
 import time, os
