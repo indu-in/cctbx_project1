@@ -453,6 +453,7 @@ class nanoBragg {
 
     /* struct for CUDA pointers */
 #ifdef NANOBRAGG_HAVE_CUDA
+    bool timelog;
     cudaPointers cpo;
 #endif
     /* special options */
