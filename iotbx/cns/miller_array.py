@@ -1,7 +1,7 @@
 from __future__ import division, print_function
-from six.moves import range
 from iotbx.cns.crystal_symmetry_utils import crystal_symmetry_as_sg_uc
 from cctbx.array_family import flex
+from six.moves import range
 
 def crystal_symmetry_as_cns_comments(crystal_symmetry, out):
   if (   crystal_symmetry.unit_cell() is not None

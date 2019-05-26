@@ -1,9 +1,9 @@
 from __future__ import division, print_function
-from six.moves import range
 import scitbx.math
 from scitbx.array_family import flex
 import math
 from libtbx.test_utils import approx_equal
+from six.moves import range
 
 def exercise_1():
   x = flex.double()

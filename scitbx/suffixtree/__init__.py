@@ -1,8 +1,8 @@
 from __future__ import division, print_function
 
-from six.moves import range
 import boost.python
 from functools import reduce
+from six.moves import range
 ext = boost.python.import_ext( "scitbx_suffixtree_shared_ext" )
 from scitbx_suffixtree_shared_ext import *
 
@@ -15,7 +15,7 @@ def dump(root, word):
 def label(edge, word, separator = ""):
 
   return separator.join(
-    str( word[ index ] ) for index in list(range( edge.start, edge.stop))
+    str( word[ index ] ) for index in range( edge.start, edge.stop )
     )
 
 

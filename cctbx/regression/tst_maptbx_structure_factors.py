@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import maptbx
 from cctbx import crystal
 from cctbx import sgtbx
@@ -9,6 +8,7 @@ from cctbx.array_family import flex
 from scitbx import fftpack
 from libtbx.test_utils import approx_equal
 import sys
+from six.moves import range
 
 def exercise_crystal_gridding():
   crystal_symmetry = crystal.symmetry(

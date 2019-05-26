@@ -24,7 +24,6 @@ from __future__ import division, print_function
 # and degrees (perhaps small differences in postrefinement are affecting
 # things?)
 
-from six.moves import range
 import sys
 import math
 from iotbx import mtz
@@ -32,6 +31,7 @@ from cctbx.array_family import flex
 from annlib_ext import AnnAdaptor as ann_adaptor
 from cctbx.sgtbx import space_group, space_group_symbols
 from cctbx.miller import map_to_asu
+from six.moves import range
 
 def meansd(values):
     assert(len(values) > 3)

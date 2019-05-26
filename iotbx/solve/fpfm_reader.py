@@ -1,8 +1,8 @@
 from __future__ import division
-from six.moves import range
 from cctbx import miller
 from cctbx import crystal
 from cctbx.array_family import flex
+from six.moves import range
 
 class reader(object):
 

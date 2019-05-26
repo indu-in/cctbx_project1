@@ -1,10 +1,10 @@
 from __future__ import division, print_function
-from six.moves import range
 import scitbx.linalg
 import scitbx.linalg.eigensystem
 from scitbx.array_family import flex
 from libtbx.test_utils import approx_equal
 from scitbx.linalg import matrix_normality_ratio
+from six.moves import range
 
 def exercise_random_normal_matrix():
   for m, n in [ (3,5), (4,5), (5,5), (5,4), (5,3) ]:

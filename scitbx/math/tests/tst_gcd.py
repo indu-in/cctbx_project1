@@ -1,9 +1,9 @@
 from __future__ import division, print_function
-from six.moves import range
 import scitbx.math
 import boost.rational
 import time
 import sys, os
+from six.moves import range
 
 def compare_with_boost_rational_gcd(label):
   other_gcd = getattr(scitbx.math, label, None)

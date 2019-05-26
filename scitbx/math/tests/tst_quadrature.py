@@ -1,9 +1,9 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.array_family import flex
 from libtbx.test_utils import approx_equal
 import scitbx.math as sm
 import math
+from six.moves import range
 
 
 def twod_integrator( cub, n_points ):

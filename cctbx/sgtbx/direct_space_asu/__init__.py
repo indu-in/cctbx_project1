@@ -1,10 +1,10 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import sgtbx
 from cctbx.sgtbx.direct_space_asu import cut_plane
 from cctbx.sgtbx.direct_space_asu.short_cuts import r1
 from scitbx import matrix
 import sys
+from six.moves import range
 
 class direct_space_asu(object):
 

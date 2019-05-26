@@ -1,7 +1,7 @@
 from __future__ import division
 from __future__ import print_function
-from six.moves import range
 from cctbx.eltbx import wavelengths
+from six.moves import range
 
 def _make_phase_block(phase, number=1, name="", scale_down=1.0):
   """Create a pcr phase block skelleton with placeholder strings for different

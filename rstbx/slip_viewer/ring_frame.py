@@ -4,8 +4,8 @@ from __future__ import print_function
 #
 # $Id$
 
-from six.moves import range
 import wx
+from six.moves import range
 
 
 class RingSettingsFrame(wx.MiniFrame):

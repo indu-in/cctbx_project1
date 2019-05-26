@@ -1,11 +1,11 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx.xray import ext
 from cctbx.array_family import flex
 from libtbx.test_utils import approx_equal
 from libtbx.math_utils import iceil
 from itertools import count
 import sys
+from six.moves import range
 
 class random_inputs(object):
 

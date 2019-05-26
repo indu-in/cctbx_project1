@@ -1,9 +1,9 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.array_family import flex
 from scitbx import matrix
 import math
 import sys
+from six.moves import range
 
 angle_scale = math.pi / 2
 

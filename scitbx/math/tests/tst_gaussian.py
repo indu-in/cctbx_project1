@@ -1,10 +1,10 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.examples import immoptibox_ports
 from scitbx.math import gaussian
 from scitbx.array_family import flex
 from libtbx.test_utils import approx_equal, eps_eq
 from libtbx.utils import format_cpu_times
+from six.moves import range
 try:
   import cPickle as pickle
 except ImportError:

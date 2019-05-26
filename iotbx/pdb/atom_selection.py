@@ -5,7 +5,6 @@ a simple keyword syntax and boolean operators.
 """
 
 from __future__ import division
-from six.moves import range
 from iotbx import simple_parser
 from iotbx import wildcard
 from cctbx import crystal
@@ -16,6 +15,7 @@ from libtbx.phil import tokenizer
 from libtbx.utils import Sorry, format_exception
 from libtbx import slots_getstate_setstate
 from mmtbx.ncs.ncs_search import get_chains_info
+from six.moves import range
 
 abc="abcdefghijklmnopqrstuvwxyz"
 ABC="ABCDEFGHIJKLMNOPQRSTUVWXYZ"

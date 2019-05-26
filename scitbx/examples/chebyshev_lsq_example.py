@@ -1,9 +1,9 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.array_family import flex
 from scitbx.math import chebyshev_polynome
 from scitbx.math import chebyshev_lsq_fit
 from cStringIO import StringIO
+from six.moves import range
 
 
 
@@ -78,7 +78,7 @@ def example():
 
 
 def another_example(np=41,nt=5):
-  x = flex.double( list(range(np)) )/(np-1)
+  x = flex.double( range(np) )/(np-1)
   y = 0.99*flex.exp(-x*x*0.5)
   y = -flex.log(1.0/y-1)
   w = y*y/1.0

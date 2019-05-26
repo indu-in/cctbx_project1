@@ -6,13 +6,13 @@ from __future__ import division, print_function
 # Validate reflection data from test integration code against data from XDS,
 # by means of computing a correlaton coefficient between the two.
 
-from six.moves import range
 import math
 import sys
 import random
 from cctbx.array_family import flex
 from annlib_ext import AnnAdaptor as ann_adaptor
 from scitbx import matrix
+from six.moves import range
 
 def meansd(values):
 

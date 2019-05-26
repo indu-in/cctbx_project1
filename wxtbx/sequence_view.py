@@ -10,10 +10,10 @@
 # TODO: show existing CCTBX atom selection?
 
 from __future__ import division, print_function
-from six.moves import range
 import wx
 import wx.lib.scrolledpanel
 import math, sys, os
+from six.moves import range
 
 WXTBX_SEQ_SELECT_NONE = 1
 WXTBX_SEQ_SELECT_SINGLE = 2

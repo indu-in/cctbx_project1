@@ -1,11 +1,11 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.rigid_body.proto.tst_joint_lib import revolute_simulation
 from scitbx.math import minimum_covering_sphere, sphere_3d
 from scitbx.array_family import flex
 from gltbx import wx_viewer
 import wx
 import sys
+from six.moves import range
 
 class viewer(wx_viewer.show_points_and_lines_mixin):
 

@@ -9,10 +9,10 @@
 #
 
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.array_family import flex
 from scitbx.math.periodogram import Periodogram
 from libtbx.test_utils import approx_equal
+from six.moves import range
 
 # This is the "discoveries" dataset from R, giving the number of "great"
 # inventions and scientific discoveries in each year from 1860 to 1959.

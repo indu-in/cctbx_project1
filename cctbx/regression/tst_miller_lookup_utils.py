@@ -1,10 +1,10 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx.array_family import flex
 from cctbx import crystal
 from cctbx import miller
 from cctbx import uctbx
 from cctbx import miller
+from six.moves import range
 
 
 class miller_lookup_utils_tester(object):

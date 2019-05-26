@@ -3,10 +3,10 @@ from __future__ import division, print_function
 # Copyright 2010, University of California
 # License: LGPL
 
-from six.moves import range
 from wx.lib.embeddedimage import PyEmbeddedImage
 import wx
 import sys
+from six.moves import range
 
 # from Crystal Icons (http://www.everaldo.com/crystal/)
 button_ok = PyEmbeddedImage(

@@ -1,9 +1,9 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.graph.tardy_tree import find_paths, construct
 from scitbx.graph import rigidity
 from scitbx.graph import utils
 import sys
+from six.moves import range
 
 def exercise_minimal():
   edge_sets = utils.construct_edge_sets(n_vertices=1, edge_list=[])

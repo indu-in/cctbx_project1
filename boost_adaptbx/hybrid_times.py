@@ -1,8 +1,8 @@
 from __future__ import absolute_import, division, print_function
 
-from six.moves import range
 from boost_python_hybrid_times_ext import run_c_plus_plus
 import sys, os
+from six.moves import range
 
 if (not hasattr(sys, "gettickeraccumulation")):
   print("***************************************************")

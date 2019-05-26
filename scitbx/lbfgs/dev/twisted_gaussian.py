@@ -1,11 +1,11 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx import lbfgs as scitbx_lbfgs
 from scitbx.array_family import flex
 from libtbx import adopt_init_args
 import random
 import math
 import sys
+from six.moves import range
 
 def gauss2d0(xxx_todo_changeme, s11, s12, s22):
   (x,y) = xxx_todo_changeme

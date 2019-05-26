@@ -1,9 +1,9 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import sgtbx
 import scitbx.math
 from libtbx.utils import format_cpu_times
 import sys
+from six.moves import range
 
 special = {
   9: 8, 15: 8, 17: 4, 19: 12, 20: 4, 24: 12, 43: 4, 67: 4, 68: 4, 70: 18,
@@ -16,7 +16,7 @@ special = {
 
 def run(args):
   if ("--full" in args):
-    to_do = list(range(1,230+1))
+    to_do = range(1,230+1)
   elif ("--special" in args):
     to_do = sorted(special.keys())
   else:

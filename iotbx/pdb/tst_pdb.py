@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from iotbx import pdb
 import iotbx.pdb.cryst1_interpretation
 import iotbx.pdb.remark_290_interpretation
@@ -13,6 +12,7 @@ from libtbx.utils import format_cpu_times
 import libtbx.load_env
 from cStringIO import StringIO
 import sys, os
+from six.moves import range
 op = os.path
 import iotbx.mtrix_biomt
 

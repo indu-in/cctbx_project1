@@ -1,8 +1,8 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import crystal
 import cctbx.crystal.direct_space_asu
 from cctbx.array_family import flex
+from six.moves import range
 
 def exercise_non_crystallographic():
   sites_cart = flex.vec3_double([

@@ -1,6 +1,5 @@
 from __future__ import division
 from __future__ import absolute_import, print_function
-from six.moves import range
 import smtbx.refinement.constraints as _
 from smtbx.refinement.constraints import InvalidConstraint
 import math
@@ -8,6 +7,7 @@ from scitbx.math import superpose
 from scitbx import matrix
 from scitbx.array_family import flex
 import itertools
+from six.moves import range
 
 class rigid_pivoted_rotatable_group(object):
   """ a set of atoms (rigid body) rides on a pivot atom and rotates around
@@ -197,7 +197,7 @@ class idealised_fragment(object):
     coordinates. returns coordinates of the trasformed fragment
     """
     if not control_point_indices:
-      control_point_indices = list(range(0, len(fragment)))
+      control_point_indices = range(0, len(fragment))
     to_fit = [
       (fragment[i].x, fragment[i].y, 0) for i in control_point_indices]
     lsf = superpose.least_squares_fit(

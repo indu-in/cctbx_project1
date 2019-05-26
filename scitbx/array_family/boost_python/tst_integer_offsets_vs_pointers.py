@@ -1,7 +1,7 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.array_family import flex
 import time
+from six.moves import range
 
 def block(data_size, n_repeats):
   data = flex.random_double(size=data_size)

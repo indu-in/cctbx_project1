@@ -1,8 +1,8 @@
 from __future__ import division, print_function
-from six.moves import range
 import cctbx.sgtbx
 
 import boost.python
+from six.moves import range
 ext = boost.python.import_ext("cctbx_maptbx_ext")
 from cctbx_maptbx_ext import *
 

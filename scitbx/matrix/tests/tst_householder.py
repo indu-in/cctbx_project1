@@ -1,9 +1,9 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx import linalg
 import scitbx.linalg.eigensystem
 from scitbx.array_family import flex
 from libtbx.test_utils import approx_equal
+from six.moves import range
 
 def exercise_random_symmetric_matrix(n_trials):
   symm_mat = linalg.random_normal_matrix_generator(4,4)\

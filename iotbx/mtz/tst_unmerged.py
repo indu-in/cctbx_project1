@@ -1,9 +1,9 @@
 from __future__ import division, print_function
-from six.moves import range
 import os
 from iotbx import mtz
 import libtbx.load_env
 import os.path
+from six.moves import range
 
 if (__name__ == "__main__"):
   fname = libtbx.env.find_in_repositories(

@@ -1,6 +1,6 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import sgtbx
+from six.moves import range
 #from cctbx import crystal
 
 class find_best_cell(object):
@@ -199,7 +199,7 @@ class alternative_find_best_cell(object):
       best_index = self.order_check_array.index( True )
     else: # there is more then one possible solution, use the first solution one encounters
       for order, ii in zip( self.order_check_array,
-                            list(range(len(self.order_check_array))) ):
+                            range(len(self.order_check_array)) ):
         if order:
           best_index = ii
           break

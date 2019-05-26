@@ -1,8 +1,8 @@
 from __future__ import division, print_function
-from six.moves import range
 from iotbx import pdb
 from cctbx.array_family import flex
 from libtbx.test_utils import Exception_expected, show_diff
+from six.moves import range
 
 def exercise_selection():
   pdb_inp = pdb.input(source_info=None, lines=flex.split_lines("""\

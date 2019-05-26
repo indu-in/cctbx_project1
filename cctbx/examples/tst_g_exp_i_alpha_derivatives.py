@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx.examples.g_exp_i_alpha_derivatives \
   import parameters, gradients, pack_gradients, g_exp_i_alpha_sum
 from cctbx.examples.exp_i_alpha_derivatives import least_squares
@@ -9,6 +8,7 @@ import math
 import copy
 from cStringIO import StringIO
 import sys
+from six.moves import range
 
 random.seed(0)
 

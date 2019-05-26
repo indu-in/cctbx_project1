@@ -1,10 +1,10 @@
 from __future__ import division
 
-from six.moves import range
 from scitbx import suffixtree
 from scitbx.suffixtree import single
 
 import unittest
+from six.moves import range
 
 class TestWord(unittest.TestCase):
 

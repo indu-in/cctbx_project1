@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, print_function
-from six.moves import range
 from cctbx.xray import ext
 from cctbx.xray import structure_factors
 from cctbx import miller
@@ -26,6 +25,7 @@ from cctbx import eltbx
 from libtbx.utils import format_float_with_standard_uncertainty \
      as format_float_with_su
 from cctbx import covariance
+from six.moves import range
 
 class scattering_type_registry_params(object):
   def __init__(self,

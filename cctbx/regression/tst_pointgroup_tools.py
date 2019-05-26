@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 import sys
 from cctbx import uctbx
 from cctbx import sgtbx
@@ -10,6 +9,7 @@ from cctbx import miller
 from cctbx.sgtbx import pointgroup_tools as pt
 from libtbx.test_utils import approx_equal
 from cStringIO import StringIO
+from six.moves import range
 
 def tst_pgtools():
   unit_cell = uctbx.unit_cell('40, 40, 60, 90.0, 90.0, 90.0')

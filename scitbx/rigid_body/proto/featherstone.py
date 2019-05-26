@@ -18,8 +18,8 @@ See also:
   ISBN-10: 0387743146
 """
 from __future__ import division
-
 from six.moves import range
+
 try:
   import scitbx
 except ImportError:

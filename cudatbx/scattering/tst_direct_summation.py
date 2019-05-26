@@ -1,11 +1,11 @@
 from __future__ import division, print_function
-from six.moves import range
 import math
 from iotbx import pdb
 from libtbx.test_utils import approx_equal
 from scitbx.array_family import flex
 from scitbx import matrix
 from scitbx.math.des_3_240_21 import t_x,t_y,t_z
+from six.moves import range
 
 test_pdb = "\
 CRYST1  127.692  225.403  306.106  90.00  90.00  90.00 P 21 21 21    4\n\

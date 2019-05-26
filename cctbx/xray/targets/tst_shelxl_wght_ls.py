@@ -1,8 +1,8 @@
 from __future__ import division, print_function
-from six.moves import range
 import cctbx.xray.targets
 from cctbx.array_family import flex
 from libtbx.test_utils import approx_equal
+from six.moves import range
 
 def calc_k(f_obs, i_calc):
   fc = flex.sqrt(i_calc)

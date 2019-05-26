@@ -1,11 +1,11 @@
 from __future__ import division, print_function
-from six.moves import range
 from iotbx.pdb.atom_selection import selection_string_from_selection
 from iotbx.pdb.atom_selection import get_clean_selection_string
 from mmtbx.ncs.ncs_search import get_chains_info
 from scitbx.array_family import flex
 import iotbx.pdb
 from libtbx.test_utils import approx_equal
+from six.moves import range
 
 test_pdb_1 = '''\
 CRYST1  577.812  448.715  468.790  90.00  90.00  90.00 P 1

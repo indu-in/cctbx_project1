@@ -1,9 +1,9 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.math import orthonormal_basis
 from scitbx import matrix
 from libtbx.test_utils import approx_equal
 from scitbx.array_family import flex
+from six.moves import range
 
 def input_pairs():
   yield matrix.col((1, 0, 1)), matrix.col((1, 1, 1))

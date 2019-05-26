@@ -1,8 +1,8 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx import math
 from scitbx.array_family import flex
 from scitbx.array_family import shared
+from six.moves import range
 
 def tst_nlm():
   nlm_array = math.nlm_array(10)
@@ -135,7 +135,7 @@ def tst_nl():
   assert result == expected_result
   coefs = this_nl_array.coefs()
   assert coefs.size() == nl.size()
-  new_coefs = flex.double( list(range(nl.size())) )
+  new_coefs = flex.double( range(nl.size() ) )
   assert this_nl_array.load_coefs( nl, new_coefs )
   new_nl = shared.tiny_int_2( [ (10,10) ] )
   new_coef = flex.double( [10.0] )

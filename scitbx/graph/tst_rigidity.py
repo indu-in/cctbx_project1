@@ -1,12 +1,12 @@
 from __future__ import division, print_function
 from __future__ import absolute_import
-from six.moves import range
 from rigidity import \
   gcd, \
   float_row_echelon_form_back_substitution, \
   row_reduced_float_rigidity_matrix, \
   determine_degrees_of_freedom, random, double_banana_edge_list
 import sys, os
+from six.moves import range
 
 try:
   from libtbx.math_utils import next_permutation

@@ -1,10 +1,10 @@
 from __future__ import division, print_function
-from six.moves import range
 from iotbx.mtz import extract_from_symmetry_lib
 from cctbx import sgtbx
 from libtbx.utils import format_cpu_times
 import libtbx
 import sys, os
+from six.moves import range
 op = os.path
 
 try:

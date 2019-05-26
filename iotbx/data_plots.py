@@ -5,13 +5,13 @@ Tools for handling plottable data, usually similar to CCP4's loggraph format
 """
 
 from __future__ import division, print_function
-from six.moves import range
 from libtbx import adopt_init_args
 from libtbx.utils import Sorry
 import string
 import os.path
 import math
 import re
+from six.moves import range
 
 class plot_data(object):
   def __init__(self,

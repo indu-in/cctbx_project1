@@ -1,8 +1,8 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.array_family import flex
 from scitbx.python_utils import random_transform
 import sys
+from six.moves import range
 
 
 class cross_entropy_optimizer(object):

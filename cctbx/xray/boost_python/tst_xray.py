@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import uctbx
 from cctbx import sgtbx
 from cctbx import adptbx
@@ -13,6 +12,7 @@ from scitbx.array_family import shared
 from libtbx.test_utils import Exception_expected, approx_equal, \
   not_approx_equal, show_diff
 from cStringIO import StringIO
+from six.moves import range
 try:
   import cPickle as pickle
 except ImportError:

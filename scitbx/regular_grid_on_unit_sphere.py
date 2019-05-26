@@ -1,7 +1,7 @@
 from __future__ import absolute_import, division, print_function
-from six.moves import range
 from scitbx.array_family import flex
 from scitbx.stdlib import math
+from six.moves import range
 
 def rosca(m=9, hemisphere=True):
   """

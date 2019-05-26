@@ -1,5 +1,4 @@
 from __future__ import absolute_import, division, print_function
-from six.moves import range
 import scitbx.math
 from scitbx import differential_evolution as de
 from scitbx import simplex
@@ -9,6 +8,7 @@ from scitbx.array_family import flex
 from scitbx.stdlib import math
 import time, sys
 from fractions import Fraction
+from six.moves import range
 
 def read_data(filename):
   file=open(filename, 'r')
@@ -333,8 +333,8 @@ class inm_refine(object):
     self.n = self.ndim
     self.domain =[(-1.0,1.0)]*self.ndim
     self.target_data=flex.double()
-    self.n_list=list(range(self.m,nmax+1,2))
-    self.n_indx_list=list(range(self.ndim))
+    self.n_list=range(self.m,nmax+1,2)
+    self.n_indx_list=range(self.ndim)
     for nn in self.n_list:
       self.target_data.append( self.Cnm.get_coef(nn,self.m) )
 #    self.solution=flex.random_double(self.n)*2-1

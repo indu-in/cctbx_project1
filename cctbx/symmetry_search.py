@@ -1,7 +1,7 @@
 from __future__ import division
 
-from six.moves import range
 import boost.python
+from six.moves import range
 ext = boost.python.import_ext("cctbx_symmetry_search_ext")
 from cctbx_symmetry_search_ext import ls_with_scale_and_bias
 

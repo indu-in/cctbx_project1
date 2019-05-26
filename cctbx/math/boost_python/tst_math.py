@@ -1,8 +1,8 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import math_module
 from libtbx.test_utils import approx_equal
 import math
+from six.moves import range
 
 def exercise():
   n = 2**12

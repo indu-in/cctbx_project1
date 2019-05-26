@@ -1,6 +1,6 @@
 from __future__ import division, print_function
-from six.moves import range
 import math,sys
+from six.moves import range
 
 # breakpoint.py
 # tool to analyze a plot where Y decreases with X and is best fit by 2 lines.

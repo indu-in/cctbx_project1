@@ -1,8 +1,8 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.rigid_body.essence import tst_tardy
 from scitbx.array_family import flex
 import sys
+from six.moves import range
 
 def run(args):
   if (len(args) == 0):

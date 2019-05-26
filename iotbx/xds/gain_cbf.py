@@ -9,8 +9,8 @@
 from __future__ import division
 from __future__ import absolute_import
 
-from six.moves import range
 from . import xds_cbf
+from six.moves import range
 
 class reader(xds_cbf.reader):
   """A class to read the GAIN.CBF files used in XDS"""

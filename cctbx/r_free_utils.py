@@ -1,10 +1,10 @@
 from __future__ import division, print_function
-from six.moves import range
 from libtbx.math_utils import iceil
 from libtbx.utils import null_out, Sorry
 from itertools import count
 import random
 import sys
+from six.moves import range
 
 generate_r_free_params_str = """\
     fraction = 0.1

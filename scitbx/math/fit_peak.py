@@ -1,8 +1,8 @@
 from __future__ import division, print_function
-from six.moves import range
 import math
 from scitbx import matrix,lbfgs
 from scitbx.array_family import flex
+from six.moves import range
 
 class fit_peak(object):
   """

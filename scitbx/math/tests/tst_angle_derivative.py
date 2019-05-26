@@ -1,9 +1,9 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.math import angle_derivative_wrt_vectors
 from libtbx.test_utils import approx_equal
 from scitbx import matrix
 from random import random
+from six.moves import range
 
 def finite_difference_approx(u, v):
 

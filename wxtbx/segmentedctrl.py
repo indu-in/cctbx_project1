@@ -12,8 +12,8 @@ from __future__ import division, print_function
 #   - Windows bugs
 #   - additional styles?
 
-from six.moves import range
 import wx
+from six.moves import range
 
 SEGBTN_ROUNDED_CORNERS = 1
 SEGBTN_VERTICAL = 2

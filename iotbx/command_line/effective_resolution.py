@@ -1,13 +1,13 @@
 from __future__ import division, print_function
 # LIBTBX_SET_DISPATCHER_NAME phenix.resolution
 
-from six.moves import range
 from iotbx import reflection_file_reader
 from cctbx import maptbx
 from cctbx.array_family import flex
 from libtbx.utils import Sorry
 import sys, math, time
 from scitbx import regular_grid_on_unit_sphere
+from six.moves import range
 
 def one_d_image_along_axis(n, step, uc_length):
   rho  = flex.double()

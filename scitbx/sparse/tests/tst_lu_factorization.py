@@ -1,7 +1,7 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx import sparse
 from libtbx.test_utils import approx_equal
+from six.moves import range
 
 class test(object):
 

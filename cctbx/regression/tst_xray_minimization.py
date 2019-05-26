@@ -1,10 +1,10 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import xray
 from cctbx.development import random_structure
 from cctbx.development import debug_utils
 from cctbx.array_family import flex
 import sys, random
+from six.moves import range
 
 def shift_u_iso(structure, shift):
   for sc in structure.scatterers():

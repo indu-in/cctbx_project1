@@ -1,10 +1,10 @@
 from __future__ import division, print_function
 # -*- coding: utf-8 -*-
-from six.moves import range
 import copy,math
 from scitbx.array_family import flex
 from cctbx.xray import ext
 from libtbx.utils import Sorry
+from six.moves import range
 
 # alternative implementations of direct summation using parallel architecture
 # example usage is given in cctbx/regression/tst_direct_scaling

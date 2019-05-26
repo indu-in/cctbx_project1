@@ -1,11 +1,11 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx.array_family import flex
 import os, sys
 import libtbx
 #import libtbx.load_env
 #from libtbx.test_utils import approx_equal
 from cctbx import multipolar
+from six.moves import range
 
 pdbs = [
   """\

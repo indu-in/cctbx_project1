@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import xray
 from cctbx import adptbx
 from cctbx import miller
@@ -8,6 +7,7 @@ from cctbx.development import debug_utils
 from cctbx.array_family import flex
 from libtbx.utils import user_plus_sys_time
 import sys
+from six.moves import range
 
 def dummy_structure(space_group_info, volume, n_scatterers):
   structure = xray.structure(

@@ -18,8 +18,8 @@ crystal.symmetry(
 """
 from __future__ import division
 
-from six.moves import range
 from cctbx import crystal
+from six.moves import range
 
 def extract_from(file_name=None, file=None, max_characters=1000000):
   assert [file_name, file].count(None) == 1

@@ -1,6 +1,6 @@
 from __future__ import division, print_function
-from six.moves import range
 import iotbx.pdb
+from six.moves import range
 
 def exercise_rna_dna_atom_names():
   for atom_name in [None, ""]:

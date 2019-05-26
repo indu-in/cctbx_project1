@@ -1,11 +1,11 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx.geometry_restraints import angle, angle_delta_deg
 from cctbx.array_family import flex
 from scitbx import matrix
 from libtbx.test_utils import approx_equal
 from libtbx.utils import null_out
 import sys
+from six.moves import range
 
 def derivs_fd(a, order, eps=1.e-6):
   result = flex.vec3_double()

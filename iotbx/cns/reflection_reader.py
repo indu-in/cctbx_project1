@@ -1,7 +1,6 @@
 "Transfer of CNS reflection files to flex arrays."
 from __future__ import division, print_function
 
-from six.moves import range
 from iotbx.cns.crystal_symmetry_utils import \
   re_sg_uc, re_uc_sg, crystal_symmetry_from_re_match
 from cctbx import crystal
@@ -11,6 +10,7 @@ from libtbx import complex_math
 from libtbx import easy_pickle
 import re
 import sys
+from six.moves import range
 
 # <xray-reflection-statement> :==
 #   nreflection=<integer>

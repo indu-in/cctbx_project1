@@ -1,9 +1,9 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx.array_family import flex
 from cctbx import miller
 from cctbx.development import debug_utils
 import sys
+from six.moves import range
 
 def get_all_incides(space_group, abs_range):
   result = {}

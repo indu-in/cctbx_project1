@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import translation_search
 from cctbx import crystal
 from cctbx import miller
@@ -12,6 +11,7 @@ from libtbx.test_utils import approx_equal
 from scitbx import matrix
 import random
 import sys
+from six.moves import range
 
 def run_fast_terms(structure_fixed, structure_p1,
                    f_obs, f_calc_fixed, f_calc_p1,

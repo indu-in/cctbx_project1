@@ -5,7 +5,6 @@ files, used in GUI for phenix.ensemble_refinement.
 """
 
 from __future__ import division
-from six.moves import range
 from cctbx.array_family import flex
 from libtbx.utils import Sorry
 from wxtbx import app, path_dialogs, plots
@@ -13,6 +12,7 @@ from mmtbx.command_line import validation_summary
 from wxGUI2 import AdvancedWidgets, Base
 import wx
 import sys
+from six.moves import range
 
 class ensemble_validation_plot(plots.histogram):
   def show_plot(self,

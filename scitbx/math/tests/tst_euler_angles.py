@@ -1,9 +1,9 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.math import euler_angles as euler
 from libtbx.test_utils import approx_equal
 from libtbx.utils import format_cpu_times
 import random
+from six.moves import range
 
 def exercise_core(angles_in):
   for euler_matrix, euler_angles in [

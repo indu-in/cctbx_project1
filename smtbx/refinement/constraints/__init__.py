@@ -1,10 +1,10 @@
 from __future__ import division
 from __future__ import absolute_import, print_function
 
-from six.moves import range
 import warnings
 
 import boost.python
+from six.moves import range
 ext = boost.python.import_ext("smtbx_refinement_constraints_ext")
 from smtbx_refinement_constraints_ext import *
 

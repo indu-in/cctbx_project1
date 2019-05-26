@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 import sys
 import StringIO
 import cctbx
@@ -9,6 +8,7 @@ from cctbx.sgtbx.direct_space_asu import proto as new_asu
 from cctbx.crystal import direct_space_asu_float_asu
 from libtbx.test_utils import approx_equal
 from libtbx.utils import format_cpu_times
+from six.moves import range
 
 # For usage type:
 #   cctbx.python tst_asu.py -h

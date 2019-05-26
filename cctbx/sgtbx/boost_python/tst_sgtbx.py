@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx.sgtbx import subgroups
 from cctbx.array_family import flex
 from cctbx import sgtbx
@@ -11,6 +10,7 @@ from libtbx.test_utils import Exception_expected, approx_equal, \
 import libtbx.load_env
 import math
 import weakref
+from six.moves import range
 try:
   import cPickle as pickle
 except ImportError:
@@ -314,7 +314,7 @@ def exercise_rot_mx():
   assert r.den() == 12
   assert r.num() == (36,0,0,0,36,0,0,0,36)
   assert r.determinant() == 27
-  r = rot_mx(list(range(9)), 2).transpose()
+  r = rot_mx(range(9), 2).transpose()
   assert r.num() == (0, 3, 6, 1, 4, 7, 2, 5, 8)
   assert r.den() == 2
   assert rot_mx().inverse().num() == rot_mx().num()
@@ -974,7 +974,7 @@ def exercise_space_group():
   u = uctbx.unit_cell((95.2939, 95.2939, 98.4232, 94.3158, 115.226, 118.822))
   g = space_group("C 2y (x+y,-x+y+z,z)")
   assert g.is_compatible_unit_cell(u)
-  assert approx_equal(g.average_u_star(u_star=list(range(6,0,-1))),
+  assert approx_equal(g.average_u_star(u_star=range(6,0,-1)),
     (6.5, 5.5, 4.0, 3.5, 2.5, 1.5))
   g = space_group("C 2 -2c")
   h = g.build_derived_reflection_intensity_group(anomalous_flag=True)

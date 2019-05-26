@@ -1,8 +1,8 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.array_family import flex
 from scitbx.math import fit_peak
 from libtbx.test_utils import approx_equal
+from six.moves import range
 
 # =============================================================================
 def test_pick_map_neighbors():

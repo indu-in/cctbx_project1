@@ -1,10 +1,10 @@
 
 from __future__ import division
-from six.moves import range
 import wxtbx.plots
 from wxtbx.phil_controls import strctrl, floatctrl
 from libtbx.utils import Sorry
 import wx
+from six.moves import range
 
 class AnomPlot(wxtbx.plots.plot_container):
   def __init__(self, *args, **kwds):

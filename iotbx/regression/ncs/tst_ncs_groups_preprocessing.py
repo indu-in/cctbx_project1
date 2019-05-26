@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from iotbx.ncs import format_80
 from libtbx.utils import null_out
 from datetime import datetime
@@ -14,6 +13,7 @@ from iotbx.ncs import ncs_group_master_phil
 import mmtbx.ncs.ncs
 import mmtbx.model
 from libtbx.test_utils import approx_equal
+from six.moves import range
 
 __author__ = 'Youval'
 

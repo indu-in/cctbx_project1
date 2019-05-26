@@ -4,7 +4,6 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import absolute_import
 
-from six.moves import range
 from cctbx import miller, sgtbx, uctbx, xray
 from iotbx import reflection_file_utils, reflection_file_reader
 from iotbx import shelx
@@ -14,6 +13,7 @@ from iotbx.option_parser import option_parser
 
 from cStringIO import StringIO
 import os
+from six.moves import range
 
 def exercise_masks(xs, fo_sq,
                    solvent_radius,

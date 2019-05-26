@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import sgtbx
 from cctbx import uctbx
 from cctbx import miller
@@ -8,6 +7,7 @@ from cctbx.array_family import flex
 from libtbx.test_utils import approx_equal
 from libtbx import group_args
 import math
+from six.moves import range
 
 class Empty(object):
   pass

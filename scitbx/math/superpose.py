@@ -1,5 +1,4 @@
 from __future__ import absolute_import, division, print_function
-from six.moves import range
 from scitbx.linalg import eigensystem
 from scitbx.math import superpose_kearsley_rotation
 from scitbx import matrix
@@ -7,6 +6,7 @@ from scitbx.stdlib import math, random
 from scitbx.array_family import flex
 from scitbx import differential_evolution as de
 from scitbx.math import euler_angles as euler
+from six.moves import range
 
 def kearsley_rotation(reference_sites, other_sites):
   """

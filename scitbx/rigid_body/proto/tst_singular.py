@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.rigid_body.proto.tst_joint_lib import exercise_sim
 from scitbx.rigid_body.proto import joint_lib
 from scitbx.rigid_body.proto.test_simulation import simulation
@@ -10,6 +9,7 @@ from scitbx import matrix
 from libtbx.utils import null_out, show_times_at_exit
 import math
 import sys
+from six.moves import range
 
 class six_dof_body(object):
 

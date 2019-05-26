@@ -1,7 +1,6 @@
 from __future__ import division, print_function
 # LIBTBX_SET_DISPATCHER_NAME iotbx.pdb.add_conformations
 
-from six.moves import range
 import libtbx.phil
 from libtbx import runtime_utils
 from libtbx.utils import Sorry, Usage
@@ -9,6 +8,7 @@ import libtbx.load_env # import dependency
 import string
 import os
 import sys
+from six.moves import range
 
 master_phil = libtbx.phil.parse("""
 add_conformations

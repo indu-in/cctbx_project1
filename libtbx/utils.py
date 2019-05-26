@@ -1,6 +1,5 @@
 from __future__ import absolute_import, division, print_function
 
-from six.moves import range
 
 import atexit
 import glob
@@ -19,6 +18,7 @@ from six.moves import cStringIO as StringIO
 from libtbx.queuing_system_utils import pbs_utils, sge_utils
 from libtbx.math_utils import round2
 from libtbx.str_utils import show_string
+from six.moves import range
 
 try: import gzip
 except ImportError: gzip = None
@@ -732,7 +732,7 @@ def detect_multiprocessing_problem():
     try:
       import multiprocessing
       pool = multiprocessing.Pool(processes=2)
-      pool.map(func=abs, iterable=list(range(2)), chunksize=1)
+      pool.map(func=abs, iterable=range(2), chunksize=1)
     except ImportError as e:
       if (not str(e).startswith(sem_open_msg)):
         raise

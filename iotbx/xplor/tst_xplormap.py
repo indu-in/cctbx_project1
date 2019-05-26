@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 import iotbx.xplor.map
 from cctbx import maptbx
 from cctbx import sgtbx
@@ -11,6 +10,7 @@ from libtbx.test_utils import approx_equal, eps_eq, show_diff
 import libtbx.load_env
 from cStringIO import StringIO
 import os
+from six.moves import range
 
 def exercise_map_gridding():
   try:

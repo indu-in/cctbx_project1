@@ -1,7 +1,7 @@
 
 from __future__ import division
-from six.moves import range
 import cPickle
+from six.moves import range
 try :
   import gobject
 except ImportError :

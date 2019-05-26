@@ -1,5 +1,4 @@
 from __future__ import absolute_import, division, print_function
-from six.moves import range
 import cctbx.crystal.direct_space_asu # import dependency
 from cctbx.array_family import flex
 import scitbx.array_family.shared # import dependency
@@ -9,6 +8,7 @@ from libtbx.test_utils import approx_equal
 from libtbx.str_utils import show_string
 
 import boost.python
+from six.moves import range
 ext = boost.python.import_ext("cctbx_geometry_restraints_ext")
 from cctbx_geometry_restraints_ext import *
 

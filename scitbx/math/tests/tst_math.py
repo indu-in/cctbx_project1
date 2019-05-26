@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 import scitbx.math
 import boost.rational
 from scitbx.math import line_given_points
@@ -35,6 +34,7 @@ import random
 import math
 import time
 import sys
+from six.moves import range
 
 if (libtbx.env.has_module("tntbx")):
   import tntbx
@@ -357,7 +357,7 @@ def exercise_bessel():
     x+=0.01
 
 def exercise_eix():
-  x = flex.double( list(range(4000)) )/20.0
+  x = flex.double( range(4000) )/20.0
   expx = flex.exp( -x )
   for xx, ex in zip(x,expx):
     tmp_i0  = bessel_i0(xx)

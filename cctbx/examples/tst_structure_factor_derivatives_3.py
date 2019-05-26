@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import miller
 from cctbx.examples.structure_factor_derivatives_3 \
   import scatterer_as_list, scatterer_from_list, structure_factors
@@ -11,6 +10,7 @@ from libtbx.test_utils import approx_equal
 import random
 from cStringIO import StringIO
 import sys
+from six.moves import range
 
 random.seed(0)
 flex.set_random_seed(0)

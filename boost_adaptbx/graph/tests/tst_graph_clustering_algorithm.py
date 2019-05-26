@@ -1,10 +1,10 @@
 from __future__ import absolute_import, division, print_function
 
-from six.moves import range
 from boost_adaptbx import graph
 from boost_adaptbx.graph import clustering_algorithm
 
 import unittest
+from six.moves import range
 
 
 class TestBetweennessCentralityClustering(unittest.TestCase):

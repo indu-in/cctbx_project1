@@ -1,9 +1,9 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.graph.tardy_tree import cluster_manager, find_paths, construct
 from scitbx.graph.utils import construct_edge_sets
 from scitbx import matrix
 from libtbx.test_utils import Exception_expected, show_diff
+from six.moves import range
 try:
   import cPickle as pickle
 except ImportError:

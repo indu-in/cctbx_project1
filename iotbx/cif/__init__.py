@@ -11,8 +11,8 @@ http://cctbx.sourceforge.net/iotbx_cif
 """
 from __future__ import division, print_function
 
-from six.moves import range
 import boost.python
+from six.moves import range
 ext = boost.python.import_ext("iotbx_cif_ext")
 
 from cctbx.array_family import flex

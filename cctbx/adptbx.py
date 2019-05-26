@@ -1,9 +1,9 @@
 from __future__ import division
 from __future__ import absolute_import
-from six.moves import range
 from cctbx.array_family import flex # for tuple mappings
 
 import boost.python
+from six.moves import range
 ext = boost.python.import_ext("cctbx_adptbx_ext")
 from cctbx_adptbx_ext import *
 

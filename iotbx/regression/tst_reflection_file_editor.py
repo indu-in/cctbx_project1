@@ -1,6 +1,5 @@
 
 from __future__ import division, print_function
-from six.moves import range
 from iotbx import reflection_file_editor, file_reader
 from iotbx.reflection_file_editor import master_phil
 from cctbx import miller
@@ -12,6 +11,7 @@ from libtbx.utils import Sorry, null_out
 import warnings
 import os.path
 import sys
+from six.moves import range
 
 # this will run without phenix_regression
 def exercise_basic(verbose=False):

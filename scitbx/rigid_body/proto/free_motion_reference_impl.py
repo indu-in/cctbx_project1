@@ -18,8 +18,8 @@ Shabana (2005):
   ISBN-10: 0521850118
 """
 from __future__ import division, print_function
-
 from six.moves import range
+
 try:
   from scitbx import matrix
 except ImportError:

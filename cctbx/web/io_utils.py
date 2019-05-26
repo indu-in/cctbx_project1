@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 import iotbx.pdb
 from cctbx import xray
 from cctbx import crystal
@@ -9,6 +8,7 @@ import cctbx.eltbx.xray_scattering
 from cctbx import eltbx
 from cctbx import adptbx
 from cctbx.web import cgi_utils
+from six.moves import range
 
 def show_input_symbol(sgsymbol, convention, label="Input"):
   if (sgsymbol != ""):

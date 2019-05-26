@@ -1,4 +1,5 @@
 from __future__ import division, print_function
+from six.moves import range
 #
 # Required input files:
 #   http://journals.iucr.org/c/issues/2001/05/00/vj1132/vj1132Isup2.hkl
@@ -8,7 +9,6 @@ from __future__ import division, print_function
 #   iotbx.python direct_methods_light.py vj1132Isup2.hkl vj1132sup1.cif
 #
 
-from six.moves import range
 def run():
   import sys
   reflection_file_name = sys.argv[1]

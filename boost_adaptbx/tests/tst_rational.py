@@ -1,8 +1,8 @@
 from __future__ import absolute_import, division, print_function
 
-from six.moves import range
 from boost import rational
 from libtbx.test_utils import Exception_expected, approx_equal, show_diff
+from six.moves import range
 try:
   import cPickle as pickle
 except ImportError:

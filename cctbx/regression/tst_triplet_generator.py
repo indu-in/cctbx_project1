@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from libtbx.test_utils import approx_equal
 from cctbx import dmtbx
 from cctbx import maptbx
@@ -13,6 +12,7 @@ from cctbx.development import debug_utils
 import random
 import math
 import sys
+from six.moves import range
 
 def direct_space_squaring(start, selection_fixed):
   map_gridding = miller.index_span(

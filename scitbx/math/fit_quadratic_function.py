@@ -1,7 +1,7 @@
 from __future__ import division
-from six.moves import range
 from scitbx import lbfgs
 from scitbx.array_family import flex
+from six.moves import range
 
 
 class fit_quadratic_function_2d_data(object):

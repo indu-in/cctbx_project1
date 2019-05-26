@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import xray
 from cctbx import miller
 from cctbx import crystal
@@ -11,6 +10,7 @@ from libtbx.test_utils import approx_equal
 import random
 from cStringIO import StringIO
 import sys
+from six.moves import range
 
 random.seed(0)
 flex.set_random_seed(0)

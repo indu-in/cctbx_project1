@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 import cctbx.eltbx.xray_scattering
 from cctbx import adptbx
 from cctbx import eltbx
@@ -7,6 +6,7 @@ from cctbx.development import random_structure
 from cctbx.development import debug_utils
 from libtbx import adopt_init_args
 import sys
+from six.moves import range
 
 def tst_run_requiring_cns(args, call_back):
   import libtbx.path

@@ -7,7 +7,6 @@ they could theoretically be used in other programs.
 """
 from __future__ import division
 
-from six.moves import range
 import wxtbx.bitmaps
 from wxtbx import metallicbutton
 from wxtbx.phil_controls import simple_dialogs
@@ -15,6 +14,7 @@ from wx.lib.agw import flatnotebook
 import wx
 from libtbx import str_utils
 import sys
+from six.moves import range
 
 ATOM_SELECTION_BUTTONS = 1
 

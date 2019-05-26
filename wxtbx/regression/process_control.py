@@ -2,7 +2,6 @@
 # TODO more comprehensive tests
 
 from __future__ import absolute_import, division, print_function
-from six.moves import range
 from wx.lib.agw import pyprogress
 import wx
 from libtbx import thread_utils
@@ -15,6 +14,7 @@ import random
 import locale
 import math
 import os
+from six.moves import range
 
 JOB_START_ID = wx.NewId()
 LOG_UPDATE_ID = wx.NewId()

@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import geometry_restraints
 import cctbx.geometry_restraints.flags
 import cctbx.geometry_restraints.manager
@@ -14,6 +13,7 @@ import scitbx.lbfgs
 from libtbx.str_utils import format_value
 from itertools import count
 import sys
+from six.moves import range
 
 if (1):
   flex.set_random_seed(0)

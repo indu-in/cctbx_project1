@@ -1,7 +1,7 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx.eltbx import e_scattering
 import sys
+from six.moves import range
 
 def run(args):
   assert len(args) == 0

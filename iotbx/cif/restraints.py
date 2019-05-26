@@ -1,11 +1,11 @@
 from __future__ import division
-from six.moves import range
 from cctbx import sgtbx
 from cctbx import adp_restraints, geometry_restraints
 from cctbx.adp_restraints import adp_restraint_params
 from cctbx.array_family import flex
 from iotbx.cif import model
 import math
+from six.moves import range
 
 # http://www.iucr.org/__data/iucr/cifdic_html/1/cif_core_restraints.dic/index.html
 

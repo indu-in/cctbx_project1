@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx.omz import bfgs
 from cctbx import xray
 import cctbx.xray.targets
@@ -10,6 +9,7 @@ from libtbx import Auto, group_args
 from itertools import count
 from math import pi, atan2
 import sys
+from six.moves import range
 
 def delta_estimation_minus_cos(limit, grad, curv):
   return limit/pi * atan2(pi/limit*grad, curv)

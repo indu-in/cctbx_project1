@@ -1,5 +1,4 @@
 from __future__ import division
-from six.moves import range
 import math
 
 import libtbx
@@ -9,6 +8,7 @@ from scitbx.array_family import flex
 import scitbx.lbfgs
 import scitbx.math
 from scitbx import matrix
+from six.moves import range
 
 
 class function_base(object):

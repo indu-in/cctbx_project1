@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 import scitbx.math.gaussian
 from scitbx.math import golay_24_12_generator
 from scitbx import lbfgs
@@ -12,6 +11,7 @@ from libtbx import easy_pickle
 import time
 import math
 import sys
+from six.moves import range
 
 minimize_multi_histogram = {"None": 0}
 

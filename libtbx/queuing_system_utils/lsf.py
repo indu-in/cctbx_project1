@@ -1,9 +1,9 @@
 from __future__ import absolute_import, division, print_function
-from six.moves import range
 from six.moves import cPickle as pickle
 import subprocess
 #import sys
 import os
+from six.moves import range
 
 class Job:
   def __init__(self, name, execObj, modules=[], pythonExec='python'):

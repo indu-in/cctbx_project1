@@ -1,7 +1,7 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.array_family import flex
 from libtbx.test_utils import approx_equal
+from six.moves import range
 
 class simple_weighted_correlation(object): # used for data merging
   def __init__(self,w, x, y, derivatives_wrt_y_depth=0):

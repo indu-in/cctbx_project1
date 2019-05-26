@@ -1,10 +1,10 @@
 from __future__ import division
-from six.moves import range
 from cctbx import adp_restraints, uctbx, adptbx, sgtbx
 import scitbx.random
 from scitbx import linalg, matrix
 from libtbx.test_utils import approx_equal
 import libtbx.utils
+from six.moves import range
 
 site_coord = scitbx.random.variate(
   scitbx.random.uniform_distribution(0, 1))

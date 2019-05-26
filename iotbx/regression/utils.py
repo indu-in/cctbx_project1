@@ -1,9 +1,9 @@
 from __future__ import division
-from six.moves import range
 from cctbx.development import random_structure
 from cctbx import miller
 from cctbx.array_family import flex
 import random
+from six.moves import range
 
 def random_f_calc(space_group_info, n_scatterers, d_min, anomalous_flag,
                   verbose=0):

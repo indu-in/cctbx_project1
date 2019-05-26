@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cStringIO import StringIO
 
 from libtbx.test_utils import approx_equal
@@ -9,6 +8,7 @@ from libtbx.test_utils import show_diff
 import iotbx.cif
 from iotbx.pdb.mmcif import pdb_hierarchy_builder
 import mmtbx.model
+from six.moves import range
 
 def exercise_pdb_hierachy_builder():
   input_1ab1 = """\

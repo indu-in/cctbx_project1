@@ -1,11 +1,11 @@
 from __future__ import absolute_import, division, print_function
-from six.moves import range
 from libtbx.utils import write_this_is_auto_generated
 from libtbx.str_utils import line_breaker
 import libtbx.load_env
 import libtbx.path
 import os
 import sys
+from six.moves import range
 
 this = "gltbx.generate_functions_bpl"
 

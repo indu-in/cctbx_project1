@@ -1,7 +1,7 @@
 from __future__ import division
-from six.moves import range
 from scitbx.rigid_body.proto import featherstone
 from scitbx import matrix
+from six.moves import range
 
 def center_of_mass_from_sites(sites):
   assert len(sites) != 0

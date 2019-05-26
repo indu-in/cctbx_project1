@@ -1,8 +1,8 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx.eltbx import xray_scattering
 from cctbx.array_family import flex
 from libtbx.test_utils import Exception_expected, approx_equal
+from six.moves import range
 try:
   import cPickle as pickle
 except ImportError:

@@ -1,7 +1,7 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx.sgtbx import subgroups
 from cctbx import sgtbx
+from six.moves import range
 
 class subgroup_stats(object):
 

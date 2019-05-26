@@ -1,8 +1,8 @@
 from __future__ import division, print_function
-from six.moves import range
 import math
 import time
 import os
+from six.moves import range
 op = os.path
 
 def build_clash_detector(n_sites, bond_list, threshold):

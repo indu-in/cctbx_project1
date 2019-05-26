@@ -13,9 +13,9 @@ See also: RBDA:
 """
 
 from __future__ import division
-from six.moves import range
 from spatial_lib import \
   matrix, cb_as_spatial_transform, crm, crf, kinetic_energy
+from six.moves import range
 
 try:
   import scitbx

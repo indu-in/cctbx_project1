@@ -1,7 +1,7 @@
 from __future__ import absolute_import, division, print_function
-from six.moves import range
 from scitbx.array_family import flex
 from scitbx.stdlib import random
+from six.moves import range
 
 class differential_evolution_optimizer(object):
   """

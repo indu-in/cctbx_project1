@@ -1,10 +1,10 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.math.superpose import kabsch_rotation, kearsley_rotation, least_squares_fit
 from scitbx.math import euler_angles_as_matrix
 from scitbx.array_family import flex
 from libtbx.test_utils import approx_equal
 import random
+from six.moves import range
 
 if (1): # fixed random seed to avoid rare failures
   random.seed(0)

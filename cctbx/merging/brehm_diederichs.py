@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import sgtbx
 
 from cctbx.array_family import flex
@@ -7,6 +6,7 @@ from libtbx.development.timers import Profiler
 from cctbx import miller as miller_ext
 import math
 from cctbx.merging import update_wij_rij
+from six.moves import range
 """
 This module implements algorithm 2 from "Breaking the indexing ambiguity in
 serial crystallography", Wolfgang Brehm & Kay Diederichs, Acta Cryst. D70 (2014)

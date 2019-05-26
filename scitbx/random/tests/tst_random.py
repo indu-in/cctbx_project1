@@ -1,5 +1,4 @@
 from __future__ import division
-from six.moves import range
 import libtbx.utils
 from libtbx.test_utils import approx_equal
 import scitbx.random
@@ -11,6 +10,7 @@ import math
 # Boost 1.56 changes normal distribution, but keep old tests for testing
 # older versions of Boost
 import libtbx.load_env
+from six.moves import range
 boost_version = libtbx.env.boost_version
 
 def exercise_distributions():

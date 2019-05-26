@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import miller
 from cctbx import crystal
 from cctbx import sgtbx
@@ -8,6 +7,7 @@ from cctbx.array_family import flex
 import sys
 
 import boost.python
+from six.moves import range
 dtrek_ext = boost.python.import_ext("iotbx_dtrek_ext")
 
 class reflnlist(object):

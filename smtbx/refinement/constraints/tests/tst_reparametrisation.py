@@ -2,7 +2,6 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import absolute_import
 
-from six.moves import range
 import warnings
 
 from cctbx import uctbx, xray, sgtbx, crystal
@@ -14,6 +13,7 @@ from cctbx.array_family import flex
 from libtbx.test_utils import approx_equal
 import libtbx.utils
 import smtbx.utils
+from six.moves import range
 
 class terminal_linear_ch_site_test_case(object):
 

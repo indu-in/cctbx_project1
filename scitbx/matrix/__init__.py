@@ -10,8 +10,8 @@ provides faster C++ alternatives to some algorithms included here.
 """
 
 from __future__ import absolute_import, division, print_function
-
 from six.moves import range
+
 _flex_imported = False
 def flex_proxy():
   global _flex_imported
@@ -765,8 +765,8 @@ class rec(object):
   def extract_block(self, stop, start=(0,0), step=(1,1)):
     assert 0 <= stop[0] <= self.n[0]
     assert 0 <= stop[1] <= self.n[1]
-    i_rows = list(range(start[0], stop[0], step[0]))
-    i_colums = list(range(start[1], stop[1], step[1]))
+    i_rows = range(start[0], stop[0], step[0])
+    i_colums = range(start[1], stop[1], step[1])
     result = []
     for ir in i_rows:
       for ic in i_colums:

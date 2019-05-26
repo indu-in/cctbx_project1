@@ -1,11 +1,11 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx import matrix
 from scitbx.array_family import flex
 from libtbx.test_utils import approx_equal
 import math
 from cStringIO import StringIO
 import sys
+from six.moves import range
 
 flex.set_random_seed(0)
 

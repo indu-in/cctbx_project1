@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import crystal
 from cctbx import sgtbx
 from cctbx.sgtbx import subgroups
@@ -9,6 +8,7 @@ from cctbx.array_family import flex
 from libtbx.utils import format_cpu_times
 from cStringIO import StringIO
 import sys
+from six.moves import range
 
 def exercise_quick():
   for space_group_symbol in ("P-1",

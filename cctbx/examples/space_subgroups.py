@@ -12,12 +12,12 @@ References:
 """
 from __future__ import division, print_function
 
-from six.moves import range
 from cctbx import sgtbx
 from libtbx.utils import Usage
 from libtbx.str_utils import show_sorted_by_counts
 from libtbx import dict_with_default_0
 import sys
+from six.moves import range
 
 def loop_over_super_cells(max_index, all_subgroups, subgroup):
   assert subgroup.n_ltr() == 1

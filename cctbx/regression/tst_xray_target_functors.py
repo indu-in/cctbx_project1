@@ -1,11 +1,11 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import xray
 from cctbx import crystal
 from cctbx import miller
 from cctbx.array_family import flex
 from libtbx.test_utils import approx_equal
 import sys
+from six.moves import range
 
 def run(args):
   assert args in [[], ["--verbose"]]

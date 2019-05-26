@@ -1,7 +1,7 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.graph import utils
 import sys
+from six.moves import range
 
 def exercise_tree_marking():
   tree_marking = utils.tree_marking

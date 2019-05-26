@@ -73,7 +73,7 @@ def compare_times(
         samples.append((m, n))
   else:
     if comprehensive == "timing-1":
-      dims = list(range(100, 600, 100))
+      dims = range(100, 600, 100)
       for m in dims:
         for n in dims:
           samples.append((m, n))

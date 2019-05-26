@@ -1,11 +1,11 @@
 from __future__ import division, print_function
-from six.moves import range
 import math
 from scitbx.array_family import flex
 from cctbx import miller
 from cctbx import maptbx
 from libtbx.utils import Sorry
 import sys
+from six.moves import range
 
 def Hn(m):
   m_ = m

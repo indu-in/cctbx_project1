@@ -4,8 +4,8 @@ Numerical Recipes in C.  Cambridge University Press.
 Chapter 3.3.  Cubic Spline Interpolation.
 """
 from __future__ import division
-
 from six.moves import range
+
 class cubic_spline:  #Should be re-implemented in C++/Boost Python
   def __init__(self,xarr,yarr,lo_deriv1=None,hi_deriv1=None):
     from scitbx.array_family import flex

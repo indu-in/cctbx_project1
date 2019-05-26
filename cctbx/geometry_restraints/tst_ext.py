@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx.array_family import flex
 from cctbx import geometry_restraints
 from cctbx import crystal
@@ -12,6 +11,7 @@ from libtbx.utils import null_out
 from cStringIO import StringIO
 import math
 import sys
+from six.moves import range
 
 def finite_difference_gradients(restraint_type, sites_cart, proxy, unit_cell=None, eps=1.e-8):
   def residual(restraint_type, sites_cart, proxy, unit_cell):

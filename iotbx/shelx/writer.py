@@ -1,8 +1,8 @@
 from __future__ import division
-from six.moves import range
 from cctbx.array_family import flex # import dependency
 from cctbx.eltbx import wavelengths, tiny_pse
 from cctbx import adptbx
+from six.moves import range
 
 centric_implies_centrosymmetric_error_msg = """\
 If the structure is centrosymmetric, the origin MUST lie on a center of

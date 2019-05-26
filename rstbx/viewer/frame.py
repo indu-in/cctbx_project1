@@ -547,7 +547,7 @@ class LinePlot(wxtbx.plots.plot_container):
   def show_plot(self, line):
     self.figure.clear()
     ax = self.figure.add_subplot(111)
-    x_data = list(range(len(line.values)))
+    x_data = range(len(line.values))
     ax.plot(x_data, line.values, 'b-', linewidth=1)
     ax.set_ylabel("Intensity")
     if (line.lattice_length is not None):

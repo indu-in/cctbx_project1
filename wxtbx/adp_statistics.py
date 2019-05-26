@@ -1,9 +1,9 @@
 
 from __future__ import division
-from six.moves import range
 from wxtbx import plots
 import wx
 import sys
+from six.moves import range
 
 #-----------------------------------------------------------------------
 # GUI objects

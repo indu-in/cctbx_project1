@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from iotbx.kriber import strudat
 from cctbx import geometry_restraints
 from cctbx import crystal
@@ -13,6 +12,7 @@ from libtbx import dict_with_default_0
 from cStringIO import StringIO
 import math
 import sys, os
+from six.moves import range
 
 def exercise_icosahedron(max_level=2, verbose=0):
   for level in range(0,max_level+1):

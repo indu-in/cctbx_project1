@@ -27,12 +27,12 @@ from __future__ import print_function
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from six.moves import range
 import sys
 import wx
 
 from . import pyslip
 from . import tile_generation
+from six.moves import range
 pyslip._Tiles = tile_generation._Tiles
 
 ######

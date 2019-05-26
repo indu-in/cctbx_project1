@@ -9,8 +9,8 @@
 #  included in the root directory of this package.
 
 from __future__ import division
-from six.moves import range
 from scitbx.array_family import flex
+from six.moves import range
 
 def matrix_inverse_error_propagation(mat, cov_mat):
   """Implement analytical formula of Lefebvre et al. (1999)

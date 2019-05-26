@@ -1,10 +1,10 @@
 from __future__ import absolute_import, division, print_function
-from six.moves import range
 import scitbx.math
 from scitbx.stdlib import math
 from scitbx.array_family import flex
 from libtbx.test_utils import approx_equal
 import sys
+from six.moves import range
 
 def exercise_interfaces():
   assert approx_equal(scitbx.math.spherical_bessel(1, 2), 0.43539777498)
@@ -24,7 +24,7 @@ def j2(x):
   return result
 
 def exercise_results():
-  x = flex.double( list(range(1,100)) )/99.0
+  x = flex.double( range(1,100) )/99.0
   f0 = scitbx.math.spherical_bessel_array(0,x)
   f1 = scitbx.math.spherical_bessel_array(1,x)
   f2 = scitbx.math.spherical_bessel_array(2,x)
@@ -34,7 +34,7 @@ def exercise_results():
     assert abs(ffff-j2(xx))/ffff < 1e-5
 
 def tst_sph_bessel_j1():
-  x = flex.double( list(range(1,200)) )/199.0+7.5
+  x = flex.double( range(1,200) )/199.0+7.5
   f1 = scitbx.math.spherical_bessel_array(1,x)
   for xx,ff in zip(x,f1):
     assert abs( ff-j1(xx) )/abs(ff) < 1e-5

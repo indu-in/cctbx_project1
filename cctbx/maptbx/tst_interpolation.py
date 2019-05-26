@@ -1,10 +1,10 @@
 from __future__ import division, print_function
-from six.moves import range
 import time, random
 from cctbx import maptbx
 from scitbx.array_family import flex
 from libtbx.test_utils import approx_equal
 from libtbx import group_args
+from six.moves import range
 
 def func(f,x,y,z):
   return eval(f)

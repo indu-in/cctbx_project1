@@ -1,10 +1,10 @@
 from __future__ import division, print_function
 
-from six.moves import range
 from wxtbx.phil_controls import intctrl, floatctrl, symop, strctrl, ints, choice
 from wxtbx.utils import std_sizer_flags, add_ok_cancel_buttons
 from libtbx.utils import Abort
 import wx
+from six.moves import range
 
 class SimpleInputDialog(wx.Dialog):
   def __init__(self,

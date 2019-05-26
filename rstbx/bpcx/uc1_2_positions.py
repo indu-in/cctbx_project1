@@ -7,13 +7,13 @@ from __future__ import division, print_function
 # by means of computing a correlaton coefficient between the two sets of
 # positions.
 
-from six.moves import range
 import math
 import sys
 import random
 from cctbx.array_family import flex
 from annlib_ext import AnnAdaptor as ann_adaptor
 from scitbx import matrix
+from six.moves import range
 
 def meansd(values):
 

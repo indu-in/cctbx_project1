@@ -1,7 +1,7 @@
 from __future__ import division
-from six.moves import range
 from scitbx.array_family import flex
 import scitbx.matrix
+from six.moves import range
 
 
 def savitzky_golay_coefficients(n_left, n_right, degree, derivative=0, wraparound=True):

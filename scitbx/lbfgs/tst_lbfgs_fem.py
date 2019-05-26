@@ -1,5 +1,4 @@
 from __future__ import absolute_import, division, print_function
-from six.moves import range
 from scitbx.array_family import flex
 from scitbx.lbfgs import have_lbfgs_fem, fortran, raw_reference, raw
 from libtbx.utils import show_times
@@ -9,6 +8,7 @@ import libtbx.load_env
 import random
 import re
 import sys, os
+from six.moves import range
 
 def exercise(lbfgs_impl, n=100, m=5, iprint=[1, 0]):
   assert n % 2 == 0

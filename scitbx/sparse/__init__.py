@@ -1,7 +1,7 @@
 from __future__ import division
-from six.moves import range
 import boost.python
 import boost.optional # import dependency
+from six.moves import range
 # Indeed Boost.Python binding needs boost::optional
 # through scitbx/random/boost_python/random.h
 ext = boost.python.import_ext("scitbx_sparse_ext")

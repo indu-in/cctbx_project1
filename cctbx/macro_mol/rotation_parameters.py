@@ -28,8 +28,8 @@ Revision history:
 """
 from __future__ import division, print_function
 
-from six.moves import range
 import math, types
+from six.moves import range
 
 class matrix33(object):
   "Minimal class for the handling of (3x3) matrices."

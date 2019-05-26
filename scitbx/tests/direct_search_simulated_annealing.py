@@ -1,8 +1,8 @@
 from __future__ import absolute_import, division
-from six.moves import range
 from scitbx.array_family import flex
 import random
 import scitbx.direct_search_simulated_annealing
+from six.moves import range
 
 class test_rosenbrock_function(object):
   def __init__(self, dim=4):

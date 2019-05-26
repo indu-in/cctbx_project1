@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from iotbx import pdb
 from iotbx.pdb import hybrid_36
 from cctbx import crystal
@@ -10,6 +9,7 @@ from libtbx.utils import Sorry, \
 from libtbx.test_utils import Exception_expected, approx_equal, show_diff
 import libtbx.load_env
 from cStringIO import StringIO
+from six.moves import range
 try:
   import cPickle as pickle
 except ImportError:

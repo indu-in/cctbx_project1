@@ -1,10 +1,10 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import crystal
 from cctbx import sgtbx
 from boost import rational
 import math
 import sys
+from six.moves import range
 
 def dot3(a, b):
   return a[0]*b[0] + a[1]*b[1] + a[2]*b[2]

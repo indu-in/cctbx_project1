@@ -1,10 +1,10 @@
 from __future__ import division
 from __future__ import absolute_import, print_function
-from six.moves import range
 import smtbx.refinement.constraints as _
 from smtbx.refinement.constraints import InvalidConstraint
 from scitbx.array_family import flex
 import itertools
+from six.moves import range
 
 class occupancy_affine_constraint(object):
   """ Constraint a0 occ0 + a1 occ1 +... == b """

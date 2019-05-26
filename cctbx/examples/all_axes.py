@@ -11,9 +11,9 @@ from __future__ import division, print_function
 # XXX     (e.g. list only 3(1), not both 3(1) and 3(2)).
 # XXX See also: comment regarding shift_range below.
 
-from six.moves import range
 from cctbx import sgtbx
 import sys
+from six.moves import range
 
 def str_ev(ev):
   return "[%d,%d,%d]" % ev

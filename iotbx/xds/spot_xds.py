@@ -9,8 +9,8 @@
 #  included in the root directory of this package.
 
 from __future__ import division, print_function
-
 from six.moves import range
+
 class reader(object):
   '''Class to read the SPOT.XDS file.'''
 

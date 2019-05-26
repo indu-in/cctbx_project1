@@ -1,10 +1,10 @@
 from __future__ import division
 
-from six.moves import range
 import iotbx.gui_tools
 from iotbx import file_reader
 from libtbx.utils import Sorry
 import os
+from six.moves import range
 
 def space_group_as_str(space_group):
   from cctbx import sgtbx

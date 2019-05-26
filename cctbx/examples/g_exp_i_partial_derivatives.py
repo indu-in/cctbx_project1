@@ -1,8 +1,8 @@
 from __future__ import division, print_function
-from six.moves import range
 from libtbx.test_utils import approx_equal
 import cmath
 import math
+from six.moves import range
 
 def empirical_proof(g, ffp, fdp, alpha):
   # Mathematica: f = g (ffp + I fdp) Exp[I alpha]

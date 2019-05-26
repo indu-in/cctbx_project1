@@ -1,11 +1,11 @@
 from __future__ import division, print_function
-from six.moves import range
 from libtbx.utils import Sorry
 from scitbx.array_family import flex
 from libtbx import easy_run
 import iotbx.pdb
 import math
 import sys
+from six.moves import range
 
 class nonbonded_overlaps_results(object):
   """ Container for non-bonded overlaps results """

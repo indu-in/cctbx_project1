@@ -1,6 +1,6 @@
 from __future__ import division, print_function
-from six.moves import range
 import math
+from six.moves import range
 
 def prime_sieve( n,
            include_unity=False

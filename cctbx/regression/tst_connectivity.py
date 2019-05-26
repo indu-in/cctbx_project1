@@ -1,10 +1,10 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.array_family import flex
 import time
 import iotbx.pdb
 from cctbx import maptbx
 from cctbx import miller
+from six.moves import range
 
 def getvs(cmap, threshold, wrap=True):
   co = maptbx.connectivity(map_data=cmap, threshold=threshold, wrapping=wrap)

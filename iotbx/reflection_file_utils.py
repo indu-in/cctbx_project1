@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from iotbx import reflection_file_reader
 from cctbx import miller
 from cctbx.array_family import flex
@@ -10,6 +9,7 @@ import libtbx.phil
 from itertools import count
 import math
 import sys, os
+from six.moves import range
 
 class Sorry_No_array_of_the_required_type(Sorry):
   __orig_module__ = __module__

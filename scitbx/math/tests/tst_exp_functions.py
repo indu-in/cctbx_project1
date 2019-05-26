@@ -1,11 +1,11 @@
 from __future__ import division, print_function
-from six.moves import range
 import scitbx.math
 from scitbx.array_family import flex
 from libtbx.test_utils import Exception_expected, approx_equal
 from libtbx.utils import format_cpu_times
 import time
 import sys
+from six.moves import range
 
 def exercise_with_random_arguments(n_arguments, n_iterations):
   mt = flex.mersenne_twister(seed=0)
@@ -43,7 +43,7 @@ def run(args):
   else:
     n_arguments = 300000
     n_iterations = 20
-    exponents = list(range(-127, 7))
+    exponents = range(-127, 7)
     mantissa_step_size = 1
     j_sample = 300000
   exercise_with_random_arguments(

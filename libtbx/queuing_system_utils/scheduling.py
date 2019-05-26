@@ -1,11 +1,11 @@
 from __future__ import absolute_import, division, print_function
 
-from six.moves import range
 from six.moves.queue import Empty, Full
 from libtbx.scheduling import result
 
 import time
 from collections import deque
+from six.moves import range
 
 class Identifier(object):
   """

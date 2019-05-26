@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import crystal
 from cctbx import miller
 from cctbx import xray
@@ -18,6 +17,7 @@ from libtbx.utils import Sorry, Keep, null_out
 from libtbx import Auto
 from cStringIO import StringIO
 import warnings
+from six.moves import range
 try:
   import cPickle as pickle
 except ImportError:

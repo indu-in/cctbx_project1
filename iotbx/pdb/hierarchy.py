@@ -1,6 +1,6 @@
 from __future__ import division, print_function
-from six.moves import range
 import boost.python
+from six.moves import range
 ext = boost.python.import_ext("iotbx_pdb_hierarchy_ext")
 from iotbx_pdb_hierarchy_ext import *
 
@@ -775,7 +775,7 @@ class _(boost.python.injector, ext.root, __hash_eq_mixin):
     l = abs(min(sites_frac.min()))
     r = abs(max(sites_frac.max()))
     rl = max(l, r)+2
-    rr= list(range(int(-rl), int(rl)))
+    rr= range(int(-rl), int(rl))
     shift_best = None
     for x in rr:
       for y in rr:

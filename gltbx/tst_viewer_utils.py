@@ -1,8 +1,8 @@
 from __future__ import division
 
-from six.moves import range
 from scitbx.array_family import flex, shared
 import gltbx.viewer_utils
+from six.moves import range
 
 # this is the pdb file used to create the bonds table for testing
 ethanol_pdb = """

@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 import time
 from iotbx.pdb.secondary_structure import annotation, pdb_helix, pdb_strand
 import iotbx
@@ -8,6 +7,7 @@ from libtbx.test_utils import show_diff
 from StringIO import StringIO
 import libtbx.load_env
 import os
+from six.moves import range
 
 def test_helix_interface():
   # helix_class_to_int.

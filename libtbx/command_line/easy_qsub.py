@@ -12,7 +12,6 @@ where [list of commands]) is
 "python run.py modelN.pdb dataN.mtz" ]
 """
 from __future__ import absolute_import, division, print_function
-from six.moves import range
 import os
 import re
 import subprocess
@@ -23,6 +22,7 @@ import stat
 
 from libtbx import easy_run
 from libtbx.utils import Sorry
+from six.moves import range
 
 key_words = {
   "phenix_source"    : str,

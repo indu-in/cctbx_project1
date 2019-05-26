@@ -1,11 +1,11 @@
 
 from __future__ import division, print_function
-from six.moves import range
 import time
 import os
 import sys
 
 from libtbx.utils import to_str
+from six.moves import range
 
 t_wait = 250
 

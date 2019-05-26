@@ -7,8 +7,8 @@ From first principles; inelegant theoretically, but compact and practical.
 See also: International Tables for Crystallography, Volume A, section 3.
 """
 from __future__ import division, print_function
-
 from six.moves import range
+
 def run(args):
   assert args in [[], ["python"], ["c++"]]
   #

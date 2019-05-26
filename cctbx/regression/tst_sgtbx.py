@@ -1,12 +1,12 @@
 from __future__ import division, print_function
 
-from six.moves import range
 from cctbx import sgtbx
 import cctbx.sgtbx.bravais_types
 from cctbx.array_family import flex
 import scitbx.math
 from libtbx.test_utils import approx_equal
 from libtbx.utils import format_cpu_times
+from six.moves import range
 try:
   import cPickle as pickle
 except ImportError:

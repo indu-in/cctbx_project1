@@ -1,5 +1,4 @@
 from __future__ import division
-from six.moves import range
 from scitbx.array_family import flex
 from scitbx import sparse
 import libtbx
@@ -7,6 +6,7 @@ from libtbx.test_utils import approx_equal, Exception_expected
 import random
 import scitbx.random
 import itertools
+from six.moves import range
 
 def exercise_vector():
   v = sparse.vector(5)

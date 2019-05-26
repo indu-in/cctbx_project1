@@ -1,9 +1,9 @@
 from __future__ import division, print_function
-from six.moves import range
 import math
 import scitbx.math
 import scitbx.linalg.svd
 from scitbx.linalg import matrix_equality_ratio, matrix_normality_ratio
+from six.moves import range
 try: import tntbx
 except ImportError: tntbx = None
 import libtbx.utils

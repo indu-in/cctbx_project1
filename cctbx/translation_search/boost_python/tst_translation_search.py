@@ -1,8 +1,8 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import translation_search
 from cctbx import sgtbx
 from cctbx.array_family import flex
+from six.moves import range
 
 def exercise_symmetry_flags():
   for i_flags in range(4):

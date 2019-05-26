@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.array_family import flex
 from simtbx.nanoBragg import nanoBragg, shapetype, convention, pivot, testuple
 #from simtbx.nanoBragg import shapetype
@@ -12,6 +11,7 @@ from dxtbx.format.FormatCBFMiniPilatus import FormatCBFMiniPilatus
 import libtbx.load_env # possibly implicit
 from cctbx import crystal
 from cctbx import miller
+from six.moves import range
 assert miller
 
 pdb_lines = """HEADER TEST

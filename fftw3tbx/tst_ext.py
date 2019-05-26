@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 import fftw3tbx
 import omptbx # initializes OpenMP environment
 from scitbx import fftpack
@@ -7,6 +6,7 @@ from scitbx.array_family import flex
 import libtbx.utils
 import time
 import sys
+from six.moves import range
 
 try: from cctbx import maptbx
 except ImportError: maptbx = None

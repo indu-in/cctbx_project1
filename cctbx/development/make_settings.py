@@ -4,8 +4,8 @@ from __future__ import division, print_function
 #
 # usage: python make_settings.py > settings.py
 
-from six.moves import range
 from cctbx import sgtbx
+from six.moves import range
 
 def run():
   settings = [0]

@@ -1265,7 +1265,7 @@ class PySlip(_BufferedCanvas):
 
         # prepare the show_level value
         if show_levels is None:
-            show_levels = list(range(self.min_level, self.max_level + 1))
+            show_levels = range(self.min_level, self.max_level + 1)
 
         # create layer, add unique ID to Z order list
         l = _Layer(id=id, painter=render, data=data, map_rel=map_rel,
@@ -1333,7 +1333,7 @@ class PySlip(_BufferedCanvas):
 
             # prepare the show_level value
             if show_levels is None:
-                show_levels = list(range(self.min_level, self.max_level + 1))[:]
+                show_levels = range(self.min_level, self.max_level + 1)[:]
 
             layer.show_levels = show_levels
 
@@ -2142,7 +2142,7 @@ class PySlip(_BufferedCanvas):
                 x_pix = (self.view_offset_x
                          + (tile_margin - 1) * self.tile_size_x)
             else:
-                col_list = list(range(0, self.tiles.num_tiles_x))
+                col_list = range(0, self.tiles.num_tiles_x)
                 x_pix = -self.view_offset_x
         else:
             # Map > View - determine layout in X direction
@@ -2152,7 +2152,7 @@ class PySlip(_BufferedCanvas):
             stop_x_tile = ((x_offset + self.view_width + self.tile_size_x - 1)
                            / self.tile_size_x)
             stop_x_tile = int(stop_x_tile)
-            col_list = list(range(start_x_tile, stop_x_tile))
+            col_list = range(start_x_tile, stop_x_tile)
             x_pix = start_x_tile * self.tile_size_y - x_offset
 
         if False:#self.view_offset_y < 0: # NKS No wrapping or hard boundaries
@@ -2169,7 +2169,7 @@ class PySlip(_BufferedCanvas):
                 y_pix_start = self.view_offset_y + \
                                   (tile_margin - 1) * self.tile_size_y
             else:
-                row_list = list(range(0, self.tiles.num_tiles_y))
+                row_list = range(0, self.tiles.num_tiles_y)
                 y_pix_start = -self.view_offset_y
         else:
             y_offset = self.view_offset_y + self.move_dy
@@ -2177,7 +2177,7 @@ class PySlip(_BufferedCanvas):
             stop_y_tile = ((y_offset + self.view_height
                             + self.tile_size_y - 1) / self.tile_size_y)
             stop_y_tile = int(stop_y_tile)
-            row_list = list(range(start_y_tile, stop_y_tile))
+            row_list = range(start_y_tile, stop_y_tile)
             y_pix_start = start_y_tile * self.tile_size_y - y_offset
 
         # start pasting tiles onto the view

@@ -1,8 +1,8 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import crystal
 from cctbx import sgtbx
 from cctbx.array_family import flex
+from six.moves import range
 
 simple = crystal.coordination_sequences_simple
 simple_sym = crystal.coordination_sequences_simple_sym

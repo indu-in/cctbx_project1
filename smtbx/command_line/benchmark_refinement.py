@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 import itertools
 from smtbx.development import random_xray_structure
 import smtbx.utils
@@ -7,6 +6,7 @@ from smtbx.refinement import constraints, least_squares
 from scitbx.array_family import flex
 import timeit
 import pprint
+from six.moves import range
 
 def run(sizes, d_mins):
   timing = {

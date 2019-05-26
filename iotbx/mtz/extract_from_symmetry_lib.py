@@ -1,8 +1,8 @@
 from __future__ import division
-from six.moves import range
 from cctbx import sgtbx
 import libtbx.load_env
 import os.path as op
+from six.moves import range
 
 if (libtbx.env.has_module("ccp4io")):
   for _ in ["libccp4/data", "data"]:

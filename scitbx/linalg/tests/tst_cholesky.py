@@ -1,11 +1,11 @@
 from __future__ import division, print_function
-from six.moves import range
 import scitbx.math
 import scitbx.linalg
 from scitbx import matrix
 from scitbx.array_family import flex
 from libtbx.test_utils import approx_equal
 import random
+from six.moves import range
 
 def exercise_cholesky_decomposition():
   from scitbx.examples import immoptibox_ports

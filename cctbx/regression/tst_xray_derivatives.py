@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import xray
 from cctbx.development import random_structure
 from cctbx.development import debug_utils
@@ -8,6 +7,7 @@ import random
 import math
 import sys
 from cctbx import adptbx
+from six.moves import range
 
 def finite_differences_site(cartesian_flag, target_ftor, structure,
                             delta=0.00001):

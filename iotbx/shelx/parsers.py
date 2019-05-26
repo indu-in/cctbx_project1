@@ -2,7 +2,6 @@
 
 from __future__ import division
 
-from six.moves import range
 import itertools
 from boost import rational
 
@@ -17,6 +16,7 @@ import scitbx.math
 from iotbx.shelx.errors import error as shelx_error
 from iotbx.shelx import tokens
 from functools import reduce
+from six.moves import range
 
 class parser(object):
 

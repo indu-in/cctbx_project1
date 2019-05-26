@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.rigid_body.essence import tst_tardy
 from scitbx.math import minimum_covering_sphere, sphere_3d
 from scitbx.array_family import flex
@@ -7,6 +6,7 @@ from gltbx import wx_viewer
 from libtbx.option_parser import libtbx_option_parser
 import wx
 import sys
+from six.moves import range
 
 class viewer(wx_viewer.show_points_and_lines_mixin):
 

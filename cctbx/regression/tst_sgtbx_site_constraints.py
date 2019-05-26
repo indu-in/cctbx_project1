@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from iotbx.kriber import strudat
 from iotbx.option_parser import iotbx_option_parser
 from cctbx.array_family import flex
@@ -10,6 +9,7 @@ import libtbx.load_env
 from cStringIO import StringIO
 import math
 import sys, os
+from six.moves import range
 
 flex.set_random_seed(0)
 

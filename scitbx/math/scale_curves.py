@@ -1,16 +1,16 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx import differential_evolution as de
 from scitbx.array_family import flex
 import sys
 from libtbx.test_utils import approx_equal
+from six.moves import range
 
 class curve_interpolator(object):
   def __init__(self, start, stop, n_points=100):
     self.start    = start
     self.stop     = stop
     self.n_points = n_points
-    self.target_x = flex.double( list(range(n_points)) )/float(n_points-1)
+    self.target_x = flex.double( range(n_points) )/float(n_points-1)
     self.target_x = self.target_x*(self.stop-self.start)+self.start
     self.delta    = self.target_x[1]-self.target_x[0]
 
@@ -205,7 +205,7 @@ def scale_it_pairwise(m,v,ref_id=0,factor=10,show_progress=False,add=True):
 
 def test_curve_scaler():
    flex.set_random_seed( 12345 )
-   x = flex.double( list(range(10)) )/10.0
+   x = flex.double( range(10) )/10.0
    y = flex.exp( -x )
    y0 = y
    y1 = y*100+50
@@ -230,7 +230,7 @@ def test_curve_scaler():
 
 
 def tst_curve_interpolator():
-  x = flex.double( list(range(25)) )/24.0
+  x = flex.double( range(25) )/24.0
   y = x*x
   ip = curve_interpolator(0,2.0,200)
   x_target = ip.target_x
@@ -251,7 +251,7 @@ def tst_curve_interpolator():
   assert b[1] in (99,100)
 
 
-  x = flex.double( list(range(5,23)) )/24.0
+  x = flex.double( range(5,23) )/24.0
   y = x*x
   ip = curve_interpolator(0,2.0,200)
   nx,ny,a,b = ip.interpolate(x,y)

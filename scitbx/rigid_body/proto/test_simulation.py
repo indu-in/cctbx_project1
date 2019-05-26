@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.rigid_body.proto import featherstone
 from scitbx.rigid_body.proto import test_utils
 from scitbx.rigid_body.proto.utils import \
@@ -9,6 +8,7 @@ import scitbx.lbfgs
 from scitbx.array_family import flex
 from scitbx import matrix
 from libtbx.test_utils import approx_equal
+from six.moves import range
 
 class simulation(object):
 

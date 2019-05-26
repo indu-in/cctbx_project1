@@ -1,9 +1,9 @@
 from __future__ import division, print_function
-from six.moves import range
 import scitbx.math as sm
 import math
 from libtbx.test_utils import approx_equal
 from scitbx.array_family import flex
+from six.moves import range
 
 """
 This routine tests the halton sequence that can be used for

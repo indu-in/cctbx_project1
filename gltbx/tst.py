@@ -1,9 +1,9 @@
 from __future__ import division, print_function
-from six.moves import range
 from gltbx import gl
 from gltbx import glu
 from libtbx.test_utils import Exception_expected, show_diff
 import sys
+from six.moves import range
 
 def exercise_converter():
   textures = []

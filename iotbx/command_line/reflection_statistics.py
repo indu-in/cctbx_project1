@@ -1,7 +1,6 @@
 from __future__ import division, print_function
 # LIBTBX_SET_DISPATCHER_NAME phenix.reflection_statistics
 
-from six.moves import range
 from iotbx import reflection_file_reader
 from iotbx.option_parser import option_parser
 from cctbx import maptbx
@@ -15,6 +14,7 @@ from cctbx.array_family import flex
 from libtbx.utils import Sorry
 from itertools import count
 import sys
+from six.moves import range
 
 def show_average_of_binned_data(binned_data_list):
   l = len(binned_data_list[0].binner.bin_legend(0))

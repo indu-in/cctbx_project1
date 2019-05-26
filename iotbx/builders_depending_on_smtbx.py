@@ -1,6 +1,5 @@
 from __future__ import division
 
-from six.moves import range
 from smtbx.refinement import constraints, least_squares
 import smtbx.refinement.constraints.adp
 import smtbx.refinement.constraints.geometrical.all
@@ -9,6 +8,7 @@ import smtbx.refinement.constraints.occupancy
 from iotbx.builders import \
      crystal_structure_builder, \
      restrained_crystal_structure_builder
+from six.moves import range
 
 
 class constrained_crystal_structure_builder(crystal_structure_builder):

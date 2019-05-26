@@ -1,9 +1,9 @@
 from __future__ import division
-from six.moves import range
 from libtbx import slots_getstate_setstate
 from scitbx import matrix
 from boost import rational
 import string
+from six.moves import range
 
 class cut_expr_ops(slots_getstate_setstate):
 

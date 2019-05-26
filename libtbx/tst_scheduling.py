@@ -1,8 +1,8 @@
 from __future__ import absolute_import, division, print_function
 
-from six.moves import range
 import unittest
 import time
+from six.moves import range
 
 def normal_function(arg, wait):
 

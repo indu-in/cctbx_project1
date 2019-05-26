@@ -1,11 +1,11 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import miller
 from cctbx import crystal
 from cctbx import sgtbx
 from cctbx import uctbx
 from cctbx.array_family import flex
 from cmath import cos, sin, pi
+from six.moves import range
 
 
 def miller_export_as_shelx_fcf(self, f_calc, file_object=None):

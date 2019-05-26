@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx.examples.exp_i_alpha_derivatives \
   import least_squares, exp_i_alpha_sum
 from libtbx.test_utils import approx_equal
@@ -7,6 +6,7 @@ import random
 import math
 from cStringIO import StringIO
 import sys
+from six.moves import range
 
 random.seed(0)
 

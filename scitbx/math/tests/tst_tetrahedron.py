@@ -1,9 +1,9 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.math import tetrahedron
 from libtbx.test_utils import approx_equal
 from itertools import permutations
 from random import random
+from six.moves import range
 
 def exercise_volume():
   for (a,b,c) in ((1,2,3), (2,3,1), (3,1,2)):

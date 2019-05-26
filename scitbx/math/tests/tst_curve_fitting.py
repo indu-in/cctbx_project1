@@ -1,5 +1,4 @@
 from __future__ import absolute_import, division, print_function
-from six.moves import range
 import random
 
 import libtbx.load_env
@@ -8,6 +7,7 @@ from libtbx.utils import frange
 from scitbx.array_family import flex
 from scitbx.math import curve_fitting
 import scitbx.lbfgs
+from six.moves import range
 
 if (1): # fixed random seed to avoid rare failures
   random.seed(0)

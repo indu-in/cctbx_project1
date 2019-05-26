@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import uctbx
 from cctbx import sgtbx
 from cctbx import miller
@@ -7,6 +6,7 @@ from cctbx.array_family import flex
 import scitbx.math
 from libtbx.complex_math import polar
 from libtbx.test_utils import Exception_expected, approx_equal
+from six.moves import range
 try:
   import cPickle as pickle
 except ImportError:

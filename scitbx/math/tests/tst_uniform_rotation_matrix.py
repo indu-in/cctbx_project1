@@ -1,8 +1,8 @@
 from __future__ import division, print_function
-from six.moves import range
 import math, random
 from scitbx import matrix
 from scitbx.array_family import flex
+from six.moves import range
 
 # -----------------------------------------------------------------------------
 # simplified form of surface integral for spherical harmonic (l = m)

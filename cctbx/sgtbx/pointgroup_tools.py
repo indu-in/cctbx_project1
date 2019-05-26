@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx.array_family import flex
 from cctbx import sgtbx
 from cctbx.crystal.find_best_cell import alternative_find_best_cell
@@ -12,6 +11,7 @@ from scitbx import matrix
 from scitbx.python_utils import graph_tools
 from libtbx.utils import Sorry
 import sys
+from six.moves import range
 
 
 def reference_setting_choices(space_group):

@@ -47,7 +47,6 @@ from __future__ import division, print_function
 #    of code.
 #
 
-from six.moves import range
 from libtbx.utils import Sorry
 import libtbx.phil
 from libtbx import adopt_init_args
@@ -56,6 +55,7 @@ from iotbx.pdb.hybrid_36 import hy36encode, hy36decode
 import iotbx.cif.model
 import copy
 from libtbx.utils import null_out
+from six.moves import range
 
 
 def lists_have_comment_element(a,b):

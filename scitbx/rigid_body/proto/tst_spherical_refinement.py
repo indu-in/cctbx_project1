@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.rigid_body.proto import joint_lib
 from scitbx.rigid_body.proto import test_utils
 from scitbx.rigid_body.proto.utils import center_of_mass_from_sites
@@ -12,6 +11,7 @@ from libtbx.utils import null_out, show_times_at_exit
 from libtbx.str_utils import show_sorted_by_counts
 import math
 import sys
+from six.moves import range
 
 class setT_mixin(object):
 

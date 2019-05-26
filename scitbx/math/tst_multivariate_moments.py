@@ -1,7 +1,7 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx import math
 from scitbx.array_family import flex
+from six.moves import range
 
 def tst(N=3):
   weights = flex.double(N)*0.0+1.0

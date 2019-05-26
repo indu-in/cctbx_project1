@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx.development import random_structure
 from cctbx.development import debug_utils
 from cctbx import xray
@@ -13,6 +12,7 @@ from libtbx.test_utils import Exception_expected, approx_equal, \
   is_above_limit, show_diff
 from libtbx.test_utils import not_approx_equal
 import random
+from six.moves import range
 try:
   import cPickle as pickle
 except ImportError:

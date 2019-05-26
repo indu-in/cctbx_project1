@@ -1,10 +1,10 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx import lbfgsb
 from scitbx.array_family import flex
 import scitbx.math
 from libtbx.test_utils import approx_equal, eps_eq, Exception_expected
 import sys
+from six.moves import range
 
 def exercise_minimizer_interface():
   n = 25

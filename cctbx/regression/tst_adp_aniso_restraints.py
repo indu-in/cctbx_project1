@@ -1,10 +1,10 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx.array_family import flex
 from cStringIO import StringIO
 import cctbx.adp_restraints
 from libtbx.test_utils import approx_equal
 import libtbx.load_env
+from six.moves import range
 
 phe_pdb = """\
 remark CRYST1   25.000   35.000   45.000  80.00 70.00 100.00 P 1           1

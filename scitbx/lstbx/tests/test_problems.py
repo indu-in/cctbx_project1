@@ -1,10 +1,10 @@
 """ A collection of L.S. test problems """
 from __future__ import division
 
-from six.moves import range
 from scitbx.array_family import flex
 from scitbx.lstbx import normal_eqns
 import libtbx
+from six.moves import range
 
 
 def polynomial_fit(non_linear_ls_with_separable_scale_factor_impl):

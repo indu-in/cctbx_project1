@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 import libtbx.load_env
 from scitbx.array_family import flex
 from scitbx import sparse
@@ -7,6 +6,7 @@ from scitbx.lstbx import normal_eqns, normal_eqns_solving
 from libtbx.test_utils import approx_equal, Exception_expected
 
 from scitbx.lstbx.tests import test_problems
+from six.moves import range
 
 def exercise_linear_normal_equations():
   py_eqs = [ ( 1, (-1,  0,  0),  1),

@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import adptbx, sgtbx
 from cctbx.development import debug_utils
 from scitbx.math import row_echelon_full_pivoting
@@ -7,6 +6,7 @@ from scitbx.array_family import flex
 from libtbx.test_utils import approx_equal
 import random
 import sys
+from six.moves import range
 
 
 def f(u_cart):

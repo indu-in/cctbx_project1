@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.array_family import flex
 from scitbx.python_utils import command_line
 from scitbx import matrix
@@ -11,6 +10,7 @@ try:
   import cPickle as pickle
 except ImportError:
   import pickle
+from six.moves import range
 import math
 import random
 import time
@@ -2216,14 +2216,14 @@ def exercise_show_count_stats():
 >=   10:  2  0.66667
    None:  1  0.33333
 """)
-  check(list(range(34)), prefix=":|", expected="""\
+  check(range(34), prefix=":|", expected="""\
 :|>=   30:   4  0.11765
 :|>=   20:  14  0.41176
 :|>=   10:  24  0.70588
 :|>=    1:  33  0.97059
 :|   None:   1  0.02941
 """)
-  check(list(range(23,74)), group_size=12, expected="""\
+  check(range(23,74), group_size=12, expected="""\
 >=   72:   2  0.03922
 >=   60:  14  0.27451
 >=   48:  26  0.50980
@@ -2650,7 +2650,7 @@ def exercise_matrix():
       assert approx_equal(flex.real(ps).matrix_diagonal(), flex.real(pd))
       assert approx_equal(flex.imag(ps).matrix_diagonal(), flex.imag(pd))
   #
-  a = flex.polar(flex.double(list(range(1,6+1))), flex.double(list(range(2,7+1))))
+  a = flex.polar(flex.double(range(1,6+1)), flex.double(range(2,7+1)))
   a.resize(flex.grid(2,3))
   b = a.deep_copy()
   b.resize(flex.grid(3,2))

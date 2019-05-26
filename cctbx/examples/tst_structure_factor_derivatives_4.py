@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import xray
 from cctbx import miller
 from cctbx.examples.structure_factor_derivatives_4 import structure_factors
@@ -14,6 +13,7 @@ import random
 from itertools import count
 from cStringIO import StringIO
 import sys, os
+from six.moves import range
 
 random.seed(0)
 flex.set_random_seed(0)
@@ -52,9 +52,9 @@ def d_target_d_params_finite(d_order, f_obs, xray_structure, eps=1.e-8):
     if (not site_symmetry_table.is_special_position(i_scatterer)):
       site_symmetry_ops = None
       if (not scatterer.flags.use_u_aniso()):
-        ips = list(range(7))
+        ips = range(7)
       else:
-        ips = list(range(12))
+        ips = range(12)
     else:
       site_symmetry_ops = site_symmetry_table.get(i_scatterer)
       site_constraints = site_symmetry_ops.site_constraints()

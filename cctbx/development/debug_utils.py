@@ -1,10 +1,10 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import sgtbx
 from scitbx.python_utils.command_line import parse_options
 from libtbx.utils import format_cpu_times
 import libtbx.load_env
 import sys, os, random
+from six.moves import range
 
 def get_test_space_group_symbols(flag_AllSpaceGroups,
                                  flag_ChiralSpaceGroups,

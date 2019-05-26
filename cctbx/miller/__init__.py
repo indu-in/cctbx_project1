@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import division, print_function
-from six.moves import range
 import cctbx.sgtbx
 
 import boost.python
+from six.moves import range
 ext = boost.python.import_ext("cctbx_miller_ext")
 asu_map_ext = boost.python.import_ext("cctbx_asymmetric_map_ext")
 from cctbx_miller_ext import *

@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from iotbx.cns.crystal_symmetry_utils import \
   re_sg_uc, crystal_symmetry_from_re_match
 from cctbx import crystal
@@ -13,6 +12,7 @@ from libtbx import adopt_init_args
 from libtbx import easy_pickle
 import re
 import os
+from six.moves import range
 
 class sdb_site(object):
 

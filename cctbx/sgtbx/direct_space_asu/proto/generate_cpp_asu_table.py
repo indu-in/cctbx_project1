@@ -1,9 +1,9 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.source_generators.utils import join_open
 import cctbx
 from cctbx.sgtbx.direct_space_asu import reference_table
 from cctbx.sgtbx.direct_space_asu.cut_plane import cut
+from six.moves import range
 
 
 head1 = """\

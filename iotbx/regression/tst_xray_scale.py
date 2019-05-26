@@ -1,9 +1,9 @@
 from __future__ import division, print_function
-from six.moves import range
 import iotbx.pdb
 from cctbx import crystal
 from libtbx.test_utils import approx_equal
 import mmtbx.model
+from six.moves import range
 
 cif_str="""
 data_5JUP

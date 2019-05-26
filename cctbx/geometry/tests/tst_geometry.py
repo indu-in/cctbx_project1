@@ -1,11 +1,11 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx.array_family import flex
 from cctbx import covariance, crystal, geometry, sgtbx, uctbx, xray
 from libtbx.test_utils import approx_equal, show_diff
 from scitbx import matrix
 import math
 from cStringIO import StringIO
+from six.moves import range
 
 def quartz():
   return xray.structure(

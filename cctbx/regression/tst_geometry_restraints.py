@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from iotbx.pdb.tst_pdb import dump_pdb
 from cctbx import geometry_restraints
 from iotbx.pymol import pml_stick, pml_write
@@ -9,6 +8,7 @@ from scitbx.math import euler_angles_as_matrix
 from libtbx.test_utils import approx_equal, not_approx_equal
 import random
 import sys
+from six.moves import range
 
 if (1): # fixed random seed to avoid rare failures
   random.seed(0)

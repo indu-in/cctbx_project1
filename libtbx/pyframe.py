@@ -1,7 +1,7 @@
 
 from __future__ import absolute_import, division, print_function
-from six.moves import range
 import inspect
+from six.moves import range
 
 class error(Exception):
   """ libtbx.python_frame error """

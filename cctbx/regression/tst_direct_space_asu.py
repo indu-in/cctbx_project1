@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import crystal
 import cctbx.crystal.direct_space_asu
 from cctbx import xray
@@ -16,6 +15,7 @@ from boost import rational
 import random
 import copy
 import sys
+from six.moves import range
 
 def exercise_reference_table():
   for space_group_number in range(1,230+1):

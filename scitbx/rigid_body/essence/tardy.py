@@ -1,11 +1,11 @@
 from __future__ import division
-from six.moves import range
 from scitbx.rigid_body.essence import featherstone
 from scitbx.rigid_body.essence import body_lib
 import scitbx.lbfgs
 from scitbx.array_family import flex
 from scitbx import matrix
 import math
+from six.moves import range
 
 def construct_bodies(
       sites,

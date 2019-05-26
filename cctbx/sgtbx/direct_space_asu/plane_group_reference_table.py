@@ -1,7 +1,7 @@
 from __future__ import division
-from six.moves import range
 from cctbx.sgtbx.direct_space_asu import direct_space_asu
 from cctbx.sgtbx.direct_space_asu.short_cuts import *
+from six.moves import range
 
 def asu_01(): # p_1 (s.g. 1)
   return (direct_space_asu('P 1')

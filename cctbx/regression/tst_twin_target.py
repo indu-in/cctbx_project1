@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx.array_family import flex
 from cctbx import crystal
 from cctbx import miller
@@ -13,6 +12,7 @@ from libtbx.test_utils import approx_equal
 from libtbx.utils import format_cpu_times
 import random
 import math
+from six.moves import range
 
 random.seed(0)
 flex.set_random_seed(0)
@@ -520,7 +520,7 @@ def tst_detwin():
     diff = flex.sum( flex.abs(diff) ) # / flex.sum( sfs.data() )
     assert approx_equal( diff, 0, eps=1e-5 )
     permut = tmp_detwin.obs_to_twin_obs()
-    ind = list(range( permut.size()))
+    ind = range( permut.size() )
     for ii, jj, kk, pp, mm  in zip( sfs.data(), i, dti, ind, permut ):
       no = (1-t)*sfs.data()[pp] + t*sfs.data()[mm]
       assert approx_equal( jj-no, 0, eps=1e-5)

@@ -1,8 +1,8 @@
 from __future__ import division, print_function
 # -*- coding: utf-8 -*-
-from six.moves import range
 from cctbx.array_family import flex
 import boost.python
+from six.moves import range
 ext = boost.python.import_ext("cctbx_crystal_ext")
 from cctbx_crystal_ext import *
 from cctbx.crystal.find_best_cell import find_best_cell
@@ -385,7 +385,7 @@ class symmetry(object):
     if self.space_group() is not None:
       sym_loop = model.loop(data=OrderedDict((
         ('_space_group_symop'+separator+'id',
-         list(range(1, len(self.space_group())+1))),
+         range(1, len(self.space_group())+1)),
         ('_space_group_symop'+separator+'operation_xyz',
          [s.as_xyz() for s in self.space_group()]))))
       cif_block.add_loop(sym_loop)

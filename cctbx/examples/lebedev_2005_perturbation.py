@@ -14,10 +14,10 @@ in radians for comparison.
 """
 from __future__ import division, print_function
 
-from six.moves import range
 from cctbx import sgtbx
 from cctbx import uctbx
 from scitbx import matrix
+from six.moves import range
 
 matrices_from_email = """
 CRYST1   82.053   66.612   84.904  99.00 111.29 105.00 P 1

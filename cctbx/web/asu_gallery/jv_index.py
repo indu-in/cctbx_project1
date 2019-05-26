@@ -1,9 +1,9 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx.web.asu_gallery import web_links
 from cctbx.web.asu_gallery import html_head_title
 from cctbx import sgtbx
 import sys
+from six.moves import range
 
 def table_format_html(table, f, n_columns, serial_fmt="%03d"):
   print("<table border=2 cellpadding=2>", file=f)

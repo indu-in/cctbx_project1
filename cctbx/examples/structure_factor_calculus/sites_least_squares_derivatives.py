@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx.examples.exp_i_alpha_derivatives import least_squares
 from scitbx import matrix
 from scitbx.array_family import flex
@@ -7,6 +6,7 @@ from libtbx.test_utils import approx_equal
 import cmath
 from cStringIO import StringIO
 import sys
+from six.moves import range
 
 flex.set_random_seed(0)
 

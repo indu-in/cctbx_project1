@@ -1,9 +1,9 @@
 from __future__ import absolute_import, division, print_function
-from six.moves import range
 import libtbx.load_env
 from libtbx.str_utils import show_string
 import os
 import sys
+from six.moves import range
 op = os.path
 
 class font_info(object):

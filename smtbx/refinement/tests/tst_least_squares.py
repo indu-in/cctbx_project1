@@ -1,6 +1,5 @@
 from __future__ import division, absolute_import
 from __future__ import print_function
-from six.moves import range
 from libtbx import object_oriented_patterns as oop
 from scitbx.linalg import eigensystem, svd
 from scitbx import matrix
@@ -20,6 +19,7 @@ import math
 import sys
 import random
 import re
+from six.moves import range
 
 tested_ls_engines = (
   least_squares.normal_eqns.non_linear_ls_with_separable_scale_factor_BLAS_2,

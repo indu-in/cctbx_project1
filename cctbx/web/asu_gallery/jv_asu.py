@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx.web.asu_gallery import jvx
 from cctbx.web.asu_gallery import jv_index
 from cctbx.web.asu_gallery import guide_to_notation
@@ -12,6 +11,7 @@ from libtbx.option_parser import OptionParser
 import urllib
 import math
 import os
+from six.moves import range
 
 def select_color(inclusive_flag):
   if (inclusive_flag): return (0,255,0)

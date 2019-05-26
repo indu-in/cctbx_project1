@@ -1,7 +1,7 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.array_family import flex
 from libtbx.test_utils import Exception_expected, show_diff
+from six.moves import range
 
 def exercise_basic(flex_type, verbose):
   if (flex_type is flex.bool):

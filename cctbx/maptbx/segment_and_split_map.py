@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 import iotbx.phil
 import iotbx.pdb
 import iotbx.mrcfile
@@ -13,6 +12,7 @@ from copy import deepcopy
 from libtbx.utils import null_out
 import libtbx.callbacks # import dependency
 from libtbx import group_args
+from six.moves import range
 
 master_phil = iotbx.phil.parse("""
 

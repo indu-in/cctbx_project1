@@ -1,7 +1,7 @@
 from __future__ import division, print_function
-from six.moves import range
 import re,struct
 from iotbx.detectors.detectorbase import DetectorImageBase
+from six.moves import range
 
 class MARImage(DetectorImageBase):
   def __init__(self,filename):

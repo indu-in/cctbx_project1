@@ -1,5 +1,4 @@
 from __future__ import absolute_import, division, print_function
-from six.moves import range
 import scitbx.math
 from scitbx.math import r3_rotation_vector_to_vector as vector_to_vector
 from scitbx.math import r3_rotation_vector_to_001 as vector_to_001
@@ -12,6 +11,7 @@ from libtbx.test_utils import Exception_expected, approx_equal
 import math
 import time
 import sys
+from six.moves import range
 
 def exercise_axis_and_angle(
       axis_range=2,

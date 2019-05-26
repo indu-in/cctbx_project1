@@ -1,4 +1,5 @@
 from __future__ import division, print_function
+from six.moves import range
 
 #  get_prob_more_than_z_n_tries
 
@@ -21,7 +22,6 @@ from __future__ import division, print_function
 
 # for small values, calculate directly
 
-from six.moves import range
 def p_of_none_greater(z,n):
   from scitbx.math import erf
   x=z/(2**0.5)

@@ -4,7 +4,6 @@ from __future__ import print_function
 # This code is based on:
 #   http://lists.wxwidgets.org/archive/wxPython-users/msg11078.html
 
-from six.moves import range
 import gltbx.util
 from gltbx.gl import *
 from gltbx.glu import *
@@ -14,6 +13,7 @@ import gltbx.images
 from scitbx.array_family import flex
 import scitbx.math
 from scitbx import matrix
+from six.moves import range
 try:
   import wx
 except ImportError:

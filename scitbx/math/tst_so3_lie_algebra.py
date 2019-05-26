@@ -1,5 +1,4 @@
 from __future__ import division
-from six.moves import range
 from scitbx.math import so3_lie_algebra
 
 import scitbx.matrix
@@ -8,6 +7,7 @@ from scitbx.array_family import flex
 
 import unittest
 import math
+from six.moves import range
 
 class TestElement(unittest.TestCase):
 

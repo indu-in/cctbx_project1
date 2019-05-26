@@ -1,5 +1,4 @@
 from __future__ import division
-from six.moves import range
 from cctbx import sgtbx
 from cctbx import crystal
 from cctbx import adptbx
@@ -9,6 +8,7 @@ from cctbx import eltbx
 from cctbx.array_family import flex
 from libtbx import adopt_init_args
 import random
+from six.moves import range
 
 def random_modify_adp_and_adp_flags(scatterers,
                                     random_u_iso_scale = 0.3,

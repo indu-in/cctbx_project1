@@ -1,9 +1,9 @@
 from __future__ import division, print_function
-from six.moves import range
 import scitbx.lbfgs
 import scitbx.math
 from scitbx.array_family import flex
 import math
+from six.moves import range
 
 """
 This example shows and easy way of obtaining reasonable estimates of
@@ -139,7 +139,7 @@ class fake_data(object):
 
 
 def example():
-  x_obs = flex.double( list(range(20)) )
+  x_obs = flex.double( range(20) )
   a = flex.double([1,2,3])
   w_obs = flex.double(20,100.0)
   y_ideal = a[0] + a[1]*x_obs + a[2]*x_obs*x_obs

@@ -1,9 +1,9 @@
 from __future__ import division
 from __future__ import absolute_import, print_function
-from six.moves import range
 import smtbx.refinement.constraints as _
 from smtbx.refinement.constraints import InvalidConstraint
 from math import pi
+from six.moves import range
 
 class u_iso_proportional_to_pivot_u_eq(object):
   """ u_iso of some scatterer constrained to be proportional to

@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx import uctbx
 from cctbx import adptbx
 from cctbx.array_family import flex
@@ -8,6 +7,7 @@ from scitbx import matrix
 from libtbx.test_utils import Exception_expected, approx_equal
 import math
 import random
+from six.moves import range
 
 def check_eigenvalue(adp, x):
   r = -adp[0] - adp[1] - adp[2]

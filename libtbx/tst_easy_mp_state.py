@@ -1,11 +1,11 @@
 from __future__ import absolute_import, division, print_function
-from six.moves import range
 from libtbx import easy_mp
 import os
 import random
 import string
 import threading
 import time
+from six.moves import range
 
 class state_object():
   ''' A simple thread-safe object keeping an internal state. '''
@@ -40,7 +40,7 @@ def exercise_multiprocessing(mp_nproc=1, mp_threads=1, mp_method="multiprocessin
 
   # Call the state-changing function in parallel
   easy_mp.parallel_map(
-    iterable=list(range(tasks)),
+    iterable=range(tasks),
     func=change_stored_state,
     processes=mp_nproc,
     method=mp_method)

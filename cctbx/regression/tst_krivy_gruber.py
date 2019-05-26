@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-from six.moves import range
 from cctbx.uctbx import reduction_base
 from cctbx.uctbx import krivy_gruber_1976
 from cctbx.uctbx import gruber_1973
@@ -13,6 +12,7 @@ from libtbx.test_utils import Exception_expected, approx_equal
 import math
 import random
 import sys
+from six.moves import range
 
 class check_is_niggli_cell(reduction_base.gruber_parameterization):
 

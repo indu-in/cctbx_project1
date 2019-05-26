@@ -1,8 +1,8 @@
 from __future__ import division, print_function
-from six.moves import range
 from scitbx.array_family import flex
 import libtbx.load_env
 import sys
+from six.moves import range
 
 def extend_sys_path():
   sys.path.insert(0,
