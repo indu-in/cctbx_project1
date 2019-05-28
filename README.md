@@ -6,7 +6,7 @@
 * [Installation](#install)
   * [Download the installer script](#getboot)
   * [Default](#default)
-  * [Using conds](#conda)
+  * [Using conda](#conda)
     * [get sources](#hot)
     * [get dependencies](#conda)
     * [auto building](#build)
@@ -20,7 +20,6 @@
 <a name="install"></a>
 ## Installation
 
-First
 <a name="getboot"></a>
 ### Get bootstrap.py
 
@@ -58,7 +57,7 @@ Current efforts, however, are to incorporate cctbx into a conda environment. Bel
 
 <a name="hot"></a>
 ### Getting cctbx project sources: hot and update 
-* Typically the first step is to download the internal sources, which is done automatically using the ```hot``` and ```update``` arguments. 
+Typically the first step is to download the internal sources, which is done automatically using the ```hot``` and ```update``` arguments. 
  
 ```
 ./bootstrap.py --builder=dials hot update
