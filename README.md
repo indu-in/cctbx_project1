@@ -91,16 +91,18 @@ And it will download a ```miniconda3``` folder and create a ```conda_base``` fol
 One can auto-build with the bootstrap script. Typically, after the conda environment is setup as described above, one can
 
 ```
-./bootstrap.py build --use_conda ./conda_base --build_dir ompbuild --nproc 8
+./bootstrap.py build --use_conda ./conda_base --build-dir ompbuild --nproc 8 --builder=dials
 ```
 
 This should compile the code in a build folder with the default configuration for your current OS. It is useful to have multiple build folders, for example a CUDA build. In such a case, one would
 
 ```
-./bootstrap.py build --use_conda ./conda_base --build_dir cudabuild --config-flags="--enable_cuda" --nproc 8
+./bootstrap.py build --use_conda ./conda_base --build_dir cudabuild --config-flags="--enable_cuda" --nproc 8 --builder=dials
 ```
 
 In order to use run cctbx scripts, one should always source the setpaths.sh script in the desired build folder.
+
+Note the builder had to be passed once again, so that bootstrap builds all the packages required. 
 
 <a name="manual_build"></a>
 ### Manual building
