@@ -11,6 +11,7 @@
     * [get dependencies](#conda)
     * [auto building](#build)
     * [Manual build](#manual_build)
+  * [Enable openMP under MAC OSX](#darwin_omp)
 
 * [Examples](#Examples)
 
@@ -97,7 +98,7 @@ One can auto-build with the bootstrap script. Typically, after the conda environ
 This should compile the code in a build folder with the default configuration for your current OS. It is useful to have multiple build folders, for example a CUDA build. In such a case, one would
 
 ```
-./bootstrap.py build --use_conda ./conda_base --build_dir cudabuild --config-flags="--enable_cuda" --nproc 8 --builder=dials
+./bootstrap.py build --use_conda ./conda_base --build-dir cudabuild --config-flags="--enable_cuda" --nproc 8 --builder=dials
 ```
 
 In order to use run cctbx scripts, one should always source the setpaths.sh script in the desired build folder.
@@ -135,6 +136,18 @@ After configuring, run make from within the build directory, twice, to compile a
 make
 make
 ```
+
+<a name="darwin_omp"></a>
+### OpenMP under MAC OSX
+Prior to building the sources, one should add the ```llvm-openmp``` package to the conda environment
+
+```
+source ./miniconda3/etc/profile.d/conda.sh
+conda activate ./conda_base
+conda install -c anaconda llvm-openmp --no-deps
+```
+
+The omp header for your corresponding conda cxx version should be installed in ```./conda_base/lib/clang/*/include/omp.h``` and this is what the the bootstrap builder will search for. 
 
 ### After you build
 * Run the command
