@@ -454,6 +454,7 @@ class nanoBragg {
     /* struct for CUDA pointers */
 #ifdef NANOBRAGG_HAVE_CUDA
     bool timelog;
+    int device_Id;
     cudaPointers cpo;
 #endif
     /* special options */
@@ -493,8 +494,8 @@ class nanoBragg {
          with class variables that manage memory and lifetime.  These will include std::string,
          std::map, std::vector, std::shared_ptr, and flex arrays.
        */
-
-      printf("free all memory within nanoBragg\n");
+      if (verbose)
+        printf("free all memory within nanoBragg\n");
       if(verbose>9)printf("pixels_in %p\n",pixels_in);
       free(pixels_in);
       if(verbose>9)printf("bin_start %p\n",bin_start);
@@ -543,8 +544,8 @@ class nanoBragg {
         free(Fhkl);
       }
       hkls = 0;
-
-      printf("finished freeing memory\n");
+      if (verbose)
+        printf("finished freeing memory\n");
     }
 
     /* member functions to run once (might allocate memory) */
@@ -584,6 +585,7 @@ class nanoBragg {
     void allocate_cuda();
     void add_energy_channel_cuda();
     void add_nanoBragg_spots_cuda_update();
+    int get_num_devices();
     void get_raw_pixels_cuda();
     void deallocate_cuda();
     void add_nanoBragg_spots_cuda();

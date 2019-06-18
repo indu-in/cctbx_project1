@@ -1,11 +1,14 @@
 #include <simtbx/nanoBragg/cuda_struct.h>
 #include <simtbx/nanoBragg/nanoBragg.h>
 
-//Contributed by Billy Poon, LBNL.
+//Contributed by Billy Poon, LBNL
+//
+
+extern "C" int get_num_devices_cu();
 
 // function declaration from nanoBraggCUDA.cu
 extern "C"
-void nanoBraggSpotsCUDA(int timelog, int spixels, int fpixels, int roi_xmin, int roi_xmax,
+void nanoBraggSpotsCUDA(int deviceId, int timelog, int spixels, int fpixels, int roi_xmin, int roi_xmax,
                         int roi_ymin, int roi_ymax, int oversample,
                         int point_pixel, double pixel_size, double subpixel_size,
                         int steps, double detector_thickstep,
@@ -145,7 +148,7 @@ nanoBragg::add_nanoBragg_spots_cuda()
   float* float_floatimage = new float[raw_pixels.size()];
 #ifdef HAVE_NANOBRAGG_SPOTS_CUDA
 
-  nanoBraggSpotsCUDA(timelog /*bool*/, spixels, fpixels, roi_xmin, roi_xmax,
+  nanoBraggSpotsCUDA(device_Id, timelog /*bool*/, spixels, fpixels, roi_xmin, roi_xmax,
                      roi_ymin, roi_ymax, oversample,
                      point_pixel /* bool */, pixel_size, subpixel_size,
                      steps, detector_thickstep,
@@ -388,6 +391,12 @@ nanoBragg::add_nanoBragg_spots_cuda_update() {
 #endif
 }
 
-
+int nanoBragg::get_num_devices() {
+  #ifdef HAVE_NANOBRAGG_SPOTS_CUDA
+    get_num_devices_cu();
+  #else
+    throw SCITBX_ERROR("no CUDA implementation of nanoBragg_add_spots");
+  #endif
+  }
 
 }}// namespace simtbx::nanoBragg

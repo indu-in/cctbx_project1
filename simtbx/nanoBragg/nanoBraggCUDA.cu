@@ -92,7 +92,7 @@ CUDAREAL pixel_size, CUDAREAL subpixel_size, int steps, CUDAREAL detector_thicks
                 float * max_I_y_reduction /*out*/, bool * rangemap);
 
 
-extern "C" void nanoBraggSpotsCUDA(int timelog, int spixels, int fpixels, int roi_xmin, int roi_xmax, int roi_ymin, int roi_ymax, int oversample, int point_pixel,
+extern "C" void nanoBraggSpotsCUDA(int deviceId, int timelog, int spixels, int fpixels, int roi_xmin, int roi_xmax, int roi_ymin, int roi_ymax, int oversample, int point_pixel,
                 double pixel_size, double subpixel_size, int steps, double detector_thickstep, int detector_thicksteps, double detector_thick, double detector_mu,
                 double sdet_vector[4], double fdet_vector[4], double odet_vector[4], double pix0_vector[4], int curved_detector, double distance, double close_distance,
                 double beam_vector[4], double Xbeam, double Ybeam, double dmin, double phi0, double phistep, int phisteps, double spindle_vector[4], int sources,
@@ -104,6 +104,9 @@ extern "C" void nanoBraggSpotsCUDA(int timelog, int spixels, int fpixels, int ro
                 double * omega_sum/*out*/, int * sumn /*out*/, double * sum /*out*/, double * sumsqr /*out*/, double * max_I/*out*/, double * max_I_x/*out*/,
                 double * max_I_y /*out*/) {
 
+  
+  cudaSetDevice(deviceId);
+  
   if (timelog)
     TimeLogger::m_verbose=true;
   TimeLogger myLogger(__FUNCTION__);
@@ -310,11 +313,12 @@ extern "C" void nanoBraggSpotsCUDA(int timelog, int spixels, int fpixels, int ro
     CUDA_CHECK_RETURN(cudaMemcpy(cu_Fhkl, FhklLinear, sizeof(*cu_Fhkl) * hklsize, cudaMemcpyHostToDevice));
         }
 
-        int deviceId = 0;
+        //int deviceId = 0;
   {
     TimeLogger myLogger("cudaGetDevice");
 
     CUDA_CHECK_RETURN(cudaGetDevice(&deviceId));
+    //cudaError_t cudaSetDevice(deviceId);
         }
 
   cudaDeviceProp deviceProps = { 0 };
@@ -323,6 +327,7 @@ extern "C" void nanoBraggSpotsCUDA(int timelog, int spixels, int fpixels, int ro
     CUDA_CHECK_RETURN(cudaGetDeviceProperties(&deviceProps, deviceId));
         }
 
+  //cudaError_t cudaSetDevice(deviceId);
 
   int smCount = deviceProps.multiProcessorCount;
   if (timelog)
@@ -1862,3 +1867,20 @@ extern "C" void add_nanoBragg_spots_cuda_update_cu(
         CUDA_CHECK_RETURN(cudaPeekAtLastError());
         CUDA_CHECK_RETURN(cudaDeviceSynchronize());
 }
+
+
+extern "C" int get_num_devices_cu(){
+  //https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#device-enumeration
+    int deviceCount;
+    cudaGetDeviceCount(&deviceCount);
+    int device;
+    for (device = 0; device < deviceCount; ++device) {
+        cudaDeviceProp deviceProp;
+        cudaGetDeviceProperties(&deviceProp, device);
+        printf("Device %d has compute capability %d.%d.\n",
+               device, deviceProp.major, deviceProp.minor);
+    }
+  return deviceCount;
+  }
+
+
