@@ -25,8 +25,13 @@ import tempfile
 import textwrap
 import time
 import traceback
-import urllib2
-import urlparse
+try: # Python 3
+    from urllib.parse import urlparse
+    from urllib.request import urlopen, Request
+    from urllib.error import HTTPError, URLError
+except ImportError: # Python 2
+    from urlparse import urlparse
+    from urllib2 import urlopen, Request, HTTPError, URLError
 import zipfile
 
 try:
@@ -252,14 +257,14 @@ class Toolbox(object):
         else:
           # Handle target environment that doesn't support HTTPS verification
           ssl._create_default_https_context = _create_unverified_https_context
-      url_request = urllib2.Request(url)
+      url_request = Request(url)
       if etag:
         url_request.add_header("If-None-Match", etag)
       if localcopy:
         # Shorten timeout to 7 seconds if a copy of the file is already present
-        socket = urllib2.urlopen(url_request, None, 7)
+        socket = urlopen(url_request, None, 7)
       else:
-        socket = urllib2.urlopen(url_request)
+        socket = urlopen(url_request)
     except SSLError as e:
       # This could be a timeout
       if localcopy:
@@ -269,8 +274,8 @@ class Toolbox(object):
         return -2
       # otherwise pass on the error message
       raise
-    except (pysocket.timeout, urllib2.HTTPError) as e:
-      if isinstance(e, urllib2.HTTPError) and etag and e.code == 304:
+    except (pysocket.timeout, HTTPError) as e:
+      if isinstance(e, HTTPError) and etag and e.code == 304:
         # When using ETag. a 304 error means everything is fine
         log.write("local copy is current (etag)\n")
         return -2
@@ -281,7 +286,7 @@ class Toolbox(object):
         return -2
       # otherwise pass on the error message
       raise
-    except urllib2.URLError as e:
+    except URLError as e:
       if localcopy:
         # Download failed for some reason, but a valid local copy of
         # the file exists, so use that one instead.
@@ -297,7 +302,7 @@ class Toolbox(object):
 
     if (socket is not None):
       try:
-        file_size = int(socket.info().getheader('Content-Length'))
+        file_size = int(socket.info().get('Content-Length'))
       except Exception:
         file_size = 0
 
@@ -376,9 +381,9 @@ class Toolbox(object):
         atime = st[ST_ATIME] # current access time
         os.utime(file,(atime,remote_mtime))
 
-      if cache and socket.info().getheader('ETag'):
+      if cache and socket.info().get('ETag'):
         # If the server sent an ETAG, then keep it alongside the file
-        open(tagfile, 'w').write(socket.info().getheader('ETag'))
+        open(tagfile, 'w').write(socket.info().get('ETag'))
 
     return received
 
@@ -484,8 +489,7 @@ class Toolbox(object):
       if ('cctbx_project.git' in parameters[0]):
         print('\n' + '=' * 80 + '\nCCTBX moved to git on November 22, 2016.\n\nTo update cctbx_project to the last available subversion revision please run "svn update" while in the cctbx_project directory.\n' + '*'*80 + '\n')
       return
-
-    if isinstance(parameters, basestring):
+    if isinstance(parameters, str):
       parameters = [ parameters ]
     git_parameters = []
     for source_candidate in parameters:
@@ -528,7 +532,7 @@ class Toolbox(object):
         ).run()
         return returncode
       filename = "%s-%s" % (module,
-                            urlparse.urlparse(source_candidate)[2].split('/')[-1])
+                            urlparse(source_candidate)[2].split('/')[-1])
       filename = os.path.join(destpath, filename)
       if verbose:
         print("===== Downloading %s: " % source_candidate, end=' ')
@@ -632,7 +636,7 @@ class SourceModule(object):
       self.update_subclasses()
 
   def items(self):
-    return self._modules.items()
+    return list(self._modules.items())
 
   @classmethod
   def update_subclasses(cls):
@@ -913,7 +917,7 @@ class dials_regression_module(SourceModule):
 
 class msgpack_module(SourceModule):
   module = 'msgpack'
-  anonymous = ['curl', "https://gitcdn.link/repo/dials/dependencies/dials-1.13/msgpack-3.1.1.tar.gz"]
+  anonymous = ['curl', "https://gitcdn.xyz/repo/dials/dependencies/dials-1.13/msgpack-3.1.1.tar.gz"]
 
 class xfel_regression_module(SourceModule):
   module = 'xfel_regression'
@@ -1058,12 +1062,12 @@ class Builder(object):
 
     # Add 'hot' sources
     if hot:
-      map(self.add_module, self.get_hot())
+      list(map(self.add_module, self.get_hot()))
 
     # Add svn sources.
     self.revert=revert
     if update:
-      map(self.add_module, self.get_codebases())
+      list(map(self.add_module, self.get_codebases()))
 
     # always remove .pyc files
     self.remove_pyc()
@@ -1339,7 +1343,7 @@ class Builder(object):
     self.add_step(_download())
 
   def _add_curl(self, module, url):
-    filename = urlparse.urlparse(url)[2].split('/')[-1]
+    filename = urlparse(url)[2].split('/')[-1]
     self._add_download(url, os.path.join('modules', filename))
     self.add_step(self.shell(
       name="extracting files from %s" %filename,
@@ -1628,8 +1632,11 @@ sure you have a valid conda environment in
       if self.use_conda == '' and conda_env is None:
         flags = ['--builder={builder}'.format(builder=self.category)]
         # check for existing miniconda3 installation
-        if not os.path.isdir('miniconda3'):
+        if not os.path.isdir('mc3'):
           flags.append('--install_conda')
+        # check if --python3 is set
+        if self.python3:
+          flags.append('--python=36')
         command = [
           'python',
           self.opjoin('modules', 'cctbx_project', 'libtbx', 'auto_build',
@@ -2506,7 +2513,7 @@ def run(root=None):
   parser.add_argument('action', nargs='*', help="Actions for building")
   parser.add_argument(
     "--builder",
-    help="Builder: " + ",".join(builders.keys()),
+    help="Builder: " + ",".join(list(builders.keys())),
     default="cctbx")
   parser.add_argument("--cciuser", help="CCI SVN username.")
   parser.add_argument("--sfuser", help="SourceForge SVN username.")

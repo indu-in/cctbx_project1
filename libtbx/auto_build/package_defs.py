@@ -12,12 +12,15 @@ import os
 import os.path as op
 import platform
 import sys
-import urllib2
+try: # Python 3
+  from urllib.request import urlopen
+except ImportError: # Python 2
+  from urllib2 import urlopen
 
 try:
   from .bootstrap import Toolbox
   from .installer_utils import *
-except ValueError:
+except (ValueError, ImportError):
   # When run from bootstrap the auto_build directory will be in the path
   from bootstrap import Toolbox
   from installer_utils import *
@@ -28,7 +31,7 @@ def get_pypi_package_information(package, version=None, information_only=False):
   '''Retrieve information about a PyPi package.'''
   metadata = 'https://pypi.python.org/pypi/' + package + '/json'
   try:
-    pypidata = urllib2.urlopen(metadata).read()
+    pypidata = urlopen(metadata).read()
   except Exception: # TLS <1.2, ...
     if information_only:
       return {'name': '', 'version': '', 'summary': ''}
@@ -48,7 +51,7 @@ def get_pypi_package_information(package, version=None, information_only=False):
     package[field] = pkginfo['info'][field]
   return package
 
-DEPENDENCIES_BASE = "https://gitcdn.link/repo/dials/dependencies/master/"
+DEPENDENCIES_BASE = "https://gitcdn.xyz/repo/dials/dependencies/master/"
 OPENSSL_PKG = "openssl-1.0.2r.tar.gz"    # OpenSSL
 PYTHON3_PKG = "Python-3.7.2.tgz"
 PYTHON_PKG = "Python-2.7.16.tgz"

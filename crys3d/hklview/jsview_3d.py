@@ -1,8 +1,5 @@
 
-# TODO:
-#  - cached scenes
-
-from __future__ import division
+from __future__ import absolute_import, division, print_function
 from libtbx.math_utils import roundoff
 from cctbx.miller import display2 as display
 from cctbx.array_family import flex
@@ -14,8 +11,8 @@ import threading, math, sys
 from time import sleep
 import os.path, time
 import libtbx
-import numpy as np
 import webbrowser, tempfile
+from six.moves import range
 
 
 
@@ -28,11 +25,13 @@ class ArrayInfo:
       data = [e for e in data if e!= display.inanval]
     if millarr.is_complex_array():
       data = flex.abs(millarr.data())
+    data = [e for e in data if not math.isnan(e)]
     self.maxdata =max( data )
     self.mindata =min( data )
     self.maxsigmas = self.minsigmas = None
     if millarr.sigmas() is not None:
       data = millarr.sigmas()
+      data = [e for e in data if not math.isnan(e)]
       self.maxsigmas =max( data )
       self.minsigmas =min( data )
     self.minmaxdata = (roundoff(self.mindata), roundoff(self.maxdata))
@@ -49,7 +48,7 @@ class ArrayInfo:
       self.span = ( millarr.index_span().min(), millarr.index_span().max())
       dmin = millarr.d_max_min()[1]
       dmax = millarr.d_max_min()[0]
-    except Exception, e:
+    except Exception as e:
       mprint(to_str(e))
     issymunique = millarr.is_unique_set_under_symmetry()
     self.infotpl = (self.labels, self.desc, millarr.indices().size(), self.span,
@@ -67,8 +66,9 @@ class hklview_3d:
     self.cameratype = "orthographic"
     self.url = ""
     self.binarray = "Resolution"
-    self.icolourcol = 0
-    self.iradiicol = 0
+    self.icolourcol = None
+    self.iradiicol = None
+    self.iarray = None
     self.isnewfile = False
     self.binvals = []
     self.workingbinvals = []
@@ -78,14 +78,16 @@ class hklview_3d:
     self.othermindata = []
     self.othermaxsigmas = []
     self.otherminsigmas = []
+    self.sceneisdirty = False
     self.matchingarrayinfo = []
+    self.match_valarrays = []
     self.binstrs = []
     self.mapcoef_fom_dict = {}
     self.verbose = True
     if kwds.has_key('verbose'):
       self.verbose = kwds['verbose']
     self.mprint = sys.stdout.write
-    if kwds.has_key('mprint'):
+    if 'mprint' in kwds:
       self.mprint = kwds['mprint']
     self.nbin = 0
     self.websockclient = None
@@ -95,13 +97,13 @@ class hklview_3d:
     self.hklfname = os.path.join(tempdir, "hkl.htm" )
     if os.path.isfile(self.hklfname):
       os.remove(self.hklfname)
-    if kwds.has_key('htmlfname'):
+    if 'htmlfname' in kwds:
       self.hklfname = kwds['htmlfname']
     self.hklfname = os.path.abspath( self.hklfname )
     self.jscriptfname = os.path.join(tempdir, "hkljstr.js")
     if os.path.isfile(self.jscriptfname):
       os.remove(self.jscriptfname)
-    if kwds.has_key('jscriptfname'):
+    if 'jscriptfname' in kwds:
       self.jscriptfname = kwds['jscriptfname']
     self.mprint('Output will be written to \"%s\"\n' \
       'including reference to NGL JavaScript \"%s\"' %(self.hklfname, self.jscriptfname))
@@ -126,7 +128,7 @@ class hklview_3d:
     """
     self.colourgradientvalues = []
     self.UseOSBrowser = True
-    if kwds.has_key('UseOSBrowser'):
+    if 'UseOSBrowser' in kwds:
       self.UseOSBrowser = kwds['UseOSBrowser']
     self.viewmtrxelms = None
     self.pendingmessage = None
@@ -140,179 +142,174 @@ class hklview_3d:
       os.remove(self.hklfname)
 
 
-  def set_miller_array(self, miller_array, merge=None, details="", proc_arrays=[]) :
-    self.miller_array = miller_array
+  def set_miller_array(self, col, merge=None, details="", proc_arrays=[]):
+    self.iarray = col
+    if col:
+      self.miller_array = proc_arrays[col]
     self.proc_arrays = proc_arrays
     self.merge = merge
-    if (miller_array is None):
+    if (self.miller_array is None):
       return
-    self.d_min = miller_array.d_min()
-    array_info = miller_array.info()
-    self.binvals = [ 1.0/miller_array.d_max_min()[0], 1.0/miller_array.d_max_min()[1]  ]
+    self.d_min = self.miller_array.d_min()
+    array_info = self.miller_array.info()
+    self.binvals = [ 1.0/self.miller_array.d_max_min()[0], 1.0/self.miller_array.d_max_min()[1]  ]
     #import code, traceback; code.interact(local=locals(), banner="".join( traceback.format_stack(limit=10) ) )
-    uc = "a=%g b=%g c=%g angles=%g,%g,%g" % miller_array.unit_cell().parameters()
+    uc = "a=%g b=%g c=%g angles=%g,%g,%g" % self.miller_array.unit_cell().parameters()
     self.mprint( "Data: %s %s, %d reflections in space group: %s, unit Cell: %s" \
-      % (array_info.label_string(), details, miller_array.indices().size(), \
-          miller_array.space_group_info(), uc) )
-    self.construct_reciprocal_space(merge=merge)
+      % (array_info.label_string(), details, self.miller_array.indices().size(), \
+          self.miller_array.space_group_info(), uc) )
+    #self.construct_reciprocal_space(merge=merge)
 
 
-  def construct_reciprocal_space (self, merge=None) :
+  def ExtendMillerArraysUnionHKLs(self):
     #import code, traceback; code.interact(local=locals(), banner="".join( traceback.format_stack(limit=10) ) )
-    matchcolourindices = miller.match_indices(self.miller_array.indices(),
-       self.proc_arrays[self.icolourcol].indices() )
-    matchcolourarray = self.miller_array.select( matchcolourindices.pairs().column(0) )
+    self.match_valarrays = []
+    # loop over all miller arrays to find the subsets of hkls common between currently selected
+    # miler array and the other arrays. hkls found in the currently selected miller array but
+    # missing in the subsets are populated populated with NaN values
+    # create miller indices being a superset of available indices in all arrays
+    self.mprint("Gathering superset of miller indices")
+    superset_array = self.proc_arrays[0]
+    for i,validarray in enumerate(self.proc_arrays):
+      if i==0:
+        continue
+      # first match indices in currently selected miller array with indices in the other miller arrays
+      matchindices = miller.match_indices(superset_array.indices(), validarray.indices() )
+      #print validarray.info().label_string()
+      valarray = validarray.select( matchindices.pairs().column(1) )
+      #import code, traceback; code.interact(local=locals(), banner="".join( traceback.format_stack(limit=10) ) )
+      if valarray.anomalous_flag() and not superset_array.anomalous_flag():
+        # valarray gets its anomalous_flag from validarray. But it cannot have more HKLs than self.miller_array
+        # so set its anomalous_flag to False if self.miller_array is not anomalous data
+        valarray._anomalous_flag = False
+      if not valarray.anomalous_flag() and superset_array.anomalous_flag():
+        # temporarily expand other arrays to anomalous if self.miller_array is anomalous
+        valarray = valarray.generate_bijvoet_mates()
+      missing = superset_array.lone_set( valarray )
+      # insert NAN values for reflections in self.miller_array not found in validarray
+      valarray = display.ExtendMillerArray(valarray, missing.size(), missing.indices())
+      match_valindices = miller.match_indices(superset_array.indices(), valarray.indices() )
+      #import code, traceback; code.interact(local=locals(), banner="".join( traceback.format_stack(limit=10) ) )
+      match_valarray = valarray.select( match_valindices.pairs().column(1) )
+      match_valarray.sort(by_value="packed_indices")
+      #match_valarray.set_info(validarray.info() )
+      superset_array = match_valarray
+      #print "supersetsize:", superset_array.size()
+    # now extend each miller array to contain any missing indices from the superset miller array
+    for i,validarray in enumerate(self.proc_arrays):
+      # first match indices in currently selected miller array with indices in the other miller arrays
+      matchindices = miller.match_indices(superset_array.indices(), validarray.indices() )
+      #print validarray.info().label_string()
+      valarray = validarray.select( matchindices.pairs().column(1) )
+      #import code, traceback; code.interact(local=locals(), banner="".join( traceback.format_stack(limit=10) ) )
+      if valarray.anomalous_flag() and not superset_array.anomalous_flag():
+        # valarray gets its anomalous_flag from validarray. But it cannot have more HKLs than self.miller_array
+        # so set its anomalous_flag to False if self.miller_array is not anomalous data
+        valarray._anomalous_flag = False
+      if not valarray.anomalous_flag() and superset_array.anomalous_flag():
+        # temporarily expand other arrays to anomalous if self.miller_array is anomalous
+        valarray = valarray.generate_bijvoet_mates()
+      missing = superset_array.lone_set( valarray )
+      # insert NAN values for reflections in self.miller_array not found in validarray
+      valarray = display.ExtendMillerArray(valarray, missing.size(), missing.indices())
+      match_valindices = miller.match_indices(superset_array.indices(), valarray.indices() )
+      #import code, traceback; code.interact(local=locals(), banner="".join( traceback.format_stack(limit=10) ) )
+      match_valarray = valarray.select( match_valindices.pairs().column(1) )
+      match_valarray.sort(by_value="packed_indices")
+      match_valarray.set_info(validarray.info() )
+      self.match_valarrays.append( match_valarray )
 
-    matchradiiindices = miller.match_indices(self.miller_array.indices(),
-       self.proc_arrays[self.iradiicol ].indices() )
-    matchradiiarray = self.miller_array.select( matchradiiindices.pairs().column(0) )
 
-    matchcolourradiiindices = miller.match_indices(self.proc_arrays[self.icolourcol].indices(),
-       self.proc_arrays[self.iradiicol ].indices() )
-
-    commonindices = miller.match_indices(self.miller_array.indices(),
-       matchcolourradiiindices.paired_miller_indices(0) )
-    commonarray = self.miller_array.select( commonindices.pairs().column(0) )
-    commonarray.set_info(self.miller_array.info() )
-    commonarray.sort(by_value="packed_indices")
-
+  def construct_reciprocal_space(self, merge=None):
+    self.mprint("Constructing HKL scenes")
+    #if len(self.match_valarrays)==0:
+    #  self.ExtendMillerArraysUnionHKLs()
+    self.miller_array = self.match_valarrays[self.iarray]
+    if not self.sceneisdirty:
+      return
+    self.otherscenes = []
+    self.othermaxdata = []
+    self.othermindata = []
+    self.othermaxsigmas = []
+    self.otherminsigmas = []
+    self.matchingarrayinfo = []
+    #import code, traceback; code.interact(local=locals(), banner="".join( traceback.format_stack(limit=10) ) )
     foms_array = None
     if self.miller_array.is_complex_array():
       fomcolm = self.mapcoef_fom_dict.get(self.miller_array.info().label_string())
       if fomcolm:
         foms_array = self.proc_arrays[fomcolm].deep_copy()
-    self.scene = display.scene(miller_array=self.miller_array, merge=merge,
-     settings=self.settings, foms_array=foms_array)
-
-    self.rotation_center = (0,0,0)
-
-    self.otherscenes = []
-    self.othermaxdata = []
-    self.othermindata = []
-    self.matchingarrayinfo = []
-    match_valarrays = []
-    # loop over all miller arrays to find the subsets of hkls common between currently selected
-    # miler array and the other arrays. hkls found in the currently selected miller array but
-    # missing in the subsets are populated populated with NaN values
-    for i,validarray in enumerate(self.proc_arrays):
-      # first match indices in currently selected miller array with indices in the other miller arrays
-      #matchindices = miller.match_indices(matchcolourradiiarray.indices(), validarray.indices() )
-      matchindices = miller.match_indices(self.miller_array.indices(), validarray.indices() )
-      #matchindices = miller.match_indices( commonarray.indices(), validarray.indices() )
-      #print validarray.info().label_string()
-
-      valarray = validarray.select( matchindices.pairs().column(1) )
-
-      #import code, traceback; code.interact(local=locals(), banner="".join( traceback.format_stack(limit=10) ) )
-      if valarray.anomalous_flag() and not self.miller_array.anomalous_flag():
-        # valarray gets its anomalous_flag from validarray. But it cannot have more HKLs than self.miller_array
-        # so set its anomalous_flag to False if self.miller_array is not anomalous data
-        valarray._anomalous_flag = False
-      if not valarray.anomalous_flag() and self.miller_array.anomalous_flag():
-        # temporarily expand other arrays to anomalous if self.miller_array is anomalous
-        valarray = valarray.generate_bijvoet_mates()
-
-      missing = self.miller_array.lone_set( valarray )
-      # insert NAN values for reflections in self.miller_array not found in validarray
-      valarray = display.ExtendMillerArray(valarray, missing.size(), missing.indices())
-      match_valindices = miller.match_indices(self.miller_array.indices(), valarray.indices() )
-      #import code, traceback; code.interact(local=locals(), banner="".join( traceback.format_stack(limit=10) ) )
-      match_valarray = valarray.select( match_valindices.pairs().column(1) )
-      match_valarray.sort(by_value="packed_indices")
-      match_valarray.set_info(validarray.info() )
-      match_valarrays.append( match_valarray )
-
-    for i,match_valarray in enumerate(match_valarrays):
+    #self.scene = display.scene(miller_array=self.miller_array, merge=merge,
+    # settings=self.settings, foms_array=foms_array)
+    # compute scenes for each of the miller arrays
+    for i,match_valarray in enumerate(self.match_valarrays):
       foms = None
       if match_valarray.is_complex_array():
         fomcolm = self.mapcoef_fom_dict.get(match_valarray.info().label_string())
         #import code, traceback; code.interact(local=locals(), banner="".join( traceback.format_stack(limit=10) ) )
         if fomcolm:
-          foms = match_valarrays[fomcolm]
-
-      otherscene = display.scene(miller_array=match_valarray,  merge=merge,
-        settings=self.settings, foms_array=foms)
+          foms = self.match_valarrays[fomcolm]
+      #commonarray = match_valarray
+      commonarray = match_valarray.common_set(self.proc_arrays[self.iarray] )
+      commonarray.set_info(match_valarray.info() )
+      if i==self.iradiicol or i==self.icolourcol or i==self.iarray:
+        bfullprocess = True
+      else:
+        bfullprocess = False
+      otherscene = display.scene(miller_array=commonarray, merge=merge,
+        settings=self.settings, foms_array=foms, fullprocessarray=True )
+      #import code, traceback; code.interact(local=locals(), banner="".join( traceback.format_stack(limit=10) ) )
       if not otherscene.SceneCreated:
-        self.mprint("The " + match_valarray.info().label_string() + " array was not processed")
+        self.mprint("The " + commonarray.info().label_string() + " array was not processed")
         continue
       #import code, traceback; code.interact(local=locals(), banner="".join( traceback.format_stack(limit=10) ) )
-      # cast any NAN values to -1 of the colours and radii arrays before writing javascript
-      nplst = np.array( list( otherscene.data ) )
-      mask = np.isnan(nplst)
-      npcolour = np.array( list(otherscene.colors))
-      npcolourcol = npcolour.reshape( len(otherscene.data), 3 )
-      #npcolourcol[mask] = -1
-      otherscene.colors = flex.vec3_double()
-      otherscene.colors.extend( flex.vec3_double( npcolourcol.tolist()) )
-      """
-      nplst = np.array( list( otherscene.radii ) )
-      mask = np.isnan(nplst)
-      npradii = np.array( list(otherscene.radii))
-      npradiicol = npradii.reshape( len(otherscene.data), 1 )
-      npradiicol[mask] = 0.2
-      otherscene.radii = flex.double( npradiicol.flatten().tolist())
-      """
+      # cast any NAN values to 1 of the colours and radii to 0.2 before writing javascript
+      b = flex.bool([bool(math.isnan(e[0]) + math.isnan(e[1]) + math.isnan(e[2])) for e in otherscene.colors])
+      otherscene.colors = otherscene.colors.set_selected(b, (1.0, 1.0, 1.0))
       b = flex.bool([bool(math.isnan(e)) for e in otherscene.radii])
-      # replace any nan values with 0.2
       otherscene.radii = otherscene.radii.set_selected(b, 0.2)
-
-      d = otherscene.data
-      if (isinstance(d, flex.int)):
-        d = [e for e in self.scene.data if e!= display.inanval]
-      if match_valarray.is_complex_array():
-        d = otherscene.ampl
-      maxdata =max( d )
-      mindata =min( d )
-      self.othermaxdata.append( maxdata )
-      self.othermindata.append( mindata )
-
-      maxsigmas = minsigmas = display.nanval
-      if otherscene.sigmas is not None:
-        d = otherscene.sigmas
-        maxsigmas = max( d )
-        minsigmas = min( d )
-
-      self.othermaxsigmas.append(maxsigmas)
-      self.otherminsigmas.append(minsigmas)
-      # TODO: tag array according to which otherscene is included
       self.otherscenes.append( otherscene)
-
-      #import code, traceback; code.interact(local=locals(), banner="".join( traceback.format_stack(limit=10) ) )
-      infostr = ArrayInfo(otherscene.work_array, self.mprint).infostr
-      #infostr = ArrayInfo(match_valarray).infostr
+      ainf = ArrayInfo(otherscene.work_array, self.mprint)
+      self.othermaxdata.append( ainf.maxdata )
+      self.othermindata.append( ainf.mindata )
+      self.othermaxsigmas.append(ainf.maxsigmas)
+      self.otherminsigmas.append(ainf.minsigmas)
+      infostr = ainf.infostr
       self.mprint("%d, %s" %(i, infostr) )
       self.matchingarrayinfo.append(infostr)
     #import code, traceback; code.interact(local=locals(), banner="".join( traceback.format_stack(limit=10) ) )
+    self.sceneisdirty = False
 
 
-  #--- user input and settings
-  def update_settings (self) :
-    if (self.miller_array is None):
-      return
+  def update_settings(self, diffphil) :
+    if hasattr(diffphil, "filename"):
+      self.ExtendMillerArraysUnionHKLs()
+      self.sceneisdirty = True
+
+    if hasattr(diffphil, "spacegroupchoice") or \
+      hasattr(diffphil, "mergedata") or \
+      hasattr(diffphil, "column") or \
+      hasattr(diffphil, "fomcolumn") or \
+      hasattr(diffphil, "viewer") and ( hasattr(diffphil.viewer, "show_anomalous_pairs") \
+      or hasattr(diffphil.viewer, "show_data_over_sigma") \
+      or hasattr(diffphil.viewer, "show_missing") \
+      or hasattr(diffphil.viewer, "show_only_missing") \
+      or hasattr(diffphil.viewer, "show_systematic_absences") \
+      or hasattr(diffphil.viewer, "slice_axis") \
+      or hasattr(diffphil.viewer, "slice_mode") \
+      or hasattr(diffphil.viewer, "scale") \
+      or hasattr(diffphil.viewer, "nth_power_scale_radii") \
+      or hasattr(diffphil.viewer, "expand_anomalous") \
+      or hasattr(diffphil.viewer, "expand_to_p1")
+      ):
+        self.sceneisdirty = True
     self.construct_reciprocal_space(merge=self.merge)
+    if self.miller_array is None or self.iarray < 0:
+      return
+    self.scene = self.otherscenes[self.iarray]
     self.DrawNGLJavaScript()
     msg = "Rendered %d reflections\n" % self.scene.points.size()
     return msg
-
-
-  def process_pick_points (self) :
-    self.closest_point_i_seq = None
-    if (self.pick_points is not None) and (self.scene is not None) :
-      closest_point_i_seq = gltbx.viewer_utils.closest_visible_point(
-        points=self.scene.points,
-        atoms_visible=self.scene.visible_points,
-        point0=self.pick_points[0],
-        point1=self.pick_points[1])
-      if (closest_point_i_seq is not None) :
-        self.closest_point_i_seq = closest_point_i_seq
-    if (self.closest_point_i_seq is not None) :
-      self.scene.label_points.add(self.closest_point_i_seq)
-      self.GetParent().update_clicked(index=self.closest_point_i_seq)
-      #hkl, d_min, value = self.scene.get_reflection_info(
-      #  self.closest_point_i_seq)
-      #self.GetParent().update_clicked(hkl, d_min, value)
-    else :
-      self.GetParent().update_clicked(index=None)
 
 
   def UpdateBinValues(self, binvals = [] ):

@@ -2,7 +2,7 @@
 # TODO:
 #  - cached scenes
 
-from __future__ import division
+from __future__ import absolute_import, division, print_function
 from libtbx.utils import Sorry, to_str
 from cctbx import miller
 from cctbx.array_family import flex
@@ -10,6 +10,7 @@ import libtbx.phil
 from libtbx import object_oriented_patterns as oop
 from math import sqrt
 import math
+from six.moves import zip
 
 
 
@@ -47,8 +48,10 @@ def nth_power_scale(dataarray, nth_power):
   values to 0.1 of the largest values
   """
   absdat = flex.abs(dataarray)
-  maxdat = flex.max(absdat)
-  mindat = max(1e-10*maxdat, flex.min(absdat) )
+  absdat2 = flex.double([e for e in absdat if not math.isnan(e)])
+  maxdat = flex.max(absdat2)
+  mindat = max(1e-10*maxdat, flex.min(absdat2) )
+  #print "minmaxdat:", mindat, maxdat
   # only autoscale for sensible values of maxdat and mindat
   if nth_power < 0.0 and maxdat > mindat : # amounts to automatic scale
     nth_power = math.log(0.2)/(math.log(mindat) - math.log(maxdat))
@@ -80,6 +83,8 @@ def ExtendAnyData(data, nsize):
     data.extend( flex.double(nsize, nanval) )
   if isinstance(data, flex.complex_double):
     data.extend( flex.complex_double(nsize, nanval) )
+  if isinstance(data, flex.vec3_double):
+    data.extend( flex.vec3_double(nsize, (1.,1.,1.)) )
   return data
 
 
@@ -90,20 +95,24 @@ class scene(object):
   easily extensible to any other graphics platform (e.g. a PNG embedded in
   a web page).
   """
-  def __init__(self, miller_array, settings, merge=None, foms_array=None):
+  def __init__(self, miller_array, settings, merge=None, foms_array=None,
+   fullprocessarray=True):
     self.miller_array = miller_array
     self.renderscale = 100.0
     self.foms_workarray = foms_array
     self.SceneCreated = False
     self.settings = settings
-    self.merge_equivalents = merge
+    self.merge_equivalents = False
+    if not self.miller_array.is_unique_set_under_symmetry():
+      self.merge_equivalents = merge
     from cctbx import crystal
     from cctbx.array_family import flex
     self.multiplicities = None
     self.fomlabel = ""
     self.foms = flex.double(self.miller_array.size(), float('nan'))
+    self.fullprocessarray = fullprocessarray
     if self.miller_array.is_complex_array():
-      # want to display map coefficient as circular colours but weighted with FOMS
+      # Colour map coefficient as a circular rainbow with saturation as a function of FOMs
       # process the foms miller array and store the foms data for later use when computing colours
       if foms_array:
         assert ( self.miller_array.size() == foms_array.size() )
@@ -149,14 +158,18 @@ class scene(object):
     else :
       self.indices = array.indices()
     self.points = uc.reciprocal_space_vector(self.indices) * self.renderscale
+    n_points = self.points.size()
+    if not fullprocessarray:
+      self.radii = flex.double()
+      self.radii = ExtendAnyData(self.radii, n_points)
+      self.colors = flex.vec3_double()
+      self.colors = ExtendAnyData(self.colors, n_points)
     self.missing_flags = flex.bool(self.radii.size(), False)
     self.sys_absent_flags = flex.bool(self.radii.size(), False)
     if (settings.show_missing):
       self.generate_missing_reflections()
     if (settings.show_systematic_absences) and (not settings.show_only_missing):
       self.generate_systematic_absences()
-    # XXX hack for process_pick_points
-    self.visible_points = flex.bool(self.points.size(), True)
     n_points = self.points.size()
     assert (self.colors.size() == n_points)
     assert (self.indices.size() == n_points)
@@ -289,8 +302,8 @@ class scene(object):
         else:
           self.sigmas = None
       work_array = array
-    except Exception, e:
-      print to_str(e)
+    except Exception as e:
+      print(to_str(e))
       return None, None
     work_array.set_info(arr.info() )
     multiplicities = multiplicities
@@ -302,6 +315,8 @@ class scene(object):
     from scitbx import graphics_utils
     settings = self.settings
     data_for_colors = data_for_radii = None
+    if not self.fullprocessarray:
+      return
     data = self.data #self.work_array.data()
     sigmas = self.sigmas
     if (isinstance(data, flex.double) and data.all_eq(0)):
@@ -321,7 +336,6 @@ class scene(object):
       self.colourlabel = self.miller_array.info().labels[1]
     else :
       data_for_colors = flex.abs(data.deep_copy())
-
     uc = self.work_array.unit_cell()
     min_dist = min(uc.reciprocal_space_vector((1,1,1)))
     min_radius = 0.5 * min_dist
@@ -329,7 +343,6 @@ class scene(object):
     if ((self.multiplicities is not None) and
         (settings.scale_radii_multiplicity)):
       data_for_radii = self.multiplicities.data().as_double()
-
       if (settings.sigma_radius) and sigmas is not None:
         data_for_radii = sigmas * self.multiplicities.as_double()
       assert data_for_radii.size() == data.size()
@@ -373,7 +386,8 @@ class scene(object):
     #if (settings.sqrt_scale_radii) and (not settings.scale_radii_multiplicity):
     #  data_for_radii = flex.sqrt(flex.abs(data_for_radii))
     if len(data_for_radii):
-      scale = max_radius/flex.max(data_for_radii)
+      dat2 = flex.double([e for e in data_for_radii if not math.isnan(e)])
+      scale = max_radius/flex.max(dat2)
       radii = data_for_radii * (self.settings.scale * scale)
       assert radii.size() == colors.size()
     else:
@@ -385,7 +399,7 @@ class scene(object):
     self.colors = colors
     if isinstance(data, flex.complex_double):
       self.foms = foms_for_colours
-    #print min_dist, min_radius, max_radius, flex.min(data_for_radii), flex.max(data_for_radii), scale
+    #print(min_dist, min_radius, max_radius, flex.min(data_for_radii), flex.max(data_for_radii), scale)
 
 
   def isUsingFOMs(self):
@@ -465,7 +479,7 @@ class scene(object):
       absence_array = absence_array.select(slice_selection)
     absence_flags = absence_array.data()
     if (absence_flags.count(True) == 0):
-      print "No systematic absences found!"
+      print("No systematic absences found!")
     else :
       new_indices = flex.miller_index()
       for i_seq in absence_flags.iselection():

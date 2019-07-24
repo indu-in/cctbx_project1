@@ -1,5 +1,5 @@
-from __future__ import division, print_function, absolute_import
-from past.builtins import range
+from __future__ import absolute_import, division, print_function
+from six.moves import range, zip
 
 '''
 Author      : Lyubimov, A.Y.
@@ -11,11 +11,6 @@ Description : IOTA image-tracking GUI module
 import os
 import wx
 import argparse
-
-try:  # for Py3 compatibility
-    import itertools.izip as zip
-except ImportError:
-    pass
 
 from wxtbx import bitmaps
 import wx.lib.agw.ultimatelistctrl as ulc
@@ -361,7 +356,7 @@ class TrackChart(wx.Panel):
     self.ydata = nref_y
     self.idata = nref_i
 
-    nref_xy = zip(nref_x, nref_y)
+    nref_xy = list(zip(nref_x, nref_y))
     all_acc = [i[0] for i in nref_xy if i[1] >= min_bragg]
     all_rej = [i[0] for i in nref_xy if i[1] < min_bragg]
 

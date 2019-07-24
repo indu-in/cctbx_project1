@@ -1,5 +1,5 @@
 
-from __future__ import division
+from __future__ import absolute_import, division, print_function
 
 # TODO:
 #  - prompt user for missing symmetry
@@ -92,14 +92,14 @@ mi2 = flex.miller_index([ (1,-2,3), (0,0,-4), (1, 2, 3), (0, 1, 2),
 ma2 = miller.array(miller.set(xs, mi2),
                     flex.complex_double( [
                                 -1.0 + 0.0j,
-                                 -0.5 + 0.866025j,
-                                 0.0 + 1.0j,
-                                 0.5 + 0.866025j,
-                                 1.0 + 0.0j,
+                                 -1.5 + 2.598075j,
+                                 0.0 + 0.8j,
+                                 1.0 + 1.7320508j,
+                                 4.0 + 0.0j,
                                  0.5 - 0.866025j,
                                  0.0 - 1.0j,
-                                 -0.5 - 0.866025j,
-                                 -0.7071 + 0.7071j
+                                 -2.5 - 4.330127j,
+                                 -4.24264 + 4.24264j
                                  ] ) )
 
 ma2.set_info(miller.array_info(source="artificial file", labels=["MyMap", "PhiMyMap"]))
@@ -130,7 +130,7 @@ from crys3d.hklview import cmdlineframes
 myHKLview = cmdlineframes.HKLViewFrame(jscriptfname = "myjstr.js", verbose=False)
 myHKLview.LoadReflectionsFile("mymtz.mtz")
 myHKLview.SetColumn(0)
-yes
+no
 myHKLview.SetRadiiScale(1, nth_power_scale=0.2)
 myHKLview.SetColumnBinThresholds([50, 20, 15, 12, 9])
 
@@ -181,6 +181,7 @@ import libtbx
 import traceback
 import sys, zmq, threading,  time
 
+from six.moves import input
 
 
 argn = 1
@@ -193,9 +194,9 @@ def Inputarg(varname):
   if argc > 1 and argn < argc:
     myvar = sys.argv[argn]
     argn = argn + 1
-    print varname + " " + myvar
+    print(varname + " " + myvar)
   else:
-    myvar = raw_input(varname)
+    myvar = input(varname)
   return myvar
 
 
@@ -206,7 +207,7 @@ class settings_window () :
 
 
   def update_reflection_info (self, hkl, d_min, value) :
-    print hkl, value
+    print(hkl, value)
     if (hkl is None) :
       self.hkl_info.SetValue("")
       self.d_min_info.SetValue("")
@@ -234,7 +235,7 @@ class HKLViewFrame () :
     self.dmin = -1
     self.settings = display.settings()
     self.verbose = True
-    if kwds.has_key('verbose'):
+    if 'verbose' in kwds:
       self.verbose = kwds['verbose']
     kwds['settings'] = self.settings
     kwds['mprint'] = self.mprint
@@ -243,13 +244,13 @@ class HKLViewFrame () :
     self.NewFileLoaded = False
     self.infostr = ""
     self.useSocket=False
-    if kwds.has_key('useSocket'):
+    if 'useSocket' in kwds:
       self.useSocket = kwds['useSocket']
       self.context = zmq.Context()
       self.socket = self.context.socket(zmq.PAIR)
       self.socket.connect("tcp://127.0.0.1:7895")
       self.STOP = False
-      print "starting socketthread"
+      print("starting socketthread")
       self.msgqueuethrd = threading.Thread(target = self.zmq_listen )
       self.msgqueuethrd.daemon = True
       self.msgqueuethrd.start()
@@ -332,7 +333,7 @@ class HKLViewFrame () :
         self.viewer.settings = phl.viewer
         self.settings = phl.viewer
 
-      msg = self.viewer.update_settings()
+      msg = self.viewer.update_settings(diff)
       self.mprint( msg)
       #import code, traceback; code.interact(local=locals(), banner="".join( traceback.format_stack(limit=10) ) )
       self.SendInfo()
@@ -342,14 +343,14 @@ class HKLViewFrame () :
         self.mprint( "No miller array has been selected")
         return False
       return True
-    except Exception, e:
+    except Exception as e:
       self.mprint(to_str(e) + "\n" + traceback.format_exc())
       return False
 
 
   def mprint(self, m, verbose=True):
     if self.verbose or verbose:
-      print m
+      print(m)
 
 
   def update_clicked (self, index) :#hkl, d_min=None, value=None) :
@@ -372,7 +373,7 @@ class HKLViewFrame () :
     return array
 
 
-  def process_miller_array (self, array, merge_answer=[None]) :
+  def process_miller_array(self, array, merge_answer=[None]) :
     if (array is None) : return
     if (array.is_hendrickson_lattman_array()) :
       raise Sorry("Hendrickson-Lattman coefficients are not supported.")
@@ -386,7 +387,7 @@ class HKLViewFrame () :
     details = []
     #self.merge_answer[0] = None
     self.infostr = ""
-    self.mprint("mergedata: " + str(self.params.NGL_HKLviewer.mergedata) )
+    #self.mprint("mergedata: " + str(self.params.NGL_HKLviewer.mergedata) )
     if (not array.is_unique_set_under_symmetry() and self.params.NGL_HKLviewer.mergedata is None):
       shouldmergestr = "The data in the selected array are not symmetry-" + \
         "unique, which usually means they are unmerged (but could also be due "+ \
@@ -433,29 +434,33 @@ class HKLViewFrame () :
     return array, array_info
 
 
-  def process_all_miller_arrays(self, array):
+  def process_all_miller_arrays(self, col):
     procarrays = []
     if self.params.NGL_HKLviewer.mergedata == False:
       self.settings.expand_to_p1 = False
       self.settings.expand_anomalous = False
-    for arr in self.valid_arrays:
+    for c,arr in enumerate(self.valid_arrays):
       procarray, procarray_info = self.process_miller_array(arr,
                                             merge_answer=self.merge_answer)
       procarrays.append(procarray)
-      if arr==array:
+      if c==col:
         array_info = procarray_info
         self.miller_array = procarray
         self.update_space_group_choices()
+    if col < 0:
+      array_info = procarray_info
     self.merge_answer = [None]
     #import code, traceback; code.interact(local=locals(), banner="".join( traceback.format_stack(limit=10) ) )
-    self.viewer.set_miller_array(self.miller_array, merge=array_info.merge,
+    self.viewer.set_miller_array(col, merge=array_info.merge,
        details=array_info.details_str, proc_arrays=procarrays)
     return self.miller_array, array_info
 
 
-  def set_miller_array (self, array) :
-    if (array is None) : return
-    array, array_info = self.process_all_miller_arrays(array)
+  def set_miller_array(self, col=-1) :
+    if col >= len(self.valid_arrays):
+      return
+    self.column= col
+    array, array_info = self.process_all_miller_arrays(col)
     self.miller_array = array
     #self.update_space_group_choices()
     #self.viewer.set_miller_array(array, merge=array_info.merge,
@@ -487,9 +492,6 @@ class HKLViewFrame () :
     symm = crystal.symmetry(
       space_group_info= self.current_spacegroup,
       unit_cell=self.miller_array.unit_cell())
-    array = self.miller_array.expand_to_p1().customized_copy(
-      crystal_symmetry=symm)
-    array = array.merge_equivalents().array().set_info(self.miller_array.info())
     othervalidarrays = []
     for validarray in self.valid_arrays:
       #print "Space group casting ", validarray.info().label_string()
@@ -498,7 +500,7 @@ class HKLViewFrame () :
       arr = self.detect_Rfree(arr)
       othervalidarrays.append( arr )
     self.mprint( "MERGING 2")
-    self.viewer.set_miller_array(array, proc_arrays=othervalidarrays)
+    self.viewer.set_miller_array(self.column, proc_arrays=othervalidarrays)
     self.viewer.DrawNGLJavaScript()
 
 
@@ -513,21 +515,23 @@ class HKLViewFrame () :
       from iotbx.reflection_file_reader import any_reflection_file
       self.viewer.isnewfile = True
       #self.params.NGL_HKLviewer.mergedata = None
-      self.viewer.iarray = 0
-      self.viewer.icolourcol = 0
-      self.viewer.iradiicol = 0
+      self.viewer.iarray = -1
+      self.viewer.icolourcol = -1
+      self.viewer.iradiicol = -1
+      self.viewer.match_valarrays = []
       display.reset_settings()
       self.settings = display.settings()
       self.viewer.settings = self.params.NGL_HKLviewer.viewer
       self.viewer.mapcoef_fom_dict = {}
       try :
         hkl_file = any_reflection_file(file_name)
-      except Exception, e :
+        arrays = hkl_file.as_miller_arrays(merge_equivalents=False,
+          )#observation_type_callback=misc_dialogs.get_shelx_file_data_type)
+        #arrays = f.file_server.miller_arrays
+      except Exception as e :
         self.NewFileLoaded=False
-        self.msprint(to_str(e))
-      arrays = hkl_file.as_miller_arrays(merge_equivalents=False,
-        )#observation_type_callback=misc_dialogs.get_shelx_file_data_type)
-      #arrays = f.file_server.miller_arrays
+        self.mprint(to_str(e))
+        arrays = []
       valid_arrays = []
       self.array_infostrs = []
       self.array_infotpls = []
@@ -551,9 +555,9 @@ class HKLViewFrame () :
         msg = "No arrays of the supported types in this file."
         self.mprint(msg)
         self.NewFileLoaded=False
-      elif (len(valid_arrays) == 1):
-        if (set_array) :
-          self.set_miller_array(valid_arrays[0])
+      elif (len(valid_arrays) >= 1):
+        if (set_array):
+          self.set_miller_array()
 
 
   def LoadReflectionsFile(self, filename):
@@ -642,7 +646,8 @@ class HKLViewFrame () :
         if self.viewer.mapcoef_fom_dict.get(self.valid_arrays[column].info().label_string()):
           del self.viewer.mapcoef_fom_dict[self.valid_arrays[column].info().label_string()]
         self.mprint("No valid FOM array provided.")
-    self.set_miller_array(self.valid_arrays[column])
+    #self.set_miller_array(self.valid_arrays[column])
+    self.set_miller_array(column)
     if (self.miller_array is None) :
       raise Sorry("No data loaded!")
     self.mprint( "Miller array %s runs from hkls: %s to %s" \

@@ -1,4 +1,4 @@
-from __future__ import division, print_function, absolute_import
+from __future__ import absolute_import, division, print_function
 # LIBTBX_SET_DISPATCHER_NAME iota.run
 
 '''
@@ -117,9 +117,13 @@ class Process(ProcessingBase):
         self.run_analysis()
 
       if 'silent' not in self.out_type:
-        print ('\n'.join(self.info.final_table))
-        print ('\n'.join(self.info.uc_table))
-        print ('\n'.join(self.info.summary))
+        if self.info.have_results:
+          print ('\n'.join(self.info.final_table))
+          print ('\n'.join(self.info.uc_table))
+          print ('\n'.join(self.info.summary))
+        else:
+          print ('\n **** NO IMAGES INTEGRATED! ****')
+
 
 # ============================================================================ #
 if __name__ == "__main__":

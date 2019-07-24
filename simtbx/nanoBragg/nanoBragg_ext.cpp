@@ -1862,12 +1862,17 @@ printf("DEBUG: pythony_stolFbg[1]=(%g,%g)\n",nanoBragg.pythony_stolFbg[1][0],nan
                      make_getter(&nanoBragg::timelog,rbv()),
                      make_setter(&nanoBragg::timelog,dcp()),
                      "whether to log the timing.")
+      .add_property("device_Id",
+                     make_getter(&nanoBragg::device_Id,rbv()),
+                     make_setter(&nanoBragg::device_Id,dcp()),
+                     "Which device to simulate on. ")
       
       /* actual run of the spot simulation, CUDA version */
       .def("add_nanoBragg_spots_cuda",&nanoBragg::add_nanoBragg_spots_cuda,
        "actually run the spot simulation, going pixel-by-pixel over the region-of-interest, CUDA version")
 
       /* new CUDA path */
+      .def("det_num_devices", &nanoBragg::get_num_devices, "get the number of GPU devices")
       .def("allocate_cuda", &nanoBragg::allocate_cuda,
        "Allocate and transfer input data on the GPU")
       .def("add_energy_channel_cuda", &nanoBragg::add_energy_channel_cuda,

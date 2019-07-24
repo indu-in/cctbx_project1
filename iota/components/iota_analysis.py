@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from __future__ import division, print_function, absolute_import
-from past.builtins import range
+from __future__ import absolute_import, division, print_function
+from six.moves import range, zip
 
 '''
 Author      : Lyubimov, A.Y.
@@ -20,11 +20,6 @@ import os
 import numpy as np
 from collections import Counter
 import math
-
-try:  # for Py3 compatibility
-  import itertools.izip as zip
-except ImportError:
-  pass
 
 from libtbx import easy_pickle as ep
 from cctbx import crystal, uctbx, statistics
@@ -129,8 +124,8 @@ class Plotter(object):
     beam_dist = [math.hypot(i[1] - np.median(beamX), i[2] - np.median(beamY))
                  for i in info]
     beam_dist_std = np.std(beam_dist)
-    img_list = [[i[0], i[1], i[2], i[3], i[4], i[5], j] for i, j in zip(info,
-                                                                        beam_dist)]
+    img_list = [[i[0], i[1], i[2], i[3], i[4], i[5], j] for i, j in
+                list(zip(info, beam_dist))]
 
     # Separate out outliers
     outliers = [i for i in img_list if i[3] > 2 * beam_dist_std]
@@ -402,7 +397,7 @@ class Analyzer(object):
 
       # Calculate dataset stats
       for k in self.info.stats:
-        stat_list = zip(*self.info.stats[k]['lst'])[2]
+        stat_list = list(zip(*self.info.stats[k]['lst']))[2]
         stats = dict(lst=self.info.stats[k]['lst'],
                      median=np.median(stat_list),
                      mean=np.mean(stat_list),
@@ -622,12 +617,11 @@ class Analyzer(object):
           uc_summary.append(uc_info)
 
       else:
-
         # generate average unit cell
         uc_table.append("\n\n{:-^80}\n" \
                         "".format(' UNIT CELL AVERAGING (no clustering) '))
         uc_a, uc_b, uc_c, uc_alpha, \
-        uc_beta, uc_gamma, uc_sg = zip(*self.info.cluster_iterable)
+        uc_beta, uc_gamma, uc_sg = list(zip(*self.info.cluster_iterable))
         cons_pg = Counter(uc_sg).most_common(1)[0][0]
         all_pgs = Counter(uc_sg).most_common()
         unit_cell = (np.median(uc_a), np.median(uc_b), np.median(uc_c),
@@ -711,7 +705,8 @@ class Analyzer(object):
     summary.append("\n\n{:-^80}\n".format('SUMMARY'))
     categories = ['total', 'failed_triage', 'have_diffraction',
                   'failed_spotfinding', 'failed_indexing',
-                  'failed_grid_search', 'failed_integration', 'integrated']
+                  'failed_grid_search', 'failed_integration',
+                  'failed_filter', 'integrated']
     for cat in categories:
       lst, fail, fn, _ = self.info.categories[cat]
       path = os.path.join(self.info.int_base, fn)
@@ -767,10 +762,7 @@ class Analyzer(object):
       idx_ambiguity_selected = int(round(idx_ambiguity_sample / 3))
 
     # Set run number to 000 if running LivePRIME
-    if run_zero:
-      run_no = '000'
-    else:
-      run_no = '001'
+    run_no = '000' if run_zero else '001'
 
     # Populate pertinent data parameters
     prime_params = mod_input.master_phil.extract()
@@ -822,11 +814,18 @@ class Analyzer(object):
 
     return prime_phil
 
+  def run_get_results(self, finished_objects=None):
+    self.info.have_results = self.get_results(finished_objects=finished_objects)
+    return self.info.have_results
+
   def run_all(self, get_results=True):
     if get_results:
-      results = self.get_results()
-    self.print_results()
-    self.unit_cell_analysis()
-    self.print_summary()
-    self.make_prime_input()
+      self.info.have_results = self.get_results()
+
+    if self.info.have_results:
+      self.print_results()
+      self.unit_cell_analysis()
+      self.print_summary()
+      self.make_prime_input()
+
     return self.info
