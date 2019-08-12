@@ -114,7 +114,7 @@ extern "C" void nanoBraggSpotsCUDA(int deviceId, int spixels, int fpixels, int r
                 double *source_X, double *source_Y, double * source_Z, double * source_I, double * source_lambda, double a0[4], double b0[4], double c0[4],
                 shapetype xtal_shape, double mosaic_spread, int mosaic_domains, double * mosaic_umats, double Na, double Nb, double Nc, double V_cell,
                 double water_size, double water_F, double water_MW, double r_e_sqr, double fluence, double Avogadro, int integral_form, double default_F,
-                int interpolate, double *** Fhkl, int h_min, int h_max, int h_range, int k_min, int k_max, int k_range, int l_min, int l_max, int l_range, int hkls,
+                int interpolate, double **** Fhkl, int h_min, int h_max, int h_range, int k_min, int k_max, int k_range, int l_min, int l_max, int l_range, int hkls,
                 int nopolar, double polar_vector[4], double polarization, double fudge, int unsigned short * maskimage, float * floatimage /*out*/,
                 double * omega_sum/*out*/, int * sumn /*out*/, double * sum /*out*/, double * sumsqr /*out*/, double * max_I/*out*/, double * max_I_x/*out*/,
                 double * max_I_y /*out*/) {
@@ -271,15 +271,17 @@ extern "C" void nanoBraggSpotsCUDA(int deviceId, int spixels, int fpixels, int r
 		CUDA_CHECK_RETURN(cudaMemcpy(cu_maskimage, maskimage, sizeof(*cu_maskimage) * total_pixels, cudaMemcpyHostToDevice));
 	}
 
-	int hklsize = h_range * k_range * l_range;
+	int hklsize = sources * h_range * k_range * l_range;
 	CUDAREAL * FhklLinear = (CUDAREAL*) calloc(hklsize, sizeof(*FhklLinear));
+    for (int i_source=0; i_source < sources; i_source++){
 	for (int h = 0; h < h_range; h++) {
 		for (int k = 0; k < k_range; k++) {
 //			memcpy(FhklLinear + (h * k_range * l_range + k * l_range), Fhkl[h][k], sizeof(*FhklLinear) * l_range);
 			for (int l = 0; l < l_range; l++) {
 
 				//	convert Fhkl double to CUDAREAL
-				FhklLinear[h * k_range * l_range + k * l_range + l] = Fhkl[h][k][l];
+                FhklLinear[i_source*h_range*k_range*l_range
+                  + h * k_range * l_range + k * l_range + l] = Fhkl[i_source][h][k][l];
 			}
 		}
 	}
@@ -407,9 +409,9 @@ __device__ static CUDAREAL sinc3(CUDAREAL x);
 /* polarization factor from vectors */
 __device__ static CUDAREAL polarization_factor(CUDAREAL kahn_factor, CUDAREAL *incident, CUDAREAL *diffracted, const CUDAREAL * __restrict__ axis);
 
-__device__ __inline__ static int flatten3dindex(int x, int y, int z, int x_range, int y_range, int z_range);
+__device__ __inline__ static int flatten4dindex(int w, int x, int y, int z, int x_range, int y_range, int z_range);
 
-__device__ __inline__ CUDAREAL quickFcell_ldg(int hkls, int h_max, int h_min, int k_max, int k_min, int l_min, int l_max, int h0, int k0, int l0, int h_range, int k_range, int l_range, CUDAREAL defaultF, const CUDAREAL * __restrict__ Fhkl);
+__device__ __inline__ CUDAREAL quickFcell_ldg(int hkls, int h_max, int h_min, int k_max, int k_min, int l_min, int l_max, int h0, int k0, int l0, int h_range, int k_range, int l_range, CUDAREAL defaultF, const CUDAREAL * __restrict__ Fhkl, int source_idx);
 
 __global__ void nanoBraggSpotsInitCUDAKernel(int spixels, int fpixels, float * floatimage, float * omega_reduction, float * max_I_x_reduction,
 		float * max_I_y_reduction, bool * rangemap) {
@@ -628,6 +630,7 @@ CUDAREAL pixel_size, CUDAREAL subpixel_size, int steps, CUDAREAL detector_thicks
 						incident[2] = -__ldg(&source_Y[source]);
 						incident[3] = -__ldg(&source_Z[source]);
 						CUDAREAL lambda = __ldg(&source_lambda[source]);
+                        CUDAREAL lambdaFrac = __ldg(&source_I[source]);
 
 						/* construct the incident beam unit vector while recovering source distance */
 						// TODO[Giles]: Optimization! We can unitize the source vectors before passing them in.
@@ -893,8 +896,7 @@ CUDAREAL pixel_size, CUDAREAL subpixel_size, int steps, CUDAREAL detector_thicks
 											for (i2 = 0; i2 < 4; i2++) {
 												for (i3 = 0; i3 < 4; i3++) {
 													sub_Fhkl[i1][i2][i3] = __ldg(
-															&Fhkl[flatten3dindex(h_interp[i1] - s_h_min, k_interp[i2] - s_k_min, l_interp[i3] - s_l_min, s_h_range,
-																	s_k_range, s_l_range)]);
+                                                        &Fhkl[flatten4dindex(source, h_interp[i1] - s_h_min, k_interp[i2] - s_k_min, l_interp[i3] - s_l_min, s_h_range,s_k_range, s_l_range)]);
 												}
 											}
 										}
@@ -911,7 +913,7 @@ CUDAREAL pixel_size, CUDAREAL subpixel_size, int steps, CUDAREAL detector_thicks
 //										F_cell = default_F;  // usually zero
 //									}
 //								}
-									F_cell = quickFcell_ldg(s_hkls, s_h_max, s_h_min, s_k_max, s_k_min, s_l_max, s_l_min, h0, k0, l0, s_h_range, s_k_range, s_l_range, default_F, Fhkl);
+                                    F_cell = quickFcell_ldg(s_hkls, s_h_max, s_h_min, s_k_max, s_k_min, s_l_max, s_l_min, h0, k0, l0, s_h_range, s_k_range, s_l_range, default_F, Fhkl, source);
 //									if (s_hkls && (h0 <= s_h_max) && (h0 >= s_h_min) && (k0 <= s_k_max) && (k0 >= s_k_min) && (l0 <= s_l_max) && (l0 >= s_l_min)) {
 //										/* just take nearest-neighbor */
 //										F_cell = __ldg(&Fhkl[flatten3dindex(h0 - s_h_min, k0 - s_k_min, l0 - s_l_min, s_h_range, s_k_range, s_l_range)]);
@@ -923,7 +925,7 @@ CUDAREAL pixel_size, CUDAREAL subpixel_size, int steps, CUDAREAL detector_thicks
 								/* now we have the structure factor for this pixel */
 
 								/* convert amplitudes into intensity (photons per steradian) */
-								I += F_cell * F_cell * F_latt * F_latt * capture_fraction * omega_pixel;
+                                I += F_cell * F_cell * F_latt * F_latt * capture_fraction * omega_pixel * lambdaFrac;
 								omega_sub_reduction += omega_pixel;
 							}
 							/* end of mosaic loop */
@@ -946,18 +948,20 @@ CUDAREAL pixel_size, CUDAREAL subpixel_size, int steps, CUDAREAL detector_thicks
 	}
 }
 
-__device__ __inline__ CUDAREAL quickFcell_ldg(int hkls, int h_max, int h_min, int k_max, int k_min, int l_max, int l_min, int h0, int k0, int l0, int h_range, int k_range, int l_range, CUDAREAL defaultF, const CUDAREAL * __restrict__ Fhkl) {
+__device__ __inline__ CUDAREAL quickFcell_ldg(int hkls, int h_max, int h_min, int k_max, int k_min, int l_max, int l_min,
+            int h0, int k0, int l0, int h_range, int k_range, int l_range, CUDAREAL defaultF,
+            const CUDAREAL * __restrict__ Fhkl, int source_idx) {
 	if (hkls && (h0 <= h_max) && (h0 >= h_min) && (k0 <= k_max) && (k0 >= k_min) && (l0 <= l_max) && (l0 >= l_min)) {
 		/* just take nearest-neighbor */
 //      F_cell = __ldg(&Fhkl[flatten3dindex(h0 - s_h_min, k0 - s_k_min, l0 - s_l_min, s_h_range, s_k_range, s_l_range)]);
-		return __ldg(&Fhkl[flatten3dindex(h0 - h_min, k0 - k_min, l0 - l_min, h_range, k_range, l_range)]);
+        return __ldg(&Fhkl[flatten4dindex(source_idx, h0 - h_min, k0 - k_min, l0 - l_min, h_range, k_range, l_range)]);
 	} else {
 		return defaultF;  // usually zero
 	}
 }
 
-__device__ __inline__ int flatten3dindex(int x, int y, int z, int x_range, int y_range, int z_range) {
-	return x * y_range * z_range + y * z_range + z;
+__device__ __inline__ int flatten4dindex(int w, int x, int y, int z, int x_range, int y_range, int z_range) {
+    return w*x_range*y_range*z_range +  x * y_range * z_range + y * z_range + z;
 }
 
 /* rotate a point about a unit vector axis */

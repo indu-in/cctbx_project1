@@ -323,7 +323,10 @@ class nanoBragg {
     /* structure factor representation */
     double phase,Fa,Fb;
     double F,Fbg,Ibg,*stol_of,*Fbg_of;  // = NULL
-    double ***Fhkl;  // = NULL
+    double ****Fhkl;  // = NULL
+    bool multi_sources_Fhkl;  // whether to use energy dependent Fhkl
+    int Nhkl_array; // number of Fhkl arrays (one for each color channel, if using anom
+    int i_hkl ; // Fhkl array levle0 index
     int    hkls;
     double F_latt,F_cell;
     double F000;        // to mark beam center
@@ -525,15 +528,18 @@ class nanoBragg {
       free(diffimage);
       /* free any previous allocations */
       if(Fhkl != NULL) {
+      for (source=0; source < sources; source++)  {
         for (h0=0; h0<=h_range;h0++) {
           for (k0=0; k0<=k_range;k0++) {
-            if(verbose>6) printf("freeing %d %ld-byte double Fhkl[%d][%d] at %p\n",l_range+1,sizeof(double),h0,k0,Fhkl[h0][k0]);
-            free(Fhkl[h0][k0]);
+                if(verbose>6) printf("freeing %d %ld-byte double Fhkl[%d][%d] at %p\n",l_range+1,sizeof(double),h0,k0,Fhkl[source][h0][k0]);
+                free(Fhkl[source][h0][k0]);
           }
-          if(verbose>6) printf("freeing %d %ld-byte double* Fhkl[%d] at %p\n",k_range+1,sizeof(double*),h0,Fhkl[h0]);
-          free(Fhkl[h0]);
+              if(verbose>6) printf("freeing %d %ld-byte double* Fhkl[%d] at %p\n",k_range+1,sizeof(double*),h0,Fhkl[source][h0]);
+              free(Fhkl[source][h0]);
         }
-        if(verbose>6) printf("freeing %d %ld-byte double** Fhkl at %p\n",h_range+1,sizeof(double**),Fhkl);
+            if(verbose>6) printf("freeing %d %ld-byte double** Fhkl at %p\n",h_range+1,sizeof(double**),Fhkl[source]);
+            free(Fhkl[source]);
+        }
         free(Fhkl);
       }
       hkls = 0;

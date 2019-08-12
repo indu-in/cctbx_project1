@@ -661,18 +661,25 @@ namespace boost_python { namespace {
   static af::shared<double> get_amplitudes(nanoBragg nanoBragg) {
       int i,h,k,l;
       nanoBragg.pythony_amplitudes = af::shared<double>();
-      int hkls = nanoBragg.h_range*nanoBragg.k_range*nanoBragg.l_range;
-      nanoBragg.pythony_amplitudes.resize(hkls);
-      i=0;
-      for(h=nanoBragg.h_min;h<=nanoBragg.h_max;++h){
-          for(k=nanoBragg.k_min;k<=nanoBragg.k_max;++k){
-              for(l=nanoBragg.l_min;l<=nanoBragg.l_max;++l){
 
-                  if ( (h<=nanoBragg.h_max) && (h>=nanoBragg.h_min) && (k<=nanoBragg.k_max)
-                    && (k>=nanoBragg.k_min) && (l<=nanoBragg.l_max) && (l>=nanoBragg.l_min)  ) {
-                      /* populate only valid values */
-                      nanoBragg.pythony_amplitudes[i] = nanoBragg.Fhkl[h-nanoBragg.h_min][k-nanoBragg.k_min][l-nanoBragg.l_min];
-                      ++i;
+      nanoBragg.Nhkl_array=1;
+      if (nanoBragg.multi_sources_Fhkl)
+          nanoBragg.Nhkl_array=nanoBragg.sources ;
+
+      int hkls = nanoBragg.h_range*nanoBragg.k_range*nanoBragg.l_range;
+      nanoBragg.pythony_amplitudes.resize(hkls*nanoBragg.Nhkl_array);
+      i=0;
+      for (int source=0;source <nanoBragg.Nhkl_array;source++){
+          for(h=nanoBragg.h_min;h<=nanoBragg.h_max;++h){
+              for(k=nanoBragg.k_min;k<=nanoBragg.k_max;++k){
+                  for(l=nanoBragg.l_min;l<=nanoBragg.l_max;++l){
+                      if ( (h<=nanoBragg.h_max) && (h>=nanoBragg.h_min) && (k<=nanoBragg.k_max)
+                        && (k>=nanoBragg.k_min) && (l<=nanoBragg.l_max) && (l>=nanoBragg.l_min)  ) {
+                          /* populate only valid values */
+                          nanoBragg.pythony_amplitudes[i] = nanoBragg.Fhkl[source]
+                                        [h-nanoBragg.h_min][k-nanoBragg.k_min][l-nanoBragg.l_min];
+                          ++i;
+                      }
                   }
               }
           }
@@ -693,38 +700,42 @@ namespace boost_python { namespace {
   static boost::python::tuple get_Fhkl_tuple(nanoBragg nanoBragg) {
       int h,k,l;
       double temp;
+      nanoBragg.Nhkl_array=1;
+      if (nanoBragg.multi_sources_Fhkl)
+          nanoBragg.Nhkl_array=nanoBragg.sources ;
+
       int hkls = nanoBragg.h_range*nanoBragg.k_range*nanoBragg.l_range;
       if(nanoBragg.verbose>3) printf(" expecting %d hkls\n",hkls);
 //      nanoBragg.pythony_indices = indices();
 //      nanoBragg.pythony_amplitudes = af::shared<double>();
       nanoBragg.pythony_indices = indices(hkls,af::init_functor_null<scitbx::vec3<int> >());
-      nanoBragg.pythony_amplitudes = af::shared<double>(hkls,af::init_functor_null<double>());
+      nanoBragg.pythony_amplitudes = af::shared<double>(hkls*nanoBragg.Nhkl_array, af::init_functor_null<double>());
 //      nanoBragg.pythony_indices = indices(hkls);
 //      nanoBragg.pythony_amplitudes = af::shared<double>(hkls);
 //      nanoBragg.pythony_indices.resize(hkls);
 //      nanoBragg.pythony_amplitudes.resize(hkls);
       int i=0;
-
-      for(h=nanoBragg.h_min;h<=nanoBragg.h_max;++h){
-          for(k=nanoBragg.k_min;k<=nanoBragg.k_max;++k){
-              for(l=nanoBragg.l_min;l<=nanoBragg.l_max;++l){
-
-                  if ( (h<=nanoBragg.h_max) && (h>=nanoBragg.h_min) && (k<=nanoBragg.k_max)
-                    && (k>=nanoBragg.k_min) && (l<=nanoBragg.l_max) && (l>=nanoBragg.l_min)  ) {
-                      /* populate all stored values */
-                      miller_t hkl (h,k,l);
-                      if(nanoBragg.verbose>9) printf(" about to access indices[%d] at %p\n",i,&nanoBragg.pythony_indices[i]);
-                      nanoBragg.pythony_indices[i] = hkl;
-//                      nanoBragg.pythony_indices.push_back(hkl);
-                      if(nanoBragg.verbose>9) printf(" about to access (%d,%d,%d) Fhkl[%d][%d][%d]\n",
-                                           h,k,l,h-nanoBragg.h_min,k-nanoBragg.k_min,l-nanoBragg.l_min);
-                      temp = nanoBragg.Fhkl[h-nanoBragg.h_min][k-nanoBragg.k_min][l-nanoBragg.l_min];
-                      if(nanoBragg.verbose>9) printf(" about to access amplitudes[%d] at %p\n",
-                                            i,&nanoBragg.pythony_amplitudes[i]);
-                      nanoBragg.pythony_amplitudes[i] = temp;
-//                      nanoBragg.pythony_amplitudes.push_back(temp);
-                      if(nanoBragg.verbose>9) printf(" done\n");
-                      ++i;
+      for (int source=0;source < nanoBragg.Nhkl_array;source++){
+          for(h=nanoBragg.h_min;h<=nanoBragg.h_max;++h){
+              for(k=nanoBragg.k_min;k<=nanoBragg.k_max;++k){
+                  for(l=nanoBragg.l_min;l<=nanoBragg.l_max;++l){
+                      if ( (h<=nanoBragg.h_max) && (h>=nanoBragg.h_min) && (k<=nanoBragg.k_max)
+                        && (k>=nanoBragg.k_min) && (l<=nanoBragg.l_max) && (l>=nanoBragg.l_min)  ) {
+                          /* populate all stored values */
+                          miller_t hkl (h,k,l);
+                          if(nanoBragg.verbose>9) printf(" about to access indices[%d] at %p\n",i,&nanoBragg.pythony_indices[i]);
+                          nanoBragg.pythony_indices[i] = hkl;
+    //                      nanoBragg.pythony_indices.push_back(hkl);
+                          if(nanoBragg.verbose>9) printf(" about to access (%d,%d,%d) Fhkl[%d][%d][%d][%d]\n",
+                                               h,k,l,source, h-nanoBragg.h_min,k-nanoBragg.k_min,l-nanoBragg.l_min);
+                          temp = nanoBragg.Fhkl[source][h-nanoBragg.h_min][k-nanoBragg.k_min][l-nanoBragg.l_min];
+                          if(nanoBragg.verbose>9) printf(" about to access amplitudes[%d] at %p\n",
+                                                i,&nanoBragg.pythony_amplitudes[i]);
+                          nanoBragg.pythony_amplitudes[i] = temp;
+    //                      nanoBragg.pythony_amplitudes.push_back(temp);
+                          if(nanoBragg.verbose>9) printf(" done\n");
+                          ++i;
+                      }
                   }
               }
           }
@@ -756,11 +767,19 @@ namespace boost_python { namespace {
 
   /* allow direct access to F000, mostly for marking beam center */
   static double get_F000(nanoBragg const& nanoBragg) {
-      return nanoBragg.Fhkl[-nanoBragg.h_min][-nanoBragg.k_min][-nanoBragg.l_min];
+      // only get 0 source Fhkl
+      return nanoBragg.Fhkl[0][-nanoBragg.h_min][-nanoBragg.k_min][-nanoBragg.l_min];
   }
   static void   set_F000(nanoBragg& nanoBragg, double const& value) {
       nanoBragg.F000 = value;
-      nanoBragg.Fhkl[-nanoBragg.h_min][-nanoBragg.k_min][-nanoBragg.l_min] = nanoBragg.F000;
+      nanoBragg.Fhkl[0][-nanoBragg.h_min][-nanoBragg.k_min][-nanoBragg.l_min] = nanoBragg.F000;
+      nanoBragg.Nhkl_array = 1;
+      if (nanoBragg.multi_sources_Fhkl && nanoBragg.sources > 1){
+        printf("Updating F000 for sources multi\n");
+        nanoBragg.Nhkl_array = nanoBragg.sources;
+        for (int source=1;source<nanoBragg.sources;source++)
+            nanoBragg.Fhkl[source][-nanoBragg.h_min][-nanoBragg.k_min][-nanoBragg.l_min] = nanoBragg.F000;
+    }
   }
 
 
@@ -1720,6 +1739,10 @@ printf("DEBUG: pythony_stolFbg[1]=(%g,%g)\n",nanoBragg.pythony_stolFbg[1][0],nan
                      make_function(&set_F000,dcp()),
                      "override value of F000, default 0 (useful for marking beam center)")
 
+      .add_property("multi_sources_Fhkl",
+                     make_getter(&nanoBragg::multi_sources_Fhkl,rbv()),
+                     make_setter(&nanoBragg::multi_sources_Fhkl,dcp()),
+                     "whether using multiple Fhkl , one for each source.")
 
       /* background intensity structure factor vs sin(theta)/lambda */
       .add_property("Fbg_vs_stol",
