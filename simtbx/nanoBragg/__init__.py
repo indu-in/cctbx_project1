@@ -10,18 +10,52 @@ class _():
   def __getattr__(self,name):
     """assemble miller array of structure factors used to compute spot intensities from the internal C cube array
        how do we specify docstrings for individual overriden members? """
-    if name == "Fhkl":
       from cctbx.crystal import symmetry
+    from cctbx.miller import set, array
+    if name in ["Fhkl", "Multisource_Fhkl"]:
       cs = symmetry(unit_cell = self.unit_cell_Adeg,space_group="P 1")
-      from cctbx.miller import set, array
       indices,data = self.Fhkl_tuple
       mset = set(crystal_symmetry=cs, anomalous_flag=True, indices=indices)
-      return array(mset, data=data).set_observation_type_xray_amplitude()
+      #if name=="Fhkl":
+      # TODO return all sources Fhkl ?
+      return array(mset, data=data[:len(indices)]).set_observation_type_xray_amplitude()
+      #else:
+      #
+      #  return
 
   def __setattr__(self,name,value):
     """use a P1 anomalous=True miller array to initialize the internal C cube array with structure factors for the spot intensities
        how do we specify docstrings for individual overriden members? """
-    if name in ["Fhkl"]:
+
+    if name =="Multisource_Fhkl":
+        try:
+            Nbeams = self.xray_beams.size()
+        except AttributeError:
+            print("Cannot set multisource Fhkl as it requires Xray beams to be set. ")
+        if Nbeams==1:
+            print("Cannot set multisource Fhkls because there is only one source  xray beam!")
+        elif Nbeams != len(value):
+            print ("Multi source Fhkl array of length %d should be same as # of Xray beams (%d)"\
+                 % (len(value), Nbeams ))
+        else:
+            Nsources = len(value)
+            indices=None
+            data = None
+            for source_Farray in value:
+                ff = source_Farray.expand_to_p1()
+                ff = ff.generate_bijvoet_mates()
+                if indices is None:
+                  self.unit_cell_Adeg = ff.unit_cell()
+                  indices = ff.indices()
+                  data=ff.data()
+                else:
+                  data=data.concatenate(data)
+
+            self.multi_sources_Fhkl = True
+            self.Fhkl_tuple = (indices, data)
+            print ("Set  Fhkl for multiple sources!")
+
+    elif name =="Fhkl":
       value=value.expand_to_p1()
       value=value.generate_bijvoet_mates()
       assert value.space_group_info().type().lookup_symbol() == "P 1"
@@ -33,6 +67,7 @@ class _():
       #self.mock_up_group = value.space_group()
       #self.mock_up_anomalous_flag = value.anomalous_flag()
       self.Fhkl_tuple = (value.indices(),value.data())
+      self.multi_sources_Fhkl = False  # TODO whats a better name, maybe multi_source_Fhkl
     else:
       super(ext.nanoBragg,self).__setattr__(name,value)
 
