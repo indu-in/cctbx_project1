@@ -2787,7 +2787,7 @@ nanoBragg::add_nanoBragg_spots()
                                     for (i1=0;i1<4;i1++) {
                                         for (i2=0;i2<4;i2++) {
                                            for (i3=0;i3<4;i3++) {
-                                                  sub_Fhkl[i1][i2][i3]= Fhkl[h_interp[i1]-h_min][k_interp[i2]-k_min][l_interp[i3]-l_min];
+                                                  sub_Fhkl[i1][i2][i3]= Fhkl[i_hkl][h_interp[i1]-h_min][k_interp[i2]-k_min][l_interp[i3]-l_min];
                                            }
                                         }
                                      }

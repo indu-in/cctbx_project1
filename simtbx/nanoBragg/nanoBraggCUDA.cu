@@ -51,6 +51,10 @@ static void CheckCudaErrorAux(const char *file, unsigned line, const char *state
 	exit(1);
 }
 
+
+
+
+
 static cudaError_t cudaMemcpyVectorDoubleToDevice(CUDAREAL *dst, double *src, size_t vector_items) {
 	CUDAREAL * temp = new CUDAREAL[vector_items];
 	for (size_t i = 0; i < vector_items; i++) {
@@ -274,18 +278,18 @@ extern "C" void nanoBraggSpotsCUDA(int deviceId, int spixels, int fpixels, int r
 	int hklsize = sources * h_range * k_range * l_range;
 	CUDAREAL * FhklLinear = (CUDAREAL*) calloc(hklsize, sizeof(*FhklLinear));
     for (int i_source=0; i_source < sources; i_source++){
-	for (int h = 0; h < h_range; h++) {
-		for (int k = 0; k < k_range; k++) {
-//			memcpy(FhklLinear + (h * k_range * l_range + k * l_range), Fhkl[h][k], sizeof(*FhklLinear) * l_range);
-			for (int l = 0; l < l_range; l++) {
+        for (int h = 0; h < h_range; h++) {
+            for (int k = 0; k < k_range; k++) {
+    //			memcpy(FhklLinear + (h * k_range * l_range + k * l_range), Fhkl[h][k], sizeof(*FhklLinear) * l_range);
+                for (int l = 0; l < l_range; l++) {
 
-				//	convert Fhkl double to CUDAREAL
-                FhklLinear[i_source*h_range*k_range*l_range
-                  + h * k_range * l_range + k * l_range + l] = Fhkl[i_source][h][k][l];
-			}
-		}
-	}
-
+                    //	convert Fhkl double to CUDAREAL
+                    FhklLinear[i_source*h_range*k_range*l_range
+                      + h * k_range * l_range + k * l_range + l] = Fhkl[i_source][h][k][l];
+                }
+            }
+        }
+    }
 	CUDAREAL * cu_Fhkl = NULL;
 	CUDA_CHECK_RETURN(cudaMalloc((void ** )&cu_Fhkl, sizeof(*cu_Fhkl) * hklsize));
 	CUDA_CHECK_RETURN(cudaMemcpy(cu_Fhkl, FhklLinear, sizeof(*cu_Fhkl) * hklsize, cudaMemcpyHostToDevice));
@@ -379,7 +383,7 @@ extern "C" void nanoBraggSpotsCUDA(int deviceId, int spixels, int fpixels, int r
 	free(omega_reduction);
 	free(max_I_x_reduction);
 	free(max_I_y_reduction);
-}
+ }
 
 /* cubic spline interpolation functions */
 __device__ static void polint(CUDAREAL *xa, CUDAREAL *ya, CUDAREAL x, CUDAREAL *y);
@@ -853,7 +857,7 @@ CUDAREAL pixel_size, CUDAREAL subpixel_size, int steps, CUDAREAL detector_thicks
 										//														k0, l0);
 										//												printf("WARNING: further warnings will not be printed! ");
 										//											}
-										F_cell = quickFcell_ldg(s_hkls, s_h_max, s_h_min, s_k_max, s_k_min, s_l_max, s_l_min, h0, k0, l0, s_h_range, s_k_range, s_l_range, default_F, Fhkl);
+                                       F_cell = quickFcell_ldg(s_hkls, s_h_max, s_h_min, s_k_max, s_k_min, s_l_max, s_l_min, h0, k0, l0, s_h_range, s_k_range, s_l_range, default_F, Fhkl, source);
 									} else {
 										/* integer versions of nearest HKL indicies */
 										int h_interp[] = { 0.0, 0.0, 0.0, 0.0 };

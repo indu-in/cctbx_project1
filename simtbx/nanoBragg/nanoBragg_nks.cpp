@@ -114,7 +114,8 @@ struct mostic_const{
          (k0<=n->k_max) && (k0>=n->k_min) &&
          (l0<=n->l_max) && (l0>=n->l_min)  ) {
       /* just take nearest-neighbor */
-      F_cell = n->Fhkl[h0-n->h_min][k0-n->k_min][l0-n->l_min];
+      // TODO: fix this ?
+      F_cell = n->Fhkl[0][h0-n->h_min][k0-n->k_min][l0-n->l_min];
     }else{
       F_cell = n->default_F; // usually zero
     }

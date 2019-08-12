@@ -23,7 +23,7 @@ void nanoBraggSpotsCUDA(int deviceId, int spixels, int fpixels, int roi_xmin, in
                         double Nb, double Nc, double V_cell, double water_size,
                         double water_F, double water_MW, double r_e_sqr,
                         double fluence, double Avogadro, int integral_form,
-                        double default_F, int interpolate, double *** Fhkl,
+                        double default_F, int interpolate, double **** Fhkl,
                         int h_min, int h_max, int h_range, int k_min, int k_max,
                         int k_range, int l_min, int l_max, int l_range, int hkls,
                         int nopolar, double polar_vector[4], double polarization,
