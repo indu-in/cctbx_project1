@@ -2034,7 +2034,7 @@ nanoBragg::init_sources()
             init_beam();
         }
         /* make sure stored source intensities are fractional */
-        double norm = flux_sum/sources;
+        double norm = flux_sum/sources;  // TODO: decide to normalize by number of sources, the setter for sources in nanoBragg_ext says the sources_I should sum to 1...
         for (i=0; i < sources && norm>0.0; ++i)
         {
             source_I[i] /= norm;
@@ -2719,9 +2719,10 @@ nanoBragg::add_nanoBragg_spots()
                                         }
                                         F_cell = default_F;
                                         interpolate=0;
-                                        continue;
+                                        //continue;   TODO: determine whether this continue should actually be here ? Introduces error if  looping over multiple sources.. 
                                     }
-
+                                }
+                                if (interpolate){
                                     /* integer versions of nearest HKL indicies */
                                     h_interp[0]=h0_flr-1;
                                     h_interp[1]=h0_flr;
