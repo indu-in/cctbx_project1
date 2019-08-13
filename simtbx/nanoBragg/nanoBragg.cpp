@@ -1633,8 +1633,6 @@ nanoBragg::init_Fhkl()
 {
     /* new init_default() values for sources is 1 so that this works during construction*/
 
-    /* determine whether to allocate energy dependent structure factors */
-    printf("\nAttempting to free %d Fhkl arrays \n",  Nhkl_array );
     /* free any previous allocations */
     if(Fhkl != NULL) {
         for (source=0;source < Nhkl_array; source++){
@@ -1731,35 +1729,35 @@ nanoBragg::init_Fhkl()
             Nhkl_array = 1;
 
         if(verbose>6) printf("allocating %d %ld-byte double**\n",Nhkl_array,sizeof(double****));
-        printf("Allocating\n");
 
         Fhkl = (double****) calloc(Nhkl_array,sizeof(double***));
+        
         if(Fhkl==NULL){perror("ERROR");exit(9);};
         for (source=0;source < Nhkl_array; source++){
             Fhkl[source] = (double***) calloc(h_range+1,sizeof(double**));
             if(Fhkl[source]==NULL){perror("ERROR");exit(9);};
-        for (h0=0; h0<=h_range;h0++) {
-            if(verbose>6) printf("allocating %d %ld-byte double*\n",k_range+1,sizeof(double*));
+            for (h0=0; h0<=h_range;h0++) {
+                if(verbose>6) printf("allocating %d %ld-byte double*\n",k_range+1,sizeof(double*));
                 Fhkl[source][h0] = (double**) calloc(k_range+1,sizeof(double*));
                 if(Fhkl[source][h0]==NULL){perror("ERROR");exit(9);};
-            for (k0=0; k0<=k_range;k0++) {
-            if(verbose>6) printf("allocating %d %ld-byte double\n",l_range+1,sizeof(double));
+                for (k0=0; k0<=k_range;k0++) {
+                if(verbose>6) printf("allocating %d %ld-byte double\n",l_range+1,sizeof(double));
                     Fhkl[source][h0][k0] = (double*) calloc(l_range+1,sizeof(double));
                     if(Fhkl[source][h0][k0]==NULL){perror("ERROR");exit(9);};
-                }
-            }
-        }
-        if(verbose) printf("initializing to default_F = %g:\n",default_F);
-        for (source=0;source < Nhkl_array; source++){
-        for (h0=0; h0<h_range;h0++) {
-            for (k0=0; k0<k_range;k0++) {
-                for (l0=0; l0<l_range;l0++) {
-                    if(verbose>9) printf("initializing %d %d %d to default_F = %g:\n",h0,k0,l0,default_F);
-                        Fhkl[source][h0][k0][l0] = default_F;
                     }
                 }
             }
-        }
+        if(verbose) printf("initializing to default_F = %g:\n",default_F);
+        for (source=0;source < Nhkl_array; source++){
+            for (h0=0; h0<h_range;h0++) {
+                for (k0=0; k0<k_range;k0++) {
+                    for (l0=0; l0<l_range;l0++) {
+                        if(verbose>9) printf("initializing %d %d %d to default_F = %g:\n",h0,k0,l0,default_F);
+                            Fhkl[source][h0][k0][l0] = default_F;
+                        }
+                    }
+                }
+            }
         if(verbose) printf("done initializing to default_F:\n");
         if(verbose) printf("settting F000 to %g\n",F000);
         for (source=0; source < Nhkl_array; source++)
@@ -1779,22 +1777,22 @@ nanoBragg::init_Fhkl()
 
     if(pythony_indices.size() && pythony_amplitudes.size())
     {
-        printf("indices\n");
         int n_indices = pythony_indices.size();
         if(verbose) printf("initializing Fhkl with pythony indices and amplitudes\n");
         miller_t hkl;
-        for (source=0;source<Nhkl_array;source++){
-        for (i=0; i < pythony_indices.size(); ++i)
+        for (source=0;source<Nhkl_array;source++)
         {
-            hkl = pythony_indices[i];
-            F_cell = pythony_amplitudes[i + source*n_indices];
-            h0 = hkl[0];
-            k0 = hkl[1];
-            l0 = hkl[2];
-            Fhkl[source][h0-h_min][k0-k_min][l0-l_min]=F_cell;
-            //if(verbose>9) printf("Source %d; F %d : %d %d %d = %g\n",source, i,h0,k0,l0,F_cell);
+            for (i=0; i < pythony_indices.size(); ++i)
+            {
+                hkl = pythony_indices[i];
+                F_cell = pythony_amplitudes[i + source*n_indices];
+                h0 = hkl[0];
+                k0 = hkl[1];
+                l0 = hkl[2];
+                Fhkl[source][h0-h_min][k0-k_min][l0-l_min]=F_cell;
+                //if(verbose>9) printf("Source %d; F %d : %d %d %d = %g\n",source, i,h0,k0,l0,F_cell);
+                }
             }
-        }
         if(verbose) printf("settting F000 to %g\n",F000);
         for(source=0;source<Nhkl_array;source++)
             Fhkl[source][-h_min][-k_min][-l_min] = F000;
@@ -2063,7 +2061,7 @@ nanoBragg::init_sources()
             init_beam();
         }
         /* make sure stored source intensities are fractional */
-        double norm = flux_sum/sources;  // TODO: decide to normalize by number of sources, the setter for sources in nanoBragg_ext says the sources_I should sum to 1...
+        double norm = flux_sum; ///sources;  // TODO: decide to normalize by number of sources, the setter for sources in nanoBragg_ext says the sources_I should sum to 1...
         for (i=0; i < sources && norm>0.0; ++i)
         {
             source_I[i] /= norm;

@@ -276,6 +276,7 @@ extern "C" void nanoBraggSpotsCUDA(int deviceId, int spixels, int fpixels, int r
 	}
 
 	int hklsize = sources * h_range * k_range * l_range;
+    printf("Copying over Fhkl to Linear\n");
 	CUDAREAL * FhklLinear = (CUDAREAL*) calloc(hklsize, sizeof(*FhklLinear));
     for (int i_source=0; i_source < sources; i_source++){
         for (int h = 0; h < h_range; h++) {
@@ -291,7 +292,9 @@ extern "C" void nanoBraggSpotsCUDA(int deviceId, int spixels, int fpixels, int r
         }
     }
 	CUDAREAL * cu_Fhkl = NULL;
+    printf("Malloc\n");
 	CUDA_CHECK_RETURN(cudaMalloc((void ** )&cu_Fhkl, sizeof(*cu_Fhkl) * hklsize));
+    printf("MemCopy\n");
 	CUDA_CHECK_RETURN(cudaMemcpy(cu_Fhkl, FhklLinear, sizeof(*cu_Fhkl) * hklsize, cudaMemcpyHostToDevice));
     free(FhklLinear);
 

@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function
 import boost.python
 import cctbx.uctbx # possibly implicit
+from scitbx.array_family import flex
 ext = boost.python.import_ext("simtbx_nanoBragg_ext")
 from simtbx_nanoBragg_ext import *
 
@@ -10,7 +11,7 @@ class _():
   def __getattr__(self,name):
     """assemble miller array of structure factors used to compute spot intensities from the internal C cube array
        how do we specify docstrings for individual overriden members? """
-      from cctbx.crystal import symmetry
+    from cctbx.crystal import symmetry
     from cctbx.miller import set, array
     if name in ["Fhkl", "Multisource_Fhkl"]:
       cs = symmetry(unit_cell = self.unit_cell_Adeg,space_group="P 1")
@@ -28,6 +29,7 @@ class _():
        how do we specify docstrings for individual overriden members? """
 
     if name =="Multisource_Fhkl":
+        print("Here in beams")
         try:
             Nbeams = self.xray_beams.size()
         except AttributeError:
@@ -39,21 +41,18 @@ class _():
                  % (len(value), Nbeams ))
         else:
             Nsources = len(value)
-            indices=None
-            data = None
-            for source_Farray in value:
-                ff = source_Farray.expand_to_p1()
+            data = []
+            for ii,ff in enumerate( value): #source_Farray in enumerate(value):
+                if not ff.space_group_info().type().hall_symbol()==" P 1":
+                    ff = ff.expand_to_p1()
                 ff = ff.generate_bijvoet_mates()
-                if indices is None:
-                  self.unit_cell_Adeg = ff.unit_cell()
-                  indices = ff.indices()
-                  data=ff.data()
-                else:
-                  data=data.concatenate(data)
+                self.unit_cell_Adeg = ff.unit_cell()
+                indices = ff.indices()
+                data.append(ff.data())
 
+            data = flex.double([amp for source_data in data for amp in source_data])
             self.multi_sources_Fhkl = True
             self.Fhkl_tuple = (indices, data)
-            print ("Set  Fhkl for multiple sources!")
 
     elif name =="Fhkl":
       value=value.expand_to_p1()

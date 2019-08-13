@@ -1,4 +1,5 @@
 from __future__ import absolute_import, division, print_function
+import os
 from scitbx.array_family import flex
 from simtbx.nanoBragg import testuple
 from simtbx.nanoBragg import shapetype
@@ -20,9 +21,12 @@ ATOM      6 SED  MSE A   6       1.000   2.000   3.000  1.00 20.00          SE
 END
 """
 
-def fcalc_from_pdb(resolution,algorithm=None,wavelength=0.9):
+def fcalc_from_pdb(resolution,algorithm=None,wavelength=0.9, pdbin=pdb_lines):
   from iotbx import pdb
-  pdb_inp = pdb.input(source_info=None,lines = pdb_lines)
+  if os.path.isfile(pdbin):
+    pdb_inp = pdb.input(pdbin)
+  else: # try as lines
+    pdb_inp = pdb.input(source_info=None, lines=pdb_lines)
   xray_structure = pdb_inp.xray_structure_simple()
   #
   # take a detour to insist on calculating anomalous contribution of every atom
