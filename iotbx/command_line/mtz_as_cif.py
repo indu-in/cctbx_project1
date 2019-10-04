@@ -285,7 +285,7 @@ class mtz_as_cif_blocks(object):
         f_obs_filtered = f_obs_filtered_neutron
       print("MORE2")
       print(data_type)
-      print(self.cif_block[data_type])
+      print(self.cif_blocks[data_type])
       print(r_free_xray)
       print(r_free_neutron)
       print("LESS2")
