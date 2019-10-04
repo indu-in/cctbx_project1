@@ -268,7 +268,7 @@ class mtz_as_cif_blocks(object):
     for data_type in data_types:
       print("MORE")
       print(data_type)
-      print(self.cif_block[data_type])
+      print(self.cif_blocks[data_type])
       print(r_free_xray)
       print(r_free_neutron)
       print("LESS")
