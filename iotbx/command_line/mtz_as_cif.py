@@ -266,6 +266,12 @@ class mtz_as_cif_blocks(object):
         column_names=('_refln.F_meas_au','_refln.F_meas_sigma_au'))
 
     for data_type in data_types:
+      print("MORE")
+      print(data_type)
+      print(self.cif_block[data_type])
+      print(r_free_xray)
+      print(r_free_neutron)
+      print("LESS")
       if data_type == "xray":
         r_free = r_free_xray
         input_obs = input_observations_xray
@@ -277,6 +283,12 @@ class mtz_as_cif_blocks(object):
         r_free = r_free_neutron
         input_obs = input_observations_neutron
         f_obs_filtered = f_obs_filtered_neutron
+      print("MORE2")
+      print(data_type)
+      print(self.cif_block[data_type])
+      print(r_free_xray)
+      print(r_free_neutron)
+      print("LESS2")
       if self.cif_blocks[data_type] is not None and r_free is not None:
         self.cif_blocks[data_type].add_miller_array(
           array=r_free, column_name='_refln.pdbx_r_free_flag')
