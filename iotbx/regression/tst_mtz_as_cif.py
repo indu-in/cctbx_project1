@@ -10,7 +10,6 @@ import iotbx.cif
 
 def get_array_by_label(miller_arrays, label):
   for ma in miller_arrays:
-    print(list(ma.info().labels))
     if label in list(ma.info().labels):
       return ma
 
@@ -138,7 +137,12 @@ def exercise():
     assert approx_equal(fobs_cif.sigmas(), fobs_mtz.sigmas())
     rfree_cif = get_array_by_label(miller_arrays, '_refln.pdbx_r_free_flag')
     rfree_mtz = get_array_by_label(mtz_arrays, 'R-free-flags')
-    print(rfree_cif, rfree_mtz)
+    print('CIF')
+    labels = [ma.info().labels for ma in miller_arrays]
+    print(len(miller_arrays))
+    print('\n'.join(str(label) for label in labels))
+    print('MTZ')
+    print(rfree_mtz.info())
     assert rfree_cif.data().all_eq(rfree_mtz.data())
 
   file_name = libtbx.env.find_in_repositories(
