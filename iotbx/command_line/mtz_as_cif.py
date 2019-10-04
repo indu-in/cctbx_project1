@@ -155,6 +155,12 @@ class mtz_as_cif_blocks(object):
 
     miller_arrays = mtz_object.as_miller_arrays()
 
+    print("INSIDE")
+    labels = [ma.info().labels for ma in miller_arrays]
+    print(len(miller_arrays))
+    print('\n'.join(str(label) for label in labels))
+    print("OUTSIDE")
+
     miller_arrays_as_cif_block = None
 
     input_observations_xray = None
