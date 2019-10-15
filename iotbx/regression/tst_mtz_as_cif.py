@@ -1,5 +1,6 @@
 from __future__ import absolute_import, division, print_function
 import os
+import time
 import libtbx.load_env
 if (libtbx.env.has_module("ccp4io")):
   from iotbx import mtz
@@ -127,6 +128,7 @@ def exercise():
   else:
     mtz_as_cif.run(
       args=[file_name])
+    time.sleep(1)
     assert os.path.exists("r1wqzsf.reflections.cif")
     miller_arrays = iotbx.cif.reader(
       file_path="r1wqzsf.reflections.cif").as_miller_arrays()
