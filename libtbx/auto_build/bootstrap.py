@@ -788,23 +788,23 @@ class annlib_adaptbx(SourceModule):
 class tntbx_module(SourceModule):
   module = 'tntbx'
   anonymous = ['git',
-              'git@github.com:cctbx/tntbx.git',
-              'https://github.com/cctbx/tntbx.git',
-              'https://github.com/cctbx/tntbx/archive/master.zip']
+               'git@github.com:cctbx/tntbx.git',
+               'https://github.com/cctbx/tntbx.git',
+               'https://github.com/cctbx/tntbx/archive/master.zip']
 
 class clipper_module(SourceModule):
   module = 'clipper'
   anonymous = ['git',
-              'git@github.com:cctbx/clipper.git',
-              'https://github.com/cctbx/clipper.git',
-              'https://github.com/cctbx/clipper/archive/master.zip']
+               'git@github.com:cctbx/clipper.git',
+               'https://github.com/cctbx/clipper.git',
+               'https://github.com/cctbx/clipper/archive/master.zip']
 
 class gui_resources_module(SourceModule):
   module = 'gui_resources'
   anonymous = ['git',
-              'git@github.com:cctbx/gui_resources.git',
-              'https://github.com/cctbx/gui_resources.git',
-              'https://github.com/cctbx/gui_resources/archive/master.zip']
+               'git@github.com:cctbx/gui_resources.git',
+               'https://github.com/cctbx/gui_resources.git',
+               'https://github.com/cctbx/gui_resources/archive/master.zip']
 
 class opt_resources_module(SourceModule):
   module = 'opt_resources'
@@ -813,9 +813,9 @@ class opt_resources_module(SourceModule):
 class eigen_module(SourceModule):
   module = 'eigen'
   anonymous = ['git',
-              'git@github.com:cctbx/eigen.git',
-              'https://github.com/cctbx/eigen.git',
-              'https://github.com/cctbx/eigen/archive/master.zip']
+               'git@github.com:cctbx/eigen.git',
+               'https://github.com/cctbx/eigen.git',
+               'https://github.com/cctbx/eigen/archive/master.zip']
 
 # Phenix repositories
 class phenix_module(SourceModule):
