@@ -365,6 +365,12 @@ class HKLViewFrame() :
     self.currentphil = self.master_phil
     if extraphil:
       self.currentphil = self.currentphil.fetch(source = extraphil)
+      # Don't retain clip plane values as these are specific to each crystal
+      # so use clip plane parameters from the master phil
+      default_clipphil = self.master_phil.fetch().extract().NGL_HKLviewer.clip_plane
+      currentparms = self.currentphil.extract()
+      currentparms.NGL_HKLviewer.clip_plane = default_clipphil
+      self.currentphil = self.master_phil.format(python_object = currentparms)
     self.params = self.currentphil.fetch().extract()
     self.viewer.viewerparams = self.params.NGL_HKLviewer.viewer
     self.viewer.params = self.params.NGL_HKLviewer
@@ -424,7 +430,7 @@ class HKLViewFrame() :
       phl = self.params.NGL_HKLviewer
 
       if len(diff_phil.all_definitions()) < 1 and not phl.mouse_moved:
-        self.mprint( "Nothing's changed")
+        self.mprint( "Nothing's changed", verbose=1)
         return False
 
       #diff = diff_phil.extract().NGL_HKLviewer
@@ -738,6 +744,7 @@ class HKLViewFrame() :
 
   def load_reflections_file(self, file_name, set_array=True, data_only=False):
     file_name = to_str(file_name)
+    ret = False
     if (file_name != ""):
       self.mprint("Reading file...")
       from iotbx.reflection_file_reader import any_reflection_file
@@ -801,7 +808,6 @@ class HKLViewFrame() :
         msg = "No arrays of the supported types in this file."
         self.mprint(msg)
         self.NewFileLoaded=False
-        return False
       elif (len(valid_arrays) >= 1):
         if (set_array):
           self.set_miller_array()
@@ -813,10 +819,13 @@ class HKLViewFrame() :
                    "tncsvec": self.tncsvec,
                    "merge_data": self.params.NGL_HKLviewer.merge_data,
                    "spacegroups": [e.symbol_and_number() for e in self.spacegroup_choices],
-                   "NewFileLoaded": self.NewFileLoaded
+                   "NewFileLoaded": self.NewFileLoaded,
+                   "file_name": self.params.NGL_HKLviewer.filename
                   }
         self.SendInfoToGUI(mydict)
-        return True
+        ret =  True
+      self.params.NGL_HKLviewer.filename = None
+      return ret
 
 
   def LoadReflectionsFile(self, filename):
@@ -1103,13 +1112,13 @@ class HKLViewFrame() :
     self.params.NGL_HKLviewer.clip_plane.bequiet = bequiet
 
 
-  def SetTrackBallRotateSpeed(self, trackspeed):
+  def SetMouseSpeed(self, trackspeed):
     self.params.NGL_HKLviewer.viewer.NGL.mouse_sensitivity = trackspeed
     self.update_settings()
 
 
-  def GetTrackBallRotateSpeed(self):
-    self.viewer.GetTrackBallRotateSpeed()
+  def GetMouseSpeed(self):
+    self.viewer.GetMouseSpeed()
     while self.params.viewer.NGL.mouse_sensitivity is None:
       time.sleep(0.1)
     return self.params.viewer.NGL.mouse_sensitivity

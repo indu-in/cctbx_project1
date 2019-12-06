@@ -75,7 +75,7 @@ def is_outlier(points, thresh=3.5):
     return modified_z_score > thresh
 
 
-def tilting_plane(img, mask=None, zscore=2, spline=False ):
+def tilting_plane(img, mask=None, zscore=2, spline=False, return_resid=False):
     """
     :param img:  numpy image
     :param mask:  boolean mask, same shape as img, True is good pixels
@@ -107,7 +107,14 @@ def tilting_plane(img, mask=None, zscore=2, spline=False ):
         tilt = sp.ev(XX, YY).reshape(img.shape)
     else:
         tilt = ev.reshape(img.shape)
+<<<<<<< HEAD
     return tilt, out2d, coeff, True
+=======
+    return_packet = [tilt, out2d, coeff, True]
+    if return_resid:
+        return_packet.append(r)
+    return return_packet
+>>>>>>> 5b69f3bcf7b65de5efac3878ebb8043c600fac66
 
 
 def _positive_plane(x, xcoord, ycoord, data):

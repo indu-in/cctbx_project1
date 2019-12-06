@@ -183,7 +183,7 @@ class hklview_3d:
     self.colour_scene_id = None
     self.radii_scene_id = None
     #self.scene_id = None
-    self.rotation_mx = matrix.identity(3)
+    #self.rotation_mx = matrix.identity(3)
     self.rot_recip_zvec = None
     self.rot_zvec = None
     self.meanradius = -1
@@ -192,7 +192,6 @@ class hklview_3d:
     self.high_quality = True
     if kwds.has_key('high_quality'):
       self.high_quality = kwds['high_quality']
-    self.cameradist = 0.0
     self.clipNear = None
     self.clipFar = None
     self.cameraPosZ = None
@@ -294,6 +293,7 @@ class hklview_3d:
     if 'UseOSBrowser' in kwds:
       self.UseOSBrowser = kwds['UseOSBrowser']
     self.viewmtrx = None
+    self.currentRotmx = matrix.identity(3)
     self.HKLscenesKey = ( 0, False,
                           self.viewerparams.expand_anomalous, self.viewerparams.expand_to_p1  )
     self.msgqueue = []
@@ -390,10 +390,10 @@ class hklview_3d:
       if has_phil_path(self.diff_phil, "angle_around_vector"): # no need to redraw any clip plane
         return msg
       self.fix_orientation(self.viewerparams.NGL.fixorientation)
-      self.SetTrackBallRotateSpeed(self.viewerparams.NGL.mouse_sensitivity)
+      self.SetMouseSpeed(self.viewerparams.NGL.mouse_sensitivity)
       R = flex.vec3_double( [(0,0,0)])
       hkldist = -1
-      clipwidth = 0
+      clipwidth = None
       if self.viewerparams.slice_mode: # explicit slicing
         if self.viewerparams.slice_axis=="h": hkl = [1,0,0]
         if self.viewerparams.slice_axis=="k": hkl = [0,1,0]
@@ -415,14 +415,17 @@ class hklview_3d:
             + self.params.clip_plane.k * self.normal_lh \
             - self.params.clip_plane.l * self.normal_hk
 
-      #if has_phil_path(self.diff_phil, "clipwidth"):
-      self.clip_plane_vector(R[0][0], R[0][1], R[0][2], hkldist,
-          clipwidth, self.viewerparams.NGL.fixorientation, self.params.clip_plane.is_parallel)
-      if self.params.clip_plane.fractional_vector == "reciprocal":
-        if hkldist == -1:
-          self.TranslateHKLpoints(R[0][0], R[0][1], R[0][2], 0.0)
-        else:
-          self.TranslateHKLpoints(R[0][0], R[0][1], R[0][2], hkldist)
+      if has_phil_path(self.diff_phil, "clipwidth") or \
+       has_phil_path(self.diff_phil, "fixorientation") or \
+       has_phil_path(self.diff_phil, "is_parallel") or \
+       has_phil_path(self.diff_phil, "fractional_vector"):
+        self.clip_plane_vector(R[0][0], R[0][1], R[0][2], hkldist,
+            clipwidth, self.viewerparams.NGL.fixorientation, self.params.clip_plane.is_parallel)
+        if self.params.clip_plane.fractional_vector == "reciprocal":
+          if hkldist == -1:
+            self.TranslateHKLpoints(R[0][0], R[0][1], R[0][2], 0.0)
+          else:
+            self.TranslateHKLpoints(R[0][0], R[0][1], R[0][2], hkldist)
 
       #if clipwidth==0.0 or ( R[0][0]==0.0 and R[0][1]==0.0 and R[0][2]==0.0 ) or self.params.clip_plane.angle_around_vector == 0.0:
       #  self.ReOrientStage()
@@ -881,7 +884,7 @@ var fontsize = %s;
 function MakeHKL_Axis(mshape)
 {
   // xyz arrows
-  mshape.addSphere( [0,0,0] , [ 1, 1, 1 ], 0.3, 'Origin');
+  // mshape.addSphere( [0,0,0] , [ 1, 1, 1 ], 0.3, 'Origin');
   //blue-x
   mshape.addArrow( %s, %s , [ 0, 0, 1 ], 0.1);
   //green-y
@@ -1171,8 +1174,6 @@ function MakeHKL_Axis(mshape)
         stage.viewer.parameters.clipFar = origclipfar + (origcameraZpos - stage.viewer.camera.position.z);
         stage.viewer.requestRender();
       }
-      //cvorient = stage.viewerControls.getOrientation().elements;
-      //msg = String(cvorient);
       msg = getOrientMsg();
       rightnow = timefunc();
       if (rightnow - timenow > 250)
@@ -1205,8 +1206,6 @@ function MakeHKL_Axis(mshape)
         stage.viewer.parameters.clipFar = origclipfar + (origcameraZpos - stage.viewer.camera.position.z);
         stage.viewer.requestRender();
       }
-      //cvorient = stage.viewerControls.getOrientation().elements;
-      //msg = String(cvorient);
       msg = getOrientMsg();
       rightnow = timefunc();
       if (rightnow - timenow > 250)
@@ -1567,16 +1566,21 @@ Object.assign(tooltip.style, {
 function getOrientMsg()
 {
   cvorient = stage.viewerControls.getOrientation().elements;
-  //if (cvorient[14] == 0) // appears to occasionally happen first time stage is rendered
-  //  cvorient[14] = stage.viewer.camera.position.length();
-  //else
-  //cvorient[14] = stage.viewer.cDist;
-  cvorient.push( -stage.viewer.camera.position.z); // store distance explicitly as a last element
+
+  if (stage.viewer.cDist != 0
+       && stage.viewer.parameters.clipFar > stage.viewer.cDist
+       && stage.viewer.cDist > stage.viewer.parameters.clipNear)
+    cameradist = stage.viewer.cDist;
+  else if (stage.viewer.camera.position.z != 0
+       && stage.viewer.parameters.clipFar > -stage.viewer.camera.position.z
+       && -stage.viewer.camera.position.z > stage.viewer.parameters.clipNear)
+    cameradist = -stage.viewer.camera.position.z;
+  else
+    cameradist = cvorient[14]; // fall back if stage.viewer.camera.position.z is corrupted
+  cvorient.push( cameradist );
   msg = String(cvorient);
   return msg;
 }
-
-
 
 
 function HKLscene()
@@ -1606,16 +1610,24 @@ function HKLscene()
 
   // if some radii are negative draw them with wireframe
   %s
-
   %s
   stage.viewer.requestRender();
-  console.log("Waffle wibble");
+}
+
+
+function OnUpdateOrientation()
+{
+  msg = getOrientMsg();
+  WebsockSendMsg('CurrentViewOrientation:\\n' + msg );
 }
 
 
 try
 {
   document.addEventListener('DOMContentLoaded', function() { HKLscene() }, false );
+  document.addEventListener('mouseup', function() { OnUpdateOrientation() }, false );
+  document.addEventListener('wheel', function(e) { OnUpdateOrientation() }, false );
+  document.addEventListener('scroll', function(e) { OnUpdateOrientation() }, false );
 }
 catch(err)
 {
@@ -1631,15 +1643,27 @@ catch(err)
 
 function ReturnClipPlaneDistances()
 {
+  if (stage.viewer.parameters.clipScale == 'relative')
+    cameradist = stage.viewer.cDist;
+  if (stage.viewer.parameters.clipScale == 'absolute')
+    if (stage.viewer.cDist != 0
+         && stage.viewer.parameters.clipFar > stage.viewer.cDist
+         && stage.viewer.cDist > stage.viewer.parameters.clipNear)
+      cameradist = stage.viewer.cDist;
+    else if (stage.viewer.camera.position.z != 0
+         && stage.viewer.parameters.clipFar > -stage.viewer.camera.position.z
+         && -stage.viewer.camera.position.z > stage.viewer.parameters.clipNear)
+      cameradist = stage.viewer.camera.position.z;
+
   msg = String( [stage.viewer.parameters.clipNear,
                   stage.viewer.parameters.clipFar,
-                  stage.viewer.camera.position.z ] )
+                  cameradist ] )
                   //stage.viewer.camera.position.length()] )
   WebsockSendMsg('ReturnClipPlaneDistances:\\n' + msg );
 }
 
 
-mysocket.onmessage = function (e)
+mysocket.onmessage = function(e)
 {
   var c,
   si;
@@ -1888,7 +1912,7 @@ mysocket.onmessage = function (e)
       for (j=0; j<9; j++)
         sm[j] = parseFloat(elmstrs[j]);
 
-      // GL matrices are the transpose of the conventional rotation matrices
+      // GL matrices are the transpose of conventional rotation matrices
       m4.set( sm[0], sm[3], sm[6], 0.0,
               sm[1], sm[4], sm[7], 0.0,
               sm[2], sm[5], sm[8], 0.0,
@@ -1952,7 +1976,7 @@ mysocket.onmessage = function (e)
       //alert('trans: ' + elmstrs);
       for (j=0; j<3; j++)
         sm[j] = parseFloat(elmstrs[j]);
-      shapeComp.setPosition([ sm[0], sm[1], sm[2] ])
+      shapeComp.setPosition([ sm[0], sm[1], sm[2] ]);
       stage.viewer.requestRender();
       msg = getOrientMsg();
       WebsockSendMsg('CurrentViewOrientation:\\n' + msg );
@@ -2037,17 +2061,17 @@ mysocket.onmessage = function (e)
       });
     }
 
-    if (msgtype === "SetTrackBallRotateSpeed")
+    if (msgtype === "SetMouseSpeed")
     {
       strs = datval[1].split("\\n");
       var elmstrs = strs[0].split(",");
       stage.trackballControls.rotateSpeed = parseFloat(elmstrs[0]);
     }
 
-    if (msgtype === "GetTrackBallRotateSpeed")
+    if (msgtype === "GetMouseSpeed")
     {
       msg = String( [stage.trackballControls.rotateSpeed] )
-      WebsockSendMsg('ReturnTrackBallRotateSpeed:\\n' + msg );
+      WebsockSendMsg('ReturnMouseSpeed:\\n' + msg );
     }
 
     if (msgtype === "SetClipPlaneDistances")
@@ -2058,21 +2082,25 @@ mysocket.onmessage = function (e)
       var far = parseFloat(elmstrs[1]);
       origcameraZpos = parseFloat(elmstrs[2]);
       stage.viewer.parameters.clipMode = 'camera';
+      // clipScale = 'absolute' means clip planes are using scene dimensions
       stage.viewer.parameters.clipScale = 'absolute';
+      clipFixToCamPosZ = true;
 
       if (near >= far )
       { // default to no clipping if near >= far
         stage.viewer.parameters.clipMode = 'scene';
+      // clipScale = 'relative' means clip planes are in percentage
         stage.viewer.parameters.clipScale = 'relative';
-        near = -1000;
-        far = 1000;
+        clipFixToCamPosZ = false;
+        near = 0;
+        far = 100;
       }
+      else
+        stage.viewer.camera.position.z = origcameraZpos;
       stage.viewer.parameters.clipNear = near;
       stage.viewer.parameters.clipFar = far;
       origclipnear = near;
       origclipfar = far;
-      clipFixToCamPosZ = true;
-      stage.viewer.camera.position.z = origcameraZpos;
       stage.viewer.requestRender();
     }
 
@@ -2221,7 +2249,7 @@ mysocket.onmessage = function (e)
       self.GetBoundingBox()
       self.OrigClipFar = self.clipFar
       self.OrigClipNear = self.clipNear
-      self.SetTrackBallRotateSpeed( self.ngl_settings.mouse_sensitivity )
+      self.SetMouseSpeed( self.ngl_settings.mouse_sensitivity )
     self.sceneisdirty = False
 
 
@@ -2263,7 +2291,6 @@ mysocket.onmessage = function (e)
         self.clipNear = flst[0]
         self.clipFar = flst[1]
         self.cameraPosZ = flst[2]
-        self.params.clip_plane.clipwidth = None
       if "ReturnBoundingBox:" in message:
         datastr = message[ message.find("\n") + 1: ]
         lst = datastr.split(",")
@@ -2271,7 +2298,7 @@ mysocket.onmessage = function (e)
         self.boundingX = flst[0]
         self.boundingY = flst[1]
         self.boundingZ = flst[2]
-      if "ReturnTrackBallRotateSpeed" in message:
+      if "ReturnMouseSpeed" in message:
         datastr = message[ message.find("\n") + 1: ]
         lst = datastr.split(",")
         flst = [float(e) for e in lst]
@@ -2319,12 +2346,15 @@ mysocket.onmessage = function (e)
     rotdet = ScaleRotMx.determinant()
     if rotdet <= 0.0:
       self.mprint("Negative rot determinant!", verbose=2)
-      self.cameradist = flst[16] # javascript backup of distance in case of invalid matrix
+      cameradist = flst[16] # javascript backup of distance in case of invalid matrix
     else:
-      self.cameradist = math.pow(rotdet, 1.0/3.0)
-    self.mprint("Scale distance: %s" %roundoff(self.cameradist), verbose=3)
-    self.rotation_mx = ScaleRotMx/self.cameradist
-    rotlst = roundoff(self.rotation_mx.elems)
+      cameradist = math.pow(rotdet, 1.0/3.0)
+    self.mprint("Scale distance: %s" %roundoff(cameradist), verbose=3)
+    self.currentRotmx = matrix.identity(3)
+    if cameradist > 0.0:
+      self.currentRotmx = ScaleRotMx/cameradist
+      self.cameraPosZ = cameradist
+    rotlst = roundoff(self.currentRotmx.elems)
     self.mprint("""Rotation matrix:
   %s,  %s,  %s
   %s,  %s,  %s
@@ -2339,11 +2369,15 @@ mysocket.onmessage = function (e)
 Distance: %s
     """ %tuple(alllst), verbose=4)
     self.params.mouse_moved = True
-    if self.rotation_mx.is_r3_rotation_matrix():
-      angles = self.rotation_mx.r3_rotation_matrix_as_x_y_z_angles(deg=True)
+    if self.currentRotmx.is_r3_rotation_matrix():
+      # Round off matrix elements to avoid machine imprecision errors that might cast
+      # any matrix element into a number strictly larger than 1 which would
+      # crash r3_rotation_matrix_as_x_y_z_angles()
+      self.currentRotmx = matrix.sqr(roundoff(self.currentRotmx.elems, 9) )
+      angles = self.currentRotmx.r3_rotation_matrix_as_x_y_z_angles(deg=True)
       self.mprint("angles: %s" %str(roundoff(angles)), verbose=3)
       z_vec = flex.vec3_double( [(0,0,1)])
-      self.rot_zvec = z_vec * self.rotation_mx
+      self.rot_zvec = z_vec * self.currentRotmx
       self.mprint("Rotated cartesian Z direction : %s" %str(roundoff(self.rot_zvec[0])), verbose=3)
       rfracmx = matrix.sqr( self.miller_array.unit_cell().reciprocal().fractionalization_matrix() )
       self.rot_recip_zvec = self.rot_zvec * rfracmx
@@ -2351,7 +2385,7 @@ Distance: %s
       self.mprint("Rotated reciprocal L direction : %s" %str(roundoff(self.rot_recip_zvec[0])), verbose=3)
 
 
-  def WaitforHandshake(self, sec):
+  def WaitforHandshake(self, sec=5):
     nwait = 0
     while not self.websockclient:
       time.sleep(self.sleeptime)
@@ -2488,8 +2522,7 @@ Distance: %s
 
   def OpenBrowser(self):
     if not self.browserisopen:
-      #NGLlibpath = libtbx.env.under_root(os.path.join("modules","cctbx_project","crys3d","hklview","ngl.js") )
-      NGLlibpath = libtbx.env.under_root(os.path.join("modules","cctbx_project","crys3d","hklview","ngl.dev.js") )
+      NGLlibpath = libtbx.env.under_root(os.path.join("modules","cctbx_project","crys3d","hklview","ngl.js") )
       htmlstr = self.hklhtml %(NGLlibpath, os.path.abspath( self.jscriptfname))
       htmlstr += self.htmldiv
       with open(self.hklfname, "w") as f:
@@ -2606,6 +2639,7 @@ Distance: %s
     if rotmx.determinant() < 0.99999:
       self.mprint("Rotation matrix determinant is less than 1")
       return rotmx
+    self.currentRotmx = rotmx
     self.RotateMxStage(rotmx)
     return rotmx
 
@@ -2615,6 +2649,7 @@ Distance: %s
     if rotmx.determinant() < 0.99999:
       self.mprint("Rotation matrix determinant is less than 1")
       return rotmx
+    self.currentRotmx = rotmx
     self.RotateMxStage(rotmx)
     return rotmx
 
@@ -2635,44 +2670,43 @@ Distance: %s
     sin2phi2 = math.sin(phi/2)
     sin2phi2 *= sin2phi2
     RotMx = I + math.sin(phi)*W + 2* sin2phi2 * W*W
-    RotMx = RotMx * prevrotmx # impose any other rotation already performed
-    self.RotateMxStage(RotMx, quietbrowser)
-    return RotMx, [ux, uy, uz]
+    self.currentRotmx = RotMx * prevrotmx # impose any other rotation already performed
+    self.RotateMxStage(self.currentRotmx, quietbrowser)
+    return self.currentRotmx, [ux, uy, uz]
 
 
   def SpinAnimate(self, r1, r2, r3):
     self.msgqueue.append(("SpinAnimate", "%s, %s, %s" %(r1, r2, r3) ))
 
 
-  def DrawUnitCell(self):
-    self.AddVector(0,0,0, 1,0,0, False, label="200a/V", r=0.5, g=0.8, b=0.8)
-    self.AddVector(0,0,0, 0,1,0, False, label="200b/V", r=0.8, g=0.5, b=0.8)
-    self.AddVector(0,0,0, 0,0,1, False, label="200c/V", r=0.8, g=0.8, b=0.5)
-    self.AddVector(1,0,0, 1,1,0, False, r=0.8, g=0.5, b=0.8)
-    self.AddVector(0,1,0, 1,1,0, False, r=0.5, g=0.8, b=0.8)
-    self.AddVector(0,0,1, 1,0,1, False, r=0.5, g=0.8, b=0.8)
-    self.AddVector(0,0,1, 0,1,1, False, r=0.8, g=0.5, b=0.8)
-    self.AddVector(0,1,1, 1,1,1, False, r=0.5, g=0.8, b=0.8)
-    self.AddVector(1,0,1, 1,1,1, False, r=0.8, g=0.5, b=0.8)
-    self.AddVector(1,0,0, 1,0,1, False, r=0.8, g=0.8, b=0.5)
-    self.AddVector(0,1,0, 0,1,1, False, r=0.8, g=0.8, b=0.5)
-    self.AddVector(1,1,0, 1,1,1, False, r=0.8, g=0.8, b=0.5, name="unitcell")
+  def DrawUnitCell(self, scale=1):
+    self.AddVector(0,0,0, scale,0,0, False, label="a", r=0.5, g=0.8, b=0.8)
+    self.AddVector(0,0,0, 0,scale,0, False, label="b", r=0.8, g=0.5, b=0.8)
+    self.AddVector(0,0,0, 0,0,scale, False, label="c", r=0.8, g=0.8, b=0.5)
+    self.AddVector(scale,0,0, scale,scale,0, False, r=0.8, g=0.5, b=0.8)
+    self.AddVector(0,scale,0, scale,scale,0, False, r=0.5, g=0.8, b=0.8)
+    self.AddVector(0,0,scale, scale,0,scale, False, r=0.5, g=0.8, b=0.8)
+    self.AddVector(0,0,scale, 0,scale,scale, False, r=0.8, g=0.5, b=0.8)
+    self.AddVector(0,scale,scale, scale,scale,scale, False, r=0.5, g=0.8, b=0.8)
+    self.AddVector(scale,0,scale, scale,scale,scale, False, r=0.8, g=0.5, b=0.8)
+    self.AddVector(scale,0,0, scale,0,scale, False, r=0.8, g=0.8, b=0.5)
+    self.AddVector(0,scale,0, 0,scale,scale, False, r=0.8, g=0.8, b=0.5)
+    self.AddVector(scale,scale,0, scale,scale,scale, False, r=0.8, g=0.8, b=0.5, name="unitcell")
 
 
-  def DrawReciprocalUnitCell(self):
-    n=2
-    self.AddVector(0,0,0, n,0,0, label="2a*", r=0.5, g=0.3, b=0.3)
-    self.AddVector(0,0,0, 0,n,0, label="2b*", r=0.3, g=0.5, b=0.3)
-    self.AddVector(0,0,0, 0,0,n, label="2c*", r=0.3, g=0.3, b=0.5)
-    self.AddVector(n,0,0, n,n,0, r=0.3, g=0.5, b=0.3)
-    self.AddVector(0,n,0, n,n,0, r=0.5, g=0.3, b=0.3)
-    self.AddVector(0,0,n, n,0,n, r=0.5, g=0.3, b=0.3)
-    self.AddVector(0,0,n, 0,n,n, r=0.3, g=0.5, b=0.3)
-    self.AddVector(0,n,n, n,n,n, r=0.5, g=0.3, b=0.3)
-    self.AddVector(n,0,n, n,n,n, r=0.3, g=0.5, b=0.3)
-    self.AddVector(n,0,0, n,0,n, r=0.3, g=0.3, b=0.5)
-    self.AddVector(0,n,0, 0,n,n, r=0.3, g=0.3, b=0.5)
-    self.AddVector(n,n,0, n,n,n, r=0.3, g=0.3, b=0.5, name="reciprocal_unitcell")
+  def DrawReciprocalUnitCell(self, scale=1):
+    self.AddVector(0,0,0, scale,0,0, label="a*", r=0.5, g=0.3, b=0.3)
+    self.AddVector(0,0,0, 0,scale,0, label="b*", r=0.3, g=0.5, b=0.3)
+    self.AddVector(0,0,0, 0,0,scale, label="c*", r=0.3, g=0.3, b=0.5)
+    self.AddVector(scale,0,0, scale,scale,0, r=0.3, g=0.5, b=0.3)
+    self.AddVector(0,scale,0, scale,scale,0, r=0.5, g=0.3, b=0.3)
+    self.AddVector(0,0,scale, scale,0,scale, r=0.5, g=0.3, b=0.3)
+    self.AddVector(0,0,scale, 0,scale,scale, r=0.3, g=0.5, b=0.3)
+    self.AddVector(0,scale,scale, scale,scale,scale, r=0.5, g=0.3, b=0.3)
+    self.AddVector(scale,0,scale, scale,scale,scale, r=0.3, g=0.5, b=0.3)
+    self.AddVector(scale,0,0, scale,0,scale, r=0.3, g=0.3, b=0.5)
+    self.AddVector(0,scale,0, 0,scale,scale, r=0.3, g=0.3, b=0.5)
+    self.AddVector(scale,scale,0, scale,scale,scale, r=0.3, g=0.3, b=0.5, name="reciprocal_unitcell")
 
 
   def fix_orientation(self, val):
@@ -2684,8 +2718,9 @@ Distance: %s
 
   def clip_plane_vector(self, a, b, c, hkldist=0.0,
              clipwidth=None, fixorientation=True, is_parallel=False):
+    self.GetClipPlaneDistances()
     # create clip plane oriented parallel or perpendicular to abc vector
-    if a==0.0 and b==0.0 and c==0.0 or clipwidth <= 0.0:
+    if a==0.0 and b==0.0 and c==0.0 or clipwidth is None:
       self.RemoveVectorsNoClipPlane()
       return
     self.RemoveVectors("clip_vector")
@@ -2699,16 +2734,18 @@ Distance: %s
       self.vecrotmx = self.PointVectorParallelToClipPlane()
     else:
       self.vecrotmx = self.PointVectorPerpendicularToClipPlane()
-    halfdist = -self.cameraPosZ  - hkldist # self.viewer.boundingZ*0.5
-    if clipwidth is None:
+    halfdist = self.cameraPosZ  + hkldist # self.viewer.boundingZ*0.5
+    if clipwidth == 0.0:
       clipwidth = self.meanradius
     clipNear = halfdist - clipwidth # 50/self.viewer.boundingZ
     clipFar = halfdist + clipwidth  #50/self.viewer.boundingZ
-    self.SetClipPlaneDistances(clipNear, clipFar, self.cameraPosZ)
+    self.SetClipPlaneDistances(clipNear, clipFar, -self.cameraPosZ)
     #if hkldist < 0.0:
     #  self.TranslateHKLpoints(a, b, c, hkldist)
-    self.DrawUnitCell()
-    self.DrawReciprocalUnitCell()
+    scale = max(self.miller_array.index_span().max())/10
+    #self.DrawUnitCell(scale)
+    #self.DrawReciprocalUnitCell(scale)
+    #self.RotateMxStage(self.currentRotmx, True)
 
 
   def RemoveVectorsNoClipPlane(self):
@@ -2718,16 +2755,16 @@ Distance: %s
     self.TranslateHKLpoints(0, 0, 0, 0.0)
 
 
-  def SetTrackBallRotateSpeed(self, trackspeed):
+  def SetMouseSpeed(self, trackspeed):
     msg = str(trackspeed)
-    self.msgqueue.append( ("SetTrackBallRotateSpeed", msg) )
-    #self.GetTrackBallRotateSpeed() # TODO: fix wait time
+    self.msgqueue.append( ("SetMouseSpeed", msg) )
+    #self.GetMouseSpeed() # TODO: fix wait time
 
 
-  def GetTrackBallRotateSpeed(self):
+  def GetMouseSpeed(self):
     self.ngl_settings.mouse_sensitivity = None
-    self.msgqueue.append( ("GetTrackBallRotateSpeed", "") )
-    if self.WaitforHandshake(5):
+    self.msgqueue.append( ("GetMouseSpeed", "") )
+    if self.WaitforHandshake():
       nwait = 0
       while self.ngl_settings.mouse_sensitivity is None and nwait < 5:
         time.sleep(self.sleeptime)
@@ -2746,9 +2783,9 @@ Distance: %s
     self.clipFar = None
     self.cameraPosZ = None
     self.msgqueue.append( ("GetClipPlaneDistances", "") )
-    if self.WaitforHandshake(5):
+    if self.WaitforHandshake():
       nwait = 0
-      while self.clipFar is None and nwait < 5:
+      while self.clipFar is None and nwait < self.handshakewait:
         time.sleep(self.sleeptime)
         nwait += self.sleeptime
       self.mprint("clipnear, clipfar, cameraPosZ: %s, %s %s" \
@@ -2761,9 +2798,9 @@ Distance: %s
     self.boundingY = 0.0
     self.boundingZ = 0.0
     self.msgqueue.append( ("GetBoundingBox", "") )
-    if self.WaitforHandshake(5):
+    if self.WaitforHandshake():
       nwait = 0
-      while self.boundingX is None and nwait < 5:
+      while self.boundingX is None and nwait < self.handshakewait:
         time.sleep(self.sleeptime)
         nwait += self.sleeptime
       self.mprint("boundingXYZ: %s, %s %s" \
@@ -2807,7 +2844,7 @@ Distance: %s
 
 
   def RotateMxStage(self, rotmx, quietbrowser=True):
-    scaleRot = rotmx * self.cameradist
+    scaleRot = rotmx * self.cameraPosZ
     ortrot = scaleRot.as_mat3()
     str_rot = str(ortrot)
     str_rot = str_rot.replace("(", "")
