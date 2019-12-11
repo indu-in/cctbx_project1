@@ -15,6 +15,8 @@ stages:
   dependsOn: Checks
   jobs:
     - template: ./.azure-pipelines/download-source.yml
+      parameters:
+        flags: --use-conda
     - template: ./.azure-pipelines/download-conda.yml
 
 - stage: Build

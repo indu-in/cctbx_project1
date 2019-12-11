@@ -1,5 +1,8 @@
 # Script for checking out sources and storing it as an artifact
 # The artifact name is "modules"
+#
+# Parameters:
+#   flags: <empty>, --use-conda
 
 jobs:
 - job: modules
@@ -20,8 +23,13 @@ jobs:
 
   - script: |
       cd $(Pipeline.Workspace)
-      python bootstrap.py hot update --builder=cctbx
+      python bootstrap.py hot update --builder=cctbx ${{ parameters.flags }}
     displayName: Download sources
+
+  - script: |
+      cd $(Pipeline.Workspace)/modules/dxtbx
+      git checkout newpy
+    displayName: Choose newpy branch
 
   # download test data
   # - task: DownloadPipelineArtifact@2
