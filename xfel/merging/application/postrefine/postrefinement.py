@@ -206,7 +206,7 @@ class postrefinement(worker):
             if entry_1['miller_index_asymmetric'] == entry_2['miller_index_asymmetric']:
               new_exp_reflections['intensity.sum.value.unmodified'][ii] = entry_2['intensity.sum.value.unmodified']
               new_exp_reflections['intensity.sum.variance.unmodified'][ii] = entry_2['intensity.sum.variance.unmodified']
-
+        
         new_reflections.extend(new_exp_reflections)
       '''
       # debugging
